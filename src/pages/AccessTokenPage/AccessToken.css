@@ -1,0 +1,164 @@
+.api-page-light {
+
+    --bg: #f8f8f8;
+    --bg2: rgb(255, 255, 255);
+    --txt: black;
+    --bor: #d8d8d8;
+    --p: #979797;
+    --sub: #6d6d6d;
+}
+
+.api-page-dark {
+    --bg: #0a0a0a;
+    --bg2: #121212;
+    --txt: #d8d8d8;
+    --bor: #1A1A1A;
+    --p: #444444;
+    --sub: #6d6d6d;
+}
+
+#api-page {
+    padding: 2rem;
+    color: var(--txt);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+
+.key-desc {
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color: var(--p);
+}
+
+.keys-section {
+    background-color: var(--bg);
+    padding: 2rem;
+    border: 1px solid var(--bor);
+    border-radius: 1rem;
+}
+
+
+.key-header {
+    margin: 1rem 0;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.2rem;
+}
+
+.api-value {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--bor);
+    border-radius: 6px;
+    background-color: var(--bg2);
+    overflow: hidden;
+}
+
+.key-section {
+    margin-bottom: 3rem;
+}
+
+.key-section,
+.token-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    position: relative;
+}
+
+.key-options {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    gap: 1rem;
+}
+
+.key-btn {
+    padding: 0.75rem 1rem;
+    background-color: var(--pri);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    width: fit-content;
+}
+
+
+.key-opt-btns {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0.15rem;
+    top: 0.15rem;
+}
+
+.key-opt-btn {
+    background-color: var(--bg);
+    border: 1px solid var(--bor);
+    color: var(--txt);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.access-token-page {
+    padding: 20px;
+    max-width: 500px;
+    margin: auto;
+    font-family: 'Bricolaage Grotesque', sans-serif;
+}
+
+.key-display {
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    padding: 10px;
+    border: 1px solid var(--bor);
+    border-radius: 4px;
+}
+
+.key-display p {
+    margin: 0;
+    flex: 1;
+    font-size: 16px;
+    color: var(--txt);
+}
+
+.view-button,
+.copy-button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.view-button:hover,
+.copy-button:hover {
+    background: #0056b3;
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.error-text {
+    color: red;
+    text-align: center;
+}
+
+.success-text {
+    color: green;
+    text-align: center;
+}

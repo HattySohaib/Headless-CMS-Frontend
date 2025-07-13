@@ -1,0 +1,131 @@
+.side-panel-light {
+    --bg: #f8f8f8;
+    --bg2: rgb(228, 228, 228);
+    --txt: black;
+    --p: #323232;
+    --bor: #dbdbdb;
+}
+
+.side-panel-dark {
+    --bg: #080808;
+    --bg2: #0d0d0d;
+    --txt: #F8F8F8;
+    --p: #afafaf;
+    --bor: #222222;
+}
+
+.side-panel {
+    height: 92vh;
+    border-right: 1px solid var(--bor);
+    width: 20%;
+    overflow: hidden;
+    position: sticky;
+    top: 8vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    background-color: var(--bg);
+}
+
+.side-bar-btn-holder {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--bor);
+    padding: 1rem;
+}
+
+.side-bar-btn {
+    background-color: var(--bg);
+    border: none;
+}
+
+.side-bar-btn img {
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.collapsed-false {
+    width: 20%;
+    transition: all 0.3s;
+}
+
+.collapsed-true {
+    width: 4.75rem;
+    transition: all 0.3s;
+}
+
+.panel-container {
+    background-color: var(--bg);
+}
+
+.blank-text {
+    padding: 3rem;
+    width: 100%;
+    font-size: 1rem;
+    text-align: center;
+    color: var(--p);
+    border-top: 1px solid var(--bor);
+
+}
+
+.navigation {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-bottom: 1px solid var(--bor);
+}
+
+.nav-heading {
+    font-size: 0.75rem;
+    color: #7e7e7e;
+    font-weight: 600;
+}
+
+.other-options {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.panel-nav-link {
+    padding: 0.5rem;
+    color: var(--p);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: flex-start;
+}
+
+.panel-nav-link img,
+.new-blog-btn img {
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.active {
+    color: var(--pri);
+    outline: 1px solid var(--bor);
+}
+
+.panel-nav-link:hover,
+.active {
+    background-color: var(--bg2);
+}
+
+
+
+@media (max-width:800px) {
+    #side-panel {
+        transform: translateX(-100%);
+    }
+}

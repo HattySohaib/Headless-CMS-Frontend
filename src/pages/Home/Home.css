@@ -1,0 +1,68 @@
+.home-light {
+    --bg: white;
+    --h1: #000000;
+    --p: #323232;
+    --pri: #E43D11;
+}
+
+.home-dark {
+    --bg: #080808;
+    --h1: white;
+    --p: #D7D7D7;
+    --pri: #E43D11
+}
+
+#home {
+    background-color: var(--bg);
+    height: 90vh;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 84vh;
+    gap: 1rem;
+}
+
+.bg {
+    position: absolute;
+    width: 50%;
+    top: 10vh;
+}
+
+.hero p {
+    color: var(--p);
+    font-size: 1rem;
+    text-align: center;
+    font-family: 'Bricolage Grotesque';
+    z-index: 2;
+}
+
+.hero h1 {
+    color: var(--h1);
+    font-size: 6rem;
+    font-family: 'Bricolage Grotesque';
+    font-weight: 500;
+    text-align: center;
+    z-index: 2;
+}
+
+.start-link {
+    background-color: var(--pri);
+    color: white;
+    font-family: 'Bricolage Grotesque';
+    padding: 1rem 3rem;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 1rem;
+    z-index: 2;
+    transition: all 0.3s;
+}
+
+.start-link:hover {
+    transform: translate3d(-2px, -2px, 0);
+    box-shadow: 4px 4px 0 0 black;
+    transition: all 0.3s;
+}

@@ -1,0 +1,36 @@
+.playground-light {
+    --bg: white;
+    --txt: black;
+    --bor: #d8d8d8;
+    --pri: #E43D11;
+}
+
+.playground-dark {
+    --bg: #101011;
+    --txt: #F8F8F8;
+    --bor: #1A1A1A;
+    --pri: #E43D11;
+}
+
+#playground {
+    display: flex;
+    background-color: var(--bg);
+    min-height: 100vh;
+    /* padding: 0 1rem; */
+}
+
+.section-header {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    font-size: 1.8rem;
+    color: var(--txt);
+    margin: 1rem 0;
+}
+
+.left {
+    width: 20%;
+}
+
+.right {
+    width: 100%;
+}

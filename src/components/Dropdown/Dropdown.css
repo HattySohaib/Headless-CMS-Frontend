@@ -1,0 +1,62 @@
+/* CustomDropdown.css */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-header {
+    height: 2.5rem;
+    border: 1px solid var(--bor);
+    border-radius: 8px;
+    background-color: var(--bg);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.dropdown-key {
+    color: var(--p);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.dropdown-value {
+    color: var(--txt);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.dropdown-arrow {
+    width: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.open {
+    transform: rotate(180deg);
+}
+
+.dropdown-list {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    border: 1px solid var(--bor);
+    background-color: var(--bg);
+    z-index: 1;
+    max-height: 20rem;
+    overflow-y: auto;
+    border-radius: 8px;
+}
+
+.dropdown-list-item {
+    color: var(--txt);
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-list-item:hover {
+    background-color: var(--bg2);
+}

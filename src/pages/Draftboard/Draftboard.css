@@ -1,0 +1,28 @@
+.draftboard-light {
+    --bg: #f8f8f8;
+    --bg2: white;
+    --txt: black;
+    --bor: #d8d8d8;
+    --pri: #E43D11;
+}
+
+.draftboard-dark {
+    --bg: #0a0a0a;
+    --bg2: #121212;
+    --txt: #d8d8d8;
+    --bor: #1A1A1A;
+    --pri: #E43D11;
+}
+
+#draftboard {
+    padding: 1rem 2rem;
+}
+
+.drafts-container {
+    background-color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid var(--bor);
+}

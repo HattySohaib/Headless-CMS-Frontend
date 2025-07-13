@@ -1,0 +1,222 @@
+.edit-profile-light {
+    --bg: #f8f8f8;
+    --bg2: rgb(255, 255, 255);
+    --txt: black;
+    --bor: #d8d8d8;
+    --p: #979797;
+    --sub: #6d6d6d;
+}
+
+.edit-profile-dark {
+    --bg: #0a0a0a;
+    --bg2: #121212;
+    --txt: #d8d8d8;
+    --bor: #1A1A1A;
+    --p: #444444;
+    --sub: #6d6d6d;
+}
+
+.edit {
+    display: flex;
+    padding: 2rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--bor);
+    border-radius: 1rem;
+    padding: 2rem 0;
+    position: relative;
+    width: 60%;
+    background-color: var(--bg);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.edit .form-header {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.5rem;
+    color: var(--txt);
+    font-weight: 500;
+}
+
+
+.edit .dp-holder {
+    width: min-content;
+}
+
+.edit .dp-holder label {
+    margin: auto;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    position: relative;
+}
+
+.edit .profile-picture {
+    border-radius: 50%;
+    width: 8rem;
+    height: 8rem;
+    border: 1px solid var(--pri);
+}
+
+.edit .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+    position: relative;
+}
+
+.edit .profile-form input {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--txt);
+    background-color: var(--bg2);
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--bor);
+    border-radius: 8px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+
+
+.edit .form-group label {
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin-bottom: 2px;
+    color: var(--sub);
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+
+/* INDIVIDUAL STYLING */
+
+
+.edit #email {
+    cursor: not-allowed;
+}
+
+.edit #bio {
+    resize: vertical;
+    background-color: var(--bg2);
+    border: 1px solid var(--bor);
+    color: var(--txt);
+    width: 100%;
+    font-size: 0.9rem;
+    font-weight: 400;
+    height: 10rem;
+    padding: 1rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    border-radius: 8px;
+}
+
+.edit #bio::-webkit-scrollbar {
+    display: none;
+}
+
+.edit input:focus,
+.edit textarea:focus {
+    outline: none;
+}
+
+.edit input:disabled {
+    color: var(--txt);
+    outline: none;
+}
+
+.edit #bio:disabled {
+    color: var(--txt);
+    font-size: 0.9rem;
+
+}
+
+.float-btns {
+    display: flex;
+    gap: 1rem;
+    /* position: absolute;
+    right: 1rem;
+    top: 1rem; */
+    margin-top: 1.5rem;
+
+}
+
+.edit .edit-btn,
+.edit .submit-btn {
+    padding: 0.5rem 2rem;
+    border-radius: 6px;
+    background-color: var(--pri);
+    color: white;
+    border: none;
+    font-family: 'Bricolage Grotesque';
+}
+
+.edit .cancel-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    background-color: var(--bg2);
+    color: var(--pri);
+    border: 1px solid var(--pri);
+    border: none;
+    font-family: 'Bricolage Grotesque';
+}
+
+.edit .img-overlay {
+    background-color: #00000062;
+    position: absolute;
+    width: 8rem;
+    height: 8rem;
+    z-index: 2;
+    border-radius: 50%;
+    backdrop-filter: blur(5px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.password-conditions {
+    padding: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    color: var(--p);
+
+
+    background-color: var(--bg);
+
+    border: 1px solid var(--bor);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.edit .password-conditions {
+    width: 80%;
+}
+
+.signup-container .password-conditions {
+    width: 100%;
+}
+
+.password-conditions div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.password-conditions div p {
+    font-size: 0.85rem;
+
+}
+
+.passwd-view-btn {
+    position: absolute;
+    right: 1rem;
+    top: 1.75rem;
+
+    background: none;
+    border: none;
+}

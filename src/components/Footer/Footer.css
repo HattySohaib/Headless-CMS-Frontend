@@ -1,0 +1,42 @@
+.footer-light {
+    --bg: #080808;
+    --txt: #F8F8F8;
+    --bor: #a3a3a3;
+}
+
+.footer-dark {
+    --bg: #0a0a0a;
+    --txt: #F8F8F8;
+    --bor: #1A1A1A;
+}
+
+
+#footer {
+    height: 8vh;
+    border-top: 1px solid var(--bor);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--bg);
+}
+
+.footer-text {
+    color: var(--txt);
+    font-family: 'Bricolage Grotesque';
+    font-size: 0.85rem;
+    width: 30%;
+}
+
+.footer-text:nth-child(2) {
+    text-align: center;
+}
+
+.footer-text:nth-child(3) {
+    text-align: right;
+}
+
+.footer-text a {
+    text-decoration: underline;
+    cursor: pointer;
+}

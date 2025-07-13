@@ -1,0 +1,174 @@
+.draft {
+    background-color: var(--bg);
+    padding: 1.5rem;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    align-items: center;
+    border-top: 1px solid var(--bor);
+    transition: all 0.2s;
+    position: relative;
+    color: var(--txt);
+    justify-items: center;
+    cursor: pointer;
+}
+
+.draft-title {
+    width: 100%;
+    text-align: left;
+}
+
+.draft-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1rem;
+}
+
+.background-layer {
+    background-color: rgba(20, 20, 20, 0.205);
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+}
+
+.kebab-menu {
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    right: 2rem;
+    bottom: 80%;
+    border-radius: 8px;
+    background-color: var(--bg);
+
+    border: 1px solid var(--bor);
+
+    box-shadow: 0 0 5px 1px rgba(44, 44, 44, 0.1);
+}
+
+#kebab-menu-btn {
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--bor);
+
+    color: var(--p);
+}
+
+#kebab-menu-btn:hover {
+    color: var(--pri);
+}
+
+
+.table-headers {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    background-color: var(--bg);
+}
+
+.table-header {
+    font-weight: 500;
+    color: #7e7e7e;
+    text-align: center;
+}
+
+.draft-status .circle {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+
+}
+
+@keyframes scale-up-down {
+
+    0%,
+    100% {
+        transform: scale(0.95);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.draft-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    width: min-content;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+}
+
+.status-green {
+    background-color: #00ff0015;
+    color: #00bd00;
+}
+
+.status-green .circle {
+    background-color: #00bd00;
+    animation: scale-up-down 1.2s infinite;
+}
+
+.status-red {
+    background-color: #ff000015;
+    color: #bd0000;
+}
+
+.status-red .circle {
+    background-color: #bd0000;
+}
+
+.draft-edited {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--txt);
+}
+
+.draft button {
+    border: none;
+    padding: 0.5rem 1rem;
+    background-color: var(--bg2);
+    color: var(--txt);
+    border: 1px solid var(--bor);
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.draft button img {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.draft-action-btn:hover,
+.draft-action-btn:focus {
+    background-color: var(--pri);
+    color: white;
+}
+
+#draft-kebab-btn {
+    background-color: var(--bg);
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#draft-kebab-btn:hover,
+#draft-kebab-btn:focus {
+    outline: 1px solid var(--bor);
+}

@@ -1,0 +1,32 @@
+ :root {
+   --pri: #E43D11;
+   --sec: #E16449;
+   --tra: #e43f115e;
+ }
+
+ * {
+   box-sizing: border-box;
+   padding: 0;
+   margin: 0;
+   font-family: Inter;
+ }
+
+ input:focus {
+   outline: none;
+ }
+
+ .lined-header {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+   font-family: 'Bricolage Grotesque', sans-serif;
+   font-size: 1.75rem;
+   color: var(--p);
+ }
+
+ .line {
+   width: 5px;
+   height: 2rem;
+   background-color: var(--pri);
+   border-radius: 3px;
+ }

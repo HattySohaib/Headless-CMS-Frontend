@@ -1,0 +1,46 @@
+/* .btn {
+    border: none;
+    padding: 0.5rem;
+    color: #424070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 450;
+    border-radius: 6px;
+    width: 50%;
+    cursor: pointer;
+}
+
+.btn-icon {
+    font-size: 1.4rem;
+}
+
+.btn:hover {
+    color: #292652;
+}
+
+.transparent-btn {
+    background: none;
+}
+
+.gradient-btn {
+    color: white;
+    background: linear-gradient(90deg, #00D1FF, #8F00FF);
+    width: 100%;
+    font-weight: 400;
+}
+
+.gradient-btn:hover {
+    color: aliceblue;
+}
+
+.colored-btn {
+    background-color: #EBEEFF;
+}
+
+.kebab-btn {
+    width: 2.5rem;
+    background-color: white;
+} */

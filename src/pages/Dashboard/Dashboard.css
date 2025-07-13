@@ -1,0 +1,55 @@
+.dashboard-light {
+    --bg: white;
+    --txt: black;
+    --bor: #d8d8d8;
+    --pri: #E43D11;
+}
+
+.dashboard-dark {
+    --bg: #101011;
+    --txt: #F8F8F8;
+    --bor: #1A1A1A;
+    --pri: #E43D11;
+}
+
+#dashboard {
+    padding: 1rem 2rem;
+    /* border-radius: 2rem; */
+    background-color: var(--bg);
+
+    /* height: 90vh;
+    overflow-y: scroll; */
+}
+
+/* #dashboard::-webkit-scrollbar {
+    position: absolute;
+    right: 1rem;
+    width: 12px;
+}
+
+#dashboard::-webkit-scrollbar-track {
+    background: var(--bg);
+    border-radius: 10px;
+}
+
+#dashboard::-webkit-scrollbar-thumb {
+    background-color: var(--pri);
+    border-radius: 10px;
+    border: 3px solid var(--bg);
+}
+
+#dashboard::-webkit-scrollbar-thumb:hover {
+    background-color: darken(var(--pri), 10%);
+} */
+
+.recents-container {
+    background-color: var(--bg);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    grid-gap: 1.5em;
+}
+
+.dropdowns {
+    display: flex;
+    gap: 1rem;
+}

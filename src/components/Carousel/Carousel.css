@@ -1,0 +1,93 @@
+/* src/Carousel.css */
+
+.carousel-light {
+    --bg: white;
+    --txt: black;
+    --bor: #a3a3a3;
+    --pri: #E43D11;
+}
+
+.carousel-dark {
+    --bg: #080808;
+    --txt: #F8F8F8;
+    --bor: #1A1A1A;
+    --pri: #E43D11;
+}
+
+.carousel-container {
+    width: 100%;
+    margin: auto;
+    position: relative;
+    padding: 1rem;
+    background-color: var(--bg);
+}
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.carousel-item {
+    min-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.carousel-btns {
+    width: min-content;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 1rem;
+    /* border: 1px solid red; */
+    padding: 0;
+}
+
+.carousel-control {
+    color: var(--txt);
+    background-color: var(--bg);
+    height: 2rem;
+    width: 4rem;
+    border: 1px solid var(--bor);
+    border-radius: 2rem;
+    cursor: pointer;
+    display: none;
+}
+
+.carousel-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    padding: 10px 0;
+}
+
+.carousel-dot {
+    width: 10px;
+    height: 10px;
+    background-color: var(--bor);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.carousel-dot.active {
+    background-color: var(--pri);
+    width: 60px;
+    transition: all 0.2s;
+}
+
+@media (min-width: 800px) {
+    .carousel:hover .carousel-control {
+        display: block;
+    }
+}

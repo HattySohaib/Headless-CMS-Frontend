@@ -1,0 +1,91 @@
+.blog-light {
+    --bg: #F8F8F8;
+    --bg2: #ffffff;
+    --txt: black;
+    --bor: #dbdbdb;
+}
+
+.blog-dark {
+    --bg: #0a0a0a;
+    --bg2: #121212;
+    --txt: #F8F8F8;
+    --bor: #1A1A1A;
+}
+
+.recommended-blog {
+    position: relative;
+    height: 22rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--bor);
+    cursor: pointer;
+    background-color: var(--bg);
+    text-decoration: none;
+}
+
+.recommended-blog img {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    width: 100%;
+    height: 45%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.recommended-blog .blog-text {
+    height: 40%;
+    padding: 0.75rem;
+    /* border: 1px solid red; */
+}
+
+.recommended-blog h3 {
+    font-size: 1.25rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 600;
+    color: var(--txt);
+}
+
+.recommended-blog p {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 400;
+    color: var(--txt);
+}
+
+
+
+.recommended-blog .details {
+    display: flex;
+    padding: 0 0.75rem;
+    height: 15%;
+    align-items: center;
+    border-top: 1px solid var(--bor);
+    justify-content: space-between;
+}
+
+.recommended-blog .details span {
+    font-size: 0.75rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    color: var(--txt);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.recommended-blog .details img {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    margin-bottom: 0;
+}
+
+@media screen and (max-width: 768px) {
+
+    .recommended-blogs-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+}

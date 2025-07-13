@@ -1,0 +1,215 @@
+.blog-read-light {
+    --bg: #ffffff;
+    --bg2: #f8f8f8;
+    --txt: black;
+    --p: #323232;
+    --bor: #dbdbdb;
+    --pri: #E43D11;
+}
+
+.blog-read-dark {
+    --bg: #080808;
+    --bg2: #0d0d0d;
+    --txt: #F8F8F8;
+    --p: #D7D7D7;
+    --bor: #1A1A1A;
+    --pri: #E43D11;
+}
+
+#blog-read {
+    background-color: var(--bg);
+}
+
+
+.banner-container img {
+    height: 50vh;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    margin: 0;
+    padding: 0;
+}
+
+.blogread-title {
+    font-size: 2.5rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+
+    margin-bottom: 1rem;
+    color: var(--txt);
+}
+
+.blogread-meta {
+    color: var(--p);
+    font-size: 1.05rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    margin-bottom: 1rem;
+}
+
+.data-container {
+    display: grid;
+    grid-template-columns: 0.75fr 0.25fr;
+    height: 100%;
+}
+
+.blogread-category {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--p);
+}
+
+
+
+.blog-content {
+    color: var(--txt);
+    padding: 1.5rem 3rem;
+}
+
+
+.blogread-info {
+    width: 100%;
+    /* background-color: #E8E8FF; */
+    border-bottom: 1px solid var(--bor);
+    margin: 0;
+    padding: 1.5rem 3rem;
+}
+
+
+.blog-user-actions {
+    position: sticky;
+    top: 8vh;
+    z-index: 2;
+    background-color: var(--bg2);
+    display: flex;
+    gap: 2rem;
+    padding: 0.75rem 3rem;
+    border-bottom: 1px solid var(--bor);
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left-pane {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--bor);
+}
+
+.right-pane {
+    height: fit-content;
+    position: sticky;
+    top: 9vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.right-pane .dp img {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+}
+
+.right-pane .author-name {
+    font-size: 1.5rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 500;
+    margin-top: 1rem;
+    color: var(--txt);
+}
+
+.right-pane .about-para {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    color: var(--p);
+    font-size: 1rem;
+    line-height: 1.4rem;
+    letter-spacing: 1.1;
+    background: none;
+    padding: 1rem;
+    text-align: justify;
+}
+
+.left-pane .blog-title {
+    text-decoration: none;
+    color: var(--txt);
+    background-color: var(--bg2);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+#about-the-author {
+    font-size: 1rem;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 400;
+    color: var(--p);
+    margin-top: 1rem;
+    font-style: italic;
+}
+
+.right-pane .author-username {
+    text-align: center;
+    margin: 0;
+    font-size: 0.9rem;
+    margin-bottom: -1rem;
+    color: var(--p);
+}
+
+.blog-user-actions button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    background: none;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    color: var(--txt);
+}
+
+.blog-user-actions button:hover {
+    outline: 1px solid var(--bor);
+}
+
+.blog-user-actions button img {
+    height: 1.4rem;
+}
+
+@media (max-width:800px) {
+
+    .data-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .blog-content {
+        width: 100%;
+        overflow: hidden;
+        overflow-wrap: break-word;
+    }
+
+    .blog-content img {
+        width: 90vw;
+        height: auto;
+    }
+
+    .left-pane {
+        position: absolute;
+        width: 100%;
+        transform: translateX(-100%);
+        background-color: var(--bg);
+        transition: all 0.3s;
+    }
+
+    .right-pane {
+        border-top: 1px solid var(--bor);
+    }
+
+    .rec-btn {
+        display: block;
+    }
+
+    .show {
+        transform: translateX(0);
+        transition: all 0.3s;
+    }
+}

@@ -1,0 +1,28 @@
+.stat-header,
+.stat-desc {
+    padding-left: 0rem;
+}
+
+.stat-cards {
+    /* border: 1px solid red; */
+    display: flex;
+    gap: 1rem;
+
+}
+
+.stat-card {
+    background-color: var(--bg2);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--bor);
+    width: 25%;
+    padding-bottom: 0.5rem;
+}
+
+.stat-card-value {
+    font-family: 'Inter';
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--txt);
+    margin: 1rem 0;
+}
