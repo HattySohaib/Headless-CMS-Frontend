@@ -17,6 +17,7 @@
 
 .search-bar {
     position: relative;
+    height: 3rem;
 }
 
 .search-input {

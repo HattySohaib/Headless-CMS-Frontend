@@ -112,3 +112,29 @@
     padding-left: 2rem;
     margin: 0.75rem 0;
 }
+
+/* Responsive Layout Changes */
+@media (max-width: 768px) {
+    #analytics {
+        padding: 1rem;
+    }
+
+    .stat-cards {
+        flex-direction: column;
+    }
+
+    .plots {
+        flex-direction: column;
+    }
+
+    .line-chart,
+    .pie-chart {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #analytics {
+        padding: 0.75rem;
+    }
+}

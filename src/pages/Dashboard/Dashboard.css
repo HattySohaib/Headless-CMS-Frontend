@@ -53,3 +53,37 @@
     display: flex;
     gap: 1rem;
 }
+
+/* Responsive Layout Changes */
+@media (max-width: 768px) {
+    #dashboard {
+        padding: 0.75rem;
+    }
+
+    .editor-top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .dropdowns {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .recents-container {
+        grid-template-columns: 1fr;
+        grid-gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #dashboard {
+        padding: 0.75rem;
+    }
+
+    .recents-container {
+        grid-gap: 0.75rem;
+    }
+}

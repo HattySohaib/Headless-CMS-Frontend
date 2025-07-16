@@ -124,8 +124,79 @@
 
 
 
-@media (max-width:800px) {
-    #side-panel {
-        transform: translateX(-100%);
+@media (max-width: 768px) {
+    .side-panel {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease-in-out;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+        border-right: 1px solid var(--bor);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .side-panel.mobile-open {
+        left: 0;
+    }
+
+    /* Force expanded state on mobile */
+    .side-panel.collapsed-true {
+        width: 280px;
+    }
+
+    .side-panel.collapsed-false {
+        width: 280px;
+    }
+
+    /* Hide collapse button on mobile */
+    .side-bar-btn-holder {
+        display: none;
+    }
+
+    .panel-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding-top: 2rem;
+    }
+
+    /* Ensure labels are always visible on mobile */
+    .panel-nav-link {
+        justify-content: flex-start;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .navigation {
+        padding: 1.5rem 1rem 1rem;
+        gap: 0.25rem;
+        flex: 1;
+    }
+
+    .other-options {
+        padding: 1rem;
+        gap: 0.25rem;
+        border-top: 1px solid var(--bor);
+        margin-top: auto;
     }
 }
+
+/* Small mobile screens */
+@media (max-width: 480px) {
+    .side-panel {
+        width: 100%;
+        left: -100%;
+    }
+
+    .side-panel.collapsed-true,
+    .side-panel.collapsed-false {
+        width: 100%;
+    }
+}
+
+/* Desktop styles - remove old media query */

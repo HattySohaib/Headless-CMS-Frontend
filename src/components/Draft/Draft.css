@@ -80,6 +80,40 @@
     text-align: center;
 }
 
+/* Mobile responsive table */
+@media (max-width: 768px) {
+    .table-headers {
+        display: none;
+    }
+
+    .draft {
+        flex-direction: column;
+        padding: 1rem;
+        border-bottom: 1px solid var(--bor);
+    }
+
+    .draft:last-child {
+        border-bottom: none;
+    }
+
+    .draft-title {
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    .draft-status,
+    .draft-date,
+    .draft-actions {
+        text-align: left;
+        margin-bottom: 0.5rem;
+    }
+
+    .draft-actions {
+        margin-bottom: 0;
+    }
+}
+
 .draft-status .circle {
     width: 5px;
     height: 5px;

@@ -187,3 +187,197 @@
     justify-self: center;
     gap: 1rem;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+
+    .login-container,
+    .signup-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        padding: 1.5rem;
+    }
+
+    .form-left,
+    .form-right {
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        padding: 1rem;
+        border-right: none;
+        border-bottom: 1px solid var(--bor);
+    }
+
+    .form-right {
+        border-bottom: none;
+    }
+
+    .login-container h2,
+    .signup-container h2 {
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .login-container .subtext,
+    .signup-container .subtext {
+        font-size: 1.1rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .login-container form,
+    .signup-container form {
+        width: 100%;
+        max-width: 400px;
+        padding: 1rem;
+        margin: 0 auto;
+    }
+
+    .login-container label,
+    .signup-container label {
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+
+    .login-container input,
+    .signup-container input,
+    .signup-container textarea {
+        padding: 12px;
+        font-size: 16px;
+        /* Prevents zoom on iOS */
+        margin-top: 4px;
+    }
+
+    .login-container button,
+    .signup-container button {
+        padding: 12px;
+        font-size: 1.2rem;
+        margin-top: 0.5rem;
+    }
+
+    .forgot,
+    .new {
+        font-size: 0.9rem;
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .step-btns {
+        position: relative;
+        bottom: auto;
+        padding: 1rem 0;
+        margin-top: 2rem;
+    }
+
+    .step-btns button {
+        width: 6rem;
+        padding: 10px;
+    }
+
+    #eye-btn {
+        right: 12px;
+        top: 16px;
+    }
+
+    #profile-label {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        border: 2px dashed var(--bor);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
+
+    #profile-label:hover {
+        border-color: var(--pri);
+    }
+
+    .password-conditions {
+        margin-top: 1rem;
+    }
+
+    .password-conditions div {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .condition {
+        font-size: 0.8rem;
+        margin: 0;
+    }
+}
+
+/* Small Mobile Screens */
+@media (max-width: 480px) {
+
+    .login-container,
+    .signup-container {
+        padding: 0.5rem;
+    }
+
+    .login-container h2,
+    .signup-container h2 {
+        font-size: 2rem;
+    }
+
+    .login-container .subtext,
+    .signup-container .subtext {
+        font-size: 1rem;
+    }
+
+    .login-container form,
+    .signup-container form {
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    .login-container input,
+    .signup-container input,
+    .signup-container textarea {
+        padding: 10px;
+    }
+
+    .login-container button,
+    .signup-container button {
+        font-size: 1.1rem;
+        padding: 10px;
+    }
+
+    .step-btns button {
+        width: 5rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+
+    .login-container,
+    .signup-container {
+        min-height: auto;
+        padding: 0.5rem;
+    }
+
+    .form-left,
+    .form-right {
+        padding: 1rem;
+    }
+
+    .login-container h2,
+    .signup-container h2 {
+        font-size: 2rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .login-container .subtext,
+    .signup-container .subtext {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+}
