@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import JoditEditor from "jodit-react";
 import { toast } from "react-toastify";
@@ -11,11 +11,17 @@ import { apiService } from "../../services/apiService";
 
 import { useFileContext } from "../../contexts/file.js";
 
+import {
+  RiImageAddLine,
+  RiSaveLine,
+  RiArrowLeftLine,
+  RiCloseLine,
+  RiCheckLine,
+  RiImageLine,
+} from "@remixicon/react";
+
 import deskBanner from "../../assets/editor_icons/deskbanner.png";
-import addimg from "../../assets/editor_icons/addimg.png";
-import save from "../../assets/editor_icons/save.png";
 import publishIcon from "../../assets/editor_icons/publish.png";
-import backIcon from "../../assets/editor_icons/back.png";
 
 import "../../components/ButtonsE/Btn.css";
 import { useAuthContext } from "../../contexts/auth";
@@ -205,7 +211,7 @@ export default function Editor() {
     <div className={`editorpanel editor-${theme}`}>
       <div className="top-panel">
         <Link className="back-btn" to="/playground/dashboard">
-          <img className="btn-icon" src={backIcon} alt="" />
+          <RiArrowLeftLine size="1.5rem" color="var(--txt)" />
         </Link>
       </div>
       <input
@@ -238,29 +244,31 @@ export default function Editor() {
             <option key={index} value={`${cat.value}`}>
               {cat.value}
             </option>
-          ))}
+          ))}{" "}
         </select>
-        <ImageBtn
-          img={deskBanner}
-          onChange={handleBannerChange}
-          selectedFile={banner}
-          oldBanner={oldBanner}
-        />
+
+        <div className="button-row">
+          <ImageBtn
+            img={deskBanner}
+            onChange={handleBannerChange}
+            selectedFile={banner}
+            oldBanner={oldBanner}
+          />
+          <button onClick={handleButtonClick} className="insert-img-btn">
+            <RiImageAddLine size="1.2rem" color="var(--txt)" />
+            <span>Insert Image</span>
+          </button>
+        </div>
 
         {isDragAreaVisible && (
           <>
-            <div className="backdrop">
-              <button onClick={handleButtonClick}>
-                <span className="material-symbols-outlined dnd-close-btn">
-                  close
-                </span>
-              </button>
+            <div className="backdrop" onClick={handleButtonClick}>
               <button onClick={handleImageAdd} className="upload-img-btn">
-                <span className="material-symbols-outlined">check</span>
+                <RiCheckLine size="1.2rem" />
                 <p>Upload Image</p>
               </button>
             </div>
-            <DropArea />
+            <DropArea onClose={handleButtonClick} />
           </>
         )}
         <div className="editor-action-btns">
@@ -271,7 +279,7 @@ export default function Editor() {
                 onClick={handleAddBlog}
                 className="save-btn"
               >
-                <img className="btn-icon" src={save} alt="save to drafts" />
+                <RiSaveLine size="1.2rem" color="var(--txt)" />
                 <span>Save to drafts</span>
               </button>
 
@@ -287,15 +295,11 @@ export default function Editor() {
           )}
           {blog && (
             <button id="save-btn" onClick={handleEditBlog} className="save-btn">
-              <img className="btn-icon" src={save} alt="save edits" />
+              <RiSaveLine size="1.2rem" color="var(--txt)" />
               <span>Save edits</span>
             </button>
           )}
         </div>
-        <button onClick={handleButtonClick} className="insert-img-btn">
-          <img className="btn-icon" src={addimg} alt="insert" />
-          <span>Insert Image</span>
-        </button>
       </div>
 
       <JoditEditor

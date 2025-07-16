@@ -84,3 +84,66 @@
 .scroll-right {
     transform: rotate(180deg);
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+
+    .author-list,
+    .recommended-blogs {
+        padding: 1.5rem;
+    }
+
+    .author-list h2,
+    .recommended-blogs h2 {
+        font-size: 1.5rem;
+    }
+
+    .recommended-blogs-list {
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+        margin-top: 1.5rem;
+        grid-gap: 1rem;
+    }
+
+    .scroll-buttons {
+        margin-top: 1rem;
+    }
+
+    .scroll-button {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.75rem;
+    }
+
+    .scroll-button img {
+        width: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .author-list,
+    .recommended-blogs {
+        padding: 1rem;
+    }
+
+    .author-list h2,
+    .recommended-blogs h2 {
+        font-size: 1.3rem;
+    }
+
+    .recommended-blogs-list {
+        grid-template-columns: 1fr;
+        margin-top: 1rem;
+        grid-gap: 0.75rem;
+    }
+
+    .scroll-button {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.5rem;
+    }
+
+    .scroll-button img {
+        width: 1.25rem;
+    }
+}

@@ -73,10 +73,17 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
-          <RiMenuLine size="1.5rem" />
-        </button>
+        {/* Mobile Navigation - Profile Button and Menu Button */}
+        <div className="mobile-nav-controls">
+          {user && (
+            <div className="mobile-profile-btn">
+              <ProfileButton />
+            </div>
+          )}
+          <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
+            <RiMenuLine size="1.5rem" />
+          </button>
+        </div>
       </div>
 
       <div
@@ -86,11 +93,7 @@ export default function Navbar() {
       >
         <div className="mobile-sidebar-header">
           <div className="mobile-header-left">
-            {user && (
-              <div className="mobile-header-user">
-                <ProfileButton />
-              </div>
-            )}
+            {/* Profile button moved to main navbar on mobile */}
           </div>
           <button className="mobile-close-btn" onClick={closeMobileMenu}>
             <RiCloseLine size="1.5rem" />

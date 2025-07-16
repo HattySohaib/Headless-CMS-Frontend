@@ -37,13 +37,13 @@ function Panel() {
 
   return (
     <div id="playground" className={`playground-${theme}`}>
-      {/* Mobile Toggle Button */}
+      {/* Mobile Toggle Button beside logo */}
       {isMobile && (
         <button
           className={`mobile-sidebar-toggle ${isSidebarOpen ? "open" : ""}`}
           onClick={toggleSidebar}
         >
-          <RiSidebarUnfoldLine color="#E16449" size="1.25rem" />
+          <RiSidebarUnfoldLine color="#E16449" size="1.35rem" />
         </button>
       )}
 

@@ -98,7 +98,6 @@
     .bg {
         width: 80%;
         top: 15vh;
-        opacity: 0.3;
     }
 
     .hero h1 {
@@ -139,7 +138,7 @@
 
     .bg {
         width: 90%;
-        opacity: 0.2;
+
     }
 
     .start-link {

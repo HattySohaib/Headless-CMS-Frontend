@@ -3,11 +3,23 @@
     --bg2: rgb(255, 255, 255);
     --txt: black;
     --p: #727272;
+    --pri: #E43D11;
     --bor: #dbdbdb;
-    --jd-color-background-default: #f8f8f8;
+
+    /* Jodit Editor Theme Variables */
+    --jd-color-background-default: #ffffff;
+    --jd-color-background-default-dark: #f8f8f8;
     --jd-color-border: #dbdbdb;
-    --jd-color-panel: black;
+    --jd-color-panel: #ffffff;
     --jd-color-icon: #727272;
+    --jd-color-text: black;
+    --jd-color-text-dark: #333333;
+    --jd-color-background-input: #ffffff;
+    --jd-color-background-button: #f8f8f8;
+    --jd-color-background-button-hover: #e8e8e8;
+    --jd-color-toolbar: #ffffff;
+    --jd-color-toolbar-button: #f8f8f8;
+    --jd-color-toolbar-button-active: #e0e0e0;
 }
 
 .editor-dark {
@@ -15,11 +27,114 @@
     --bg2: #0d0d0d;
     --txt: #F8F8F8;
     --p: #afafaf;
+    --pri: #E43D11;
     --bor: #222222;
+
+    /* Jodit Editor Theme Variables */
     --jd-color-background-default: #0d0d0d;
+    --jd-color-background-default-dark: #080808;
     --jd-color-border: #222222;
-    --jd-color-panel: #F8F8F8;
+    --jd-color-panel: #0d0d0d;
     --jd-color-icon: #afafaf;
+    --jd-color-text: #F8F8F8;
+    --jd-color-text-dark: #cccccc;
+    --jd-color-background-input: #111111;
+    --jd-color-background-button: #1a1a1a;
+    --jd-color-background-button-hover: #2a2a2a;
+    --jd-color-toolbar: #0d0d0d;
+    --jd-color-toolbar-button: #1a1a1a;
+    --jd-color-toolbar-button-active: #2a2a2a;
+}
+
+/* Jodit Editor Theme Styling */
+.editorpanel .jodit-container {
+    background-color: var(--jd-color-background-default) !important;
+    border-color: var(--jd-color-border) !important;
+}
+
+.editorpanel .jodit-toolbar {
+    background-color: var(--jd-color-toolbar) !important;
+    border-color: var(--jd-color-border) !important;
+}
+
+.editorpanel .jodit-toolbar-button {
+    background-color: var(--jd-color-toolbar-button) !important;
+    color: var(--jd-color-icon) !important;
+    border-color: var(--jd-color-border) !important;
+}
+
+.editorpanel .jodit-toolbar-button:hover {
+    background-color: var(--jd-color-toolbar-button-active) !important;
+    color: var(--jd-color-text) !important;
+}
+
+.editorpanel .jodit-toolbar-button.jodit-toolbar-button_active {
+    background-color: var(--jd-color-toolbar-button-active) !important;
+    color: var(--jd-color-text) !important;
+}
+
+.editorpanel .jodit-workplace {
+    background-color: var(--jd-color-background-default) !important;
+    color: var(--jd-color-text) !important;
+}
+
+.editorpanel .jodit-wysiwyg {
+    background-color: var(--jd-color-background-default) !important;
+    color: var(--jd-color-text) !important;
+}
+
+.editorpanel .jodit-status-bar {
+    background-color: var(--jd-color-background-default-dark) !important;
+    border-color: var(--jd-color-border) !important;
+    color: var(--jd-color-text-dark) !important;
+}
+
+.editorpanel .jodit-popup {
+    background-color: var(--jd-color-panel) !important;
+    border-color: var(--jd-color-border) !important;
+    color: var(--jd-color-text) !important;
+}
+
+.editorpanel .jodit-dialog {
+    background-color: var(--jd-color-panel) !important;
+    color: var(--jd-color-text) !important;
+}
+
+.editorpanel .jodit-dialog .jodit-dialog__header {
+    background-color: var(--jd-color-background-default-dark) !important;
+    border-color: var(--jd-color-border) !important;
+    color: var(--jd-color-text) !important;
+}
+
+.editorpanel .jodit-input,
+.editorpanel .jodit-select,
+.editorpanel .jodit-textarea {
+    background-color: var(--jd-color-background-input) !important;
+    border-color: var(--jd-color-border) !important;
+    color: var(--jd-color-text) !important;
+}
+
+.editorpanel .jodit-button {
+    background-color: var(--jd-color-background-button) !important;
+    border-color: var(--jd-color-border) !important;
+    color: var(--jd-color-text) !important;
+}
+
+.editorpanel .jodit-button:hover {
+    background-color: var(--jd-color-background-button-hover) !important;
+}
+
+.editorpanel .jodit-toolbar__box {
+    background-color: var(--jd-color-toolbar) !important;
+    border-color: var(--jd-color-border) !important;
+}
+
+.editorpanel .jodit-icon {
+    fill: var(--jd-color-icon) !important;
+}
+
+.editorpanel .jodit-toolbar-button:hover .jodit-icon {
+    fill: var(--jd-color-text) !important;
 }
 
 .editorpanel {
@@ -53,11 +168,11 @@
 }
 
 .back-btn:hover {
-    background-color: rgb(235, 235, 235);
+    background-color: var(--bg2);
 }
 
 .back-btn:active {
-    background-color: rgb(218, 218, 218);
+    background-color: var(--bor);
 }
 
 #title {
@@ -83,6 +198,11 @@
     height: 3rem;
     padding: 0.5rem;
     border-radius: 8px;
+    color: var(--txt);
+}
+
+#meta::placeholder {
+    color: var(--p);
 }
 
 #meta:focus {
@@ -104,8 +224,19 @@
     gap: 1rem;
     align-items: center;
     padding: 0.75rem 0;
-
     margin-bottom: 1rem;
+}
+
+/* Hide mobile button row on desktop */
+.mobile-button-row {
+    display: none;
+}
+
+/* Simple button row container */
+.button-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
 .top-bar-header {
@@ -123,13 +254,12 @@
     padding: 0.5rem;
     border: 1px solid var(--bor);
     border-radius: 8px;
-
     font-weight: 500;
     font-size: 0.9rem;
-    color: var(--p);
+    color: var(--txt);
 }
 
-#categories :focus {
+#categories:focus {
     outline: none;
     box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.059);
 }
@@ -178,41 +308,54 @@ option {
     height: 100vh;
     width: 100vw;
     z-index: 98;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    background-color: #3030302f;
+    background-color: rgba(48, 48, 48, 0.18);
     backdrop-filter: blur(5px);
+    overflow: hidden;
 }
 
-.dnd-close-btn {
+.backdrop button {
     position: absolute;
-    right: 10rem;
-    top: 5rem;
-    font-size: 3rem;
-    color: black;
-    border-radius: 50%;
-    background-color: white;
+    background: var(--bg2);
+    border: 1px solid var(--bor);
+    border-radius: 12px;
+    padding: 0.75rem;
     cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--txt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .upload-img-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--p);
-    background-color: var(--bg2);
-    padding: 1rem;
-    font-size: 1.1rem;
-    border-radius: 2rem;
-    gap: 1rem;
+    color: var(--txt);
+    background-color: var(--pri);
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 12px;
+    gap: 0.75rem;
     border: none;
-
     position: absolute;
-    bottom: 5rem;
+    bottom: 2rem;
     right: 50%;
     transform: translateX(50%);
-    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.upload-img-btn:hover {
+    background-color: #d63610;
+}
+
+.upload-img-btn p {
+    margin: 0;
+    color: white;
 }
 
 /* Banner Upload Button */
@@ -222,18 +365,18 @@ option {
 
 .banner-label {
     cursor: pointer;
-    color: black;
+    color: var(--txt);
 }
 
 .banner-label:hover {
-    box-shadow: 0 0 8px 5px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 8px 5px rgba(0, 0, 0, 0.15);
 }
 
 .file-upload-btn,
 .insert-img-btn,
 .save-btn,
 .publish-btn {
-    color: var(--p);
+    color: var(--txt);
     background-color: var(--bg2);
     display: flex;
     align-items: center;
@@ -244,6 +387,13 @@ option {
     border-radius: 8px;
     font-weight: 400;
     font-size: 0.9rem;
+}
+
+.file-upload-btn:hover,
+.insert-img-btn:hover,
+.save-btn:hover,
+.publish-btn:hover {
+    background-color: var(--bor);
 }
 
 
@@ -257,7 +407,8 @@ option {
 #save-btn {
     padding: 0 1rem;
     height: 2.5rem;
-    background-color: var(--bg);
+    background-color: var(--bg2);
+    border: 1px solid var(--bor);
 }
 
 #publish-btn {
@@ -265,6 +416,12 @@ option {
     height: 2.5rem;
     background-color: var(--pri);
     color: white;
+    border: 1px solid var(--pri);
+}
+
+#publish-btn:hover {
+    background-color: #d63610;
+    border-color: #d63610;
 }
 
 .upload-img-btn:active {
@@ -272,13 +429,163 @@ option {
 }
 
 
-@media screen and (max-width:800px) {
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
     .editorpanel {
-        padding: 5rem 1rem;
+        padding: 1rem;
+        padding-top: 5rem;
     }
 
-    .top-bar {
+    .top-panel {
+        padding: 1rem;
+    }
+
+    #title {
+        font-size: 1.5rem;
+        width: 100%;
+    }
+
+    #meta {
+        width: 100%;
+    }
+
+    #meta-label {
+        padding-left: 0;
+    }
+
+    .editor-top-bar {
         flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
     }
 
+    .button-row {
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .button-row .banner-label,
+    .button-row .insert-img-btn {
+        flex: 1;
+        width: 100%;
+    }
+
+    #categories {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: 1px solid var(--bor);
+        border-radius: 8px;
+        background-color: var(--bg2);
+        color: var(--txt);
+    }
+
+    .editor-action-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .file-upload-btn,
+    .insert-img-btn,
+    .save-btn,
+    .publish-btn {
+        padding: 0.75rem;
+        font-size: 1rem;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .banner-label {
+        width: 100%;
+        text-align: center;
+    }
+
+    #save-btn,
+    #publish-btn {
+        height: 3rem;
+        width: 100%;
+    }
+
+    .insert-img-btn {
+        width: 100%;
+        margin-top: 0;
+    }
+
+    /* JoditEditor responsive */
+    .jodit-container {
+        width: 100% !important;
+    }
+
+    .jodit-workplace {
+        min-height: 400px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .editorpanel {
+        padding: 0.75rem;
+        padding-top: 4.5rem;
+    }
+
+    .top-panel {
+        padding: 0.75rem;
+    }
+
+    #title {
+        font-size: 1.25rem;
+        padding: 0.5rem;
+    }
+
+    #meta {
+        height: 2.5rem;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    #meta-label {
+        font-size: 0.85rem;
+        margin-top: 1rem;
+    }
+
+    .back-btn {
+        padding: 0.25rem;
+    }
+
+    #categories {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .editor-action-btns {
+        gap: 0.5rem;
+    }
+
+    .file-upload-btn,
+    .insert-img-btn,
+    .save-btn,
+    .publish-btn {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        height: 2.5rem;
+    }
+
+    #save-btn,
+    #publish-btn {
+        height: 2.5rem;
+    }
+
+    .insert-img-btn {
+        margin-top: 0.25rem;
+    }
+
+    /* Smaller JoditEditor on small screens */
+    .jodit-workplace {
+        min-height: 300px !important;
+    }
+
+    .jodit-toolbar {
+        flex-wrap: wrap !important;
+    }
 }

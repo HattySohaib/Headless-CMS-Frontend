@@ -220,3 +220,77 @@
     background: none;
     border: none;
 }
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .edit {
+        padding: 1rem;
+        justify-content: center;
+    }
+
+    .profile-form {
+        width: 100%;
+        padding: 1.5rem 1rem;
+        border-radius: 0.75rem;
+    }
+
+    .edit .form-group {
+        width: 90%;
+    }
+
+    .edit .password-conditions {
+        width: 90%;
+    }
+
+    .edit .form-header {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    .float-btns {
+        flex-direction: column;
+        width: 90%;
+        gap: 0.75rem;
+    }
+
+    .edit .edit-btn,
+    .edit .submit-btn,
+    .edit .cancel-btn {
+        width: 100%;
+        padding: 0.75rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .edit {
+        padding: 0.5rem;
+    }
+
+    .profile-form {
+        padding: 1rem 0.75rem;
+        border-radius: 0.5rem;
+    }
+
+    .edit .profile-picture {
+        width: 6rem;
+        height: 6rem;
+    }
+
+    .edit .img-overlay {
+        width: 6rem;
+        height: 6rem;
+    }
+
+    .edit .form-header {
+        font-size: 1.2rem;
+    }
+
+    .edit .form-group {
+        width: 95%;
+    }
+
+    .edit .password-conditions {
+        width: 95%;
+    }
+}

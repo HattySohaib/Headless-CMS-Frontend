@@ -143,6 +143,18 @@
     background-color: var(--bg);
 }
 
+/* Mobile Navigation Controls */
+.mobile-nav-controls {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mobile-profile-btn {
+    display: flex;
+    align-items: center;
+}
+
 /* Mobile Sidebar */
 .mobile-sidebar {
     position: fixed;
@@ -322,6 +334,10 @@
         display: block;
     }
 
+    .mobile-nav-controls {
+        display: flex;
+    }
+
     #navbar {
         padding: 0 1rem;
     }
@@ -331,7 +347,7 @@
     }
 
     .navbar-logo {
-        height: 2.5rem;
+        height: 3rem;
     }
 }
 
@@ -342,6 +358,6 @@
     }
 
     .navbar-logo {
-        height: 2rem;
+        height: 3rem;
     }
 }
