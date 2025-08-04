@@ -1,0 +1,28 @@
+/* Local Font Definitions */
+@font-face {
+    font-family: 'Bricolage Grotesque';
+    src: url('../public/fonts/Bricolage_Grotesque/BricolageGrotesque-VariableFont_opsz,wdth,wght.ttf') format('truetype-variations');
+    font-weight: 200 800;
+    font-stretch: 75% 150%;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../public/fonts/Inter/Inter-VariableFont_opsz,wght.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../public/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype-variations');
+    font-weight: 100 900;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-display: swap;
+}

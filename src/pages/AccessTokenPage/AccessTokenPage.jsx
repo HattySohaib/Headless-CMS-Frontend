@@ -16,12 +16,9 @@ import {
 
 const AccessTokenPage = () => {
   const [apiKey, setApiKey] = useState("Not Generated");
-  const [accessToken, setAccessToken] = useState("Not Generated");
   const [loading, setLoading] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
-  const [showAccessToken, setShowAccessToken] = useState(false);
   const [copiedAPI, setCopiedAPI] = useState(false);
-  const [copiedAccess, setCopiedAccess] = useState(false);
 
   const { theme } = useTheme();
 
@@ -34,7 +31,6 @@ const AccessTokenPage = () => {
           apiService.getAuthHeaders()
         );
         setApiKey(data.apiKey);
-        setAccessToken(data.accessToken);
       } catch (error) {
         toast.error("Error fetching API key and token.");
       } finally {
@@ -62,23 +58,6 @@ const AccessTokenPage = () => {
     }
   };
 
-  const handleGenerateAccessToken = async () => {
-    try {
-      setLoading(true);
-      const data = await apiService.post(
-        "/token/generate-access-token",
-        null,
-        apiService.getAuthHeaders()
-      );
-      setAccessToken(data.accessToken);
-      toast.success("Access token generated successfully!");
-    } catch (error) {
-      toast.error("Error generating access token.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleRevokeApiKey = async () => {
     try {
       setLoading(true);
@@ -96,26 +75,9 @@ const AccessTokenPage = () => {
     }
   };
 
-  const handleRevokeAccessToken = async () => {
-    try {
-      setLoading(true);
-      await apiService.post(
-        "/token/revoke-access-token",
-        null,
-        apiService.getAuthHeaders()
-      );
-      setAccessToken("Not Generated");
-      toast.success("Access token revoked successfully!");
-    } catch (error) {
-      toast.error("Error revoking access token.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCopy = (text, type) => {
+  const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
-    type === "api" ? setCopiedAPI(true) : setCopiedAccess(true);
+    setCopiedAPI(true);
     toast.success("Copied to clipboard!");
   };
 
@@ -149,7 +111,7 @@ const AccessTokenPage = () => {
               </button>
               <button
                 className="key-opt-btn"
-                onClick={() => handleCopy(apiKey, "api")}
+                onClick={() => handleCopy(apiKey)}
               >
                 {copiedAPI ? (
                   <RiCheckDoubleFill size={20} color="#7d7d7d" />
@@ -175,58 +137,6 @@ const AccessTokenPage = () => {
               disabled={loading}
             >
               Revoke API Key
-            </button>
-          )}
-        </div>
-        <h3 className="key-header">Access Token:</h3>
-        <p className="key-desc">
-          Use this key to make write requests for your blogs. Keep this very
-          safe or anyone can get full access to your blogs.
-        </p>
-        <div className="token-section">
-          <p className="api-value">
-            {showAccessToken ? accessToken : truncate(accessToken, 60)}
-          </p>
-          {accessToken !== "Not Generated" && (
-            <div className="key-opt-btns">
-              <button
-                className="key-opt-btn"
-                onClick={() => setShowAccessToken((prev) => !prev)}
-              >
-                {showAccessToken ? (
-                  <RiEyeFill size={20} color="#7d7d7d" />
-                ) : (
-                  <RiEyeOffFill size={20} color="#7d7d7d" />
-                )}
-              </button>
-              <button
-                className="key-opt-btn"
-                onClick={() => handleCopy(accessToken, "accessToken")}
-              >
-                {copiedAccess ? (
-                  <RiCheckDoubleFill size={20} color="#7d7d7d" />
-                ) : (
-                  <RiClipboardFill size={20} color="#7d7d7d" />
-                )}
-              </button>
-            </div>
-          )}
-          {accessToken === "Not Generated" && (
-            <button
-              className="key-btn"
-              onClick={handleGenerateAccessToken}
-              disabled={loading}
-            >
-              Generate Access Token
-            </button>
-          )}
-          {accessToken !== "Not Generated" && (
-            <button
-              className="key-btn"
-              onClick={handleRevokeAccessToken}
-              disabled={loading}
-            >
-              Revoke Access Token
             </button>
           )}
         </div>
