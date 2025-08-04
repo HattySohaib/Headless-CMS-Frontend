@@ -9,7 +9,7 @@ import Categories from "./pages/Categories/Categories";
 import AuthorProfile from "./pages/AuthorProfile/AuthorProfile";
 import Analytics from "./pages/Analytics/Analytics";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import AccessTokensPage from "./pages/AccessTokenPage/AccessTokenPage";
+import ApiKeyPage from "./pages/AccessTokenPage/AccessTokenPage";
 import PasswordUpdateForm from "./pages/Password/Password";
 
 import { useAuthContext } from "./contexts/auth";
@@ -73,7 +73,7 @@ const App = () => {
           <Route path="categories" element={<Categories />} />
           <Route path="edit-profile" element={<AuthorProfile />} />
           <Route path="change-password" element={<PasswordUpdateForm />} />
-          <Route path="get-api-key" element={<AccessTokensPage />} />
+          <Route path="get-api-key" element={<ApiKeyPage />} />
         </Route>
         <Route
           path="editor"

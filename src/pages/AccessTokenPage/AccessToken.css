@@ -115,34 +115,6 @@
     font-family: 'Bricolaage Grotesque', sans-serif;
 }
 
-.key-display {
-    display: flex;
-    align-items: center;
-    background: var(--bg);
-    padding: 10px;
-    border: 1px solid var(--bor);
-    border-radius: 4px;
-}
-
-.key-display p {
-    margin: 0;
-    flex: 1;
-    font-size: 16px;
-    color: var(--txt);
-}
-
-.view-button,
-.copy-button {
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 10px;
-    margin-left: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
 .view-button:hover,
 .copy-button:hover {
     background: #0056b3;

@@ -14,7 +14,7 @@ import {
   RiEyeOffFill,
 } from "@remixicon/react";
 
-const AccessTokenPage = () => {
+const ApiKeyPage = () => {
   const [apiKey, setApiKey] = useState("Not Generated");
   const [loading, setLoading] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
@@ -27,12 +27,12 @@ const AccessTokenPage = () => {
       try {
         setLoading(true);
         const data = await apiService.get(
-          "/token/keys",
+          "/token/key",
           apiService.getAuthHeaders()
         );
         setApiKey(data.apiKey);
       } catch (error) {
-        toast.error("Error fetching API key and token.");
+        toast.error("Error fetching API key.");
       } finally {
         setLoading(false);
       }
@@ -145,4 +145,4 @@ const AccessTokenPage = () => {
   );
 };
 
-export default AccessTokenPage;
+export default ApiKeyPage;
