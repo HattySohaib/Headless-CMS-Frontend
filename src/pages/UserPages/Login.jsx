@@ -6,7 +6,6 @@ import Footer from "../../components/Footer/Footer";
 
 import { RiEyeFill, RiEyeOffFill } from "@remixicon/react";
 import { userApi } from "../../API/userApi";
-import { toast } from "react-toastify";
 import Loader from "../../components/Loader/Loader";
 
 const Login = () => {
@@ -29,9 +28,9 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     const res = await userApi.login(formData);
-    if (res.status === "success") {
+    if (res.success) {
       login(res.data);
-      setTimeout(() => navigate("/playground/dashboard"), 1000);
+      setTimeout(() => navigate("/playground/dashboard"), 500);
     }
     setLoading(false);
   };
@@ -72,14 +71,22 @@ const Login = () => {
                 onClick={() => togglePasswordVisibility(showPassword)}
               >
                 {!showPassword ? (
-                  <RiEyeOffFill size={20} color="white" />
+                  <RiEyeOffFill
+                    size={20}
+                    color={theme === "dark" ? "white" : "black"}
+                  />
                 ) : (
-                  <RiEyeFill size={20} color="white" />
+                  <RiEyeFill
+                    size={20}
+                    color={theme === "dark" ? "white" : "black"}
+                  />
                 )}
               </button>
             </label>
             <Link className="forgot">Forgot Password?</Link>
-            <button type="submit">Login</button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </button>
           </form>
         </div>
         <div className="form-right">

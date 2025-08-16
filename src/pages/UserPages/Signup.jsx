@@ -17,6 +17,7 @@ const Signup = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -97,6 +98,8 @@ const Signup = () => {
       toast.warn("Please upload a profile image");
       return;
     }
+
+    setLoading(true);
     const formDataToSend = new FormData();
     formDataToSend.append("fullName", formData.fullName);
     formDataToSend.append("username", formData.username);
@@ -105,8 +108,9 @@ const Signup = () => {
     formDataToSend.append("password", formData.password);
     formDataToSend.append("profileImage", formData.profileImage);
 
-    await userApi.signup(formDataToSend);
-    // setTimeout(() => navigate("/login"), 1000);
+    const res = await userApi.signup(formDataToSend);
+    if (res.success) setTimeout(() => navigate("/login"), 1000);
+    setLoading(false);
   };
 
   return (
@@ -193,9 +197,15 @@ const Signup = () => {
                     onClick={() => togglePasswordVisibility(showPassword)}
                   >
                     {!showPassword ? (
-                      <RiEyeOffFill size={20} color="white" />
+                      <RiEyeOffFill
+                        size={20}
+                        color={theme === "dark" ? "white" : "black"}
+                      />
                     ) : (
-                      <RiEyeFill size={20} color="white" />
+                      <RiEyeFill
+                        size={20}
+                        color={theme === "dark" ? "white" : "black"}
+                      />
                     )}
                   </button>
                 </label>
@@ -264,8 +274,12 @@ const Signup = () => {
                   ></textarea>
                 </label>
 
-                <button type="submit" className="signup-button">
-                  Sign Up
+                <button
+                  type="submit"
+                  className="signup-button"
+                  disabled={loading}
+                >
+                  {loading ? "Creating Account..." : "Sign Up"}
                 </button>
               </>
             )}

@@ -13,9 +13,19 @@ export const userApi = {
 
   async signup(userData) {
     const res = await apiService.post("/users", userData);
-    if (res.success) toast.success(res.message);
-    else toast.warn(res.message);
-    console.log(res);
+    if (res.success) {
+      toast.success(res.message);
+    } else {
+      // Handle validation errors
+      if (res.code === "VALIDATION_ERROR" && res.errors) {
+        Object.values(res.errors).forEach((errorMessage) => {
+          toast.error(errorMessage);
+        });
+      } else {
+        // Handle other types of errors
+        toast.error(res.message || "Signup failed");
+      }
+    }
     return res;
   },
 

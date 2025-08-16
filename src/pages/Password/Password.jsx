@@ -13,6 +13,7 @@ const PasswordUpdateForm = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState({
     oldPassword: false,
@@ -71,12 +72,14 @@ const PasswordUpdateForm = () => {
     )
       return;
 
+    setLoading(true);
     const formData = {
       oldPassword,
       newPassword,
     };
 
     await userApi.changePassword(user.id, formData);
+    setLoading(false);
   };
 
   return (
@@ -98,9 +101,9 @@ const PasswordUpdateForm = () => {
             onClick={() => togglePasswordVisibility("oldPassword")}
           >
             {!showPassword.oldPassword ? (
-              <RiEyeOffFill color="white" />
+              <RiEyeOffFill color={theme === "dark" ? "white" : "black"} />
             ) : (
-              <RiEyeFill color="white" />
+              <RiEyeFill color={theme === "dark" ? "white" : "black"} />
             )}
           </button>
         </div>
@@ -121,9 +124,9 @@ const PasswordUpdateForm = () => {
             onClick={() => togglePasswordVisibility("newPassword")}
           >
             {!showPassword.newPassword ? (
-              <RiEyeOffFill color="white" />
+              <RiEyeOffFill color={theme === "dark" ? "white" : "black"} />
             ) : (
-              <RiEyeFill color="white" />
+              <RiEyeFill color={theme === "dark" ? "white" : "black"} />
             )}
           </button>
         </div>
@@ -144,9 +147,9 @@ const PasswordUpdateForm = () => {
             onClick={() => togglePasswordVisibility("confirmPassword")}
           >
             {!showPassword.confirmPassword ? (
-              <RiEyeOffFill color="white" />
+              <RiEyeOffFill color={theme === "dark" ? "white" : "black"} />
             ) : (
-              <RiEyeFill color="white" />
+              <RiEyeFill color={theme === "dark" ? "white" : "black"} />
             )}
           </button>
           {!passwordsMatch && confirmPassword.length > 0 && (
@@ -193,6 +196,7 @@ const PasswordUpdateForm = () => {
           type="submit"
           className="submit-btn"
           disabled={
+            loading ||
             !hasMinLength ||
             !hasCapital ||
             !hasNumber ||
@@ -200,7 +204,7 @@ const PasswordUpdateForm = () => {
             !passwordsMatch
           }
         >
-          Update Password
+          {loading ? "Updating Password..." : "Update Password"}
         </button>
       </form>
     </div>
