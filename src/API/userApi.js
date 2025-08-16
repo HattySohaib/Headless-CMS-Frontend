@@ -15,6 +15,7 @@ export const userApi = {
     const res = await apiService.post("/users", userData);
     if (res.success) toast.success(res.message);
     else toast.warn(res.message);
+    console.log(res);
     return res;
   },
 

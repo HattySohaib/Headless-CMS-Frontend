@@ -45,7 +45,6 @@ const Signup = () => {
     setHasSymbol(/[!@#$%^&*(),.?":{}|<>]/.test(password));
   };
 
-  const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
 
   const checkUsername = async () => {
@@ -106,8 +105,8 @@ const Signup = () => {
     formDataToSend.append("password", formData.password);
     formDataToSend.append("profileImage", formData.profileImage);
 
-    const res = await userApi.signup(formDataToSend);
-    setTimeout(() => navigate("/login"), 1000);
+    await userApi.signup(formDataToSend);
+    // setTimeout(() => navigate("/login"), 1000);
   };
 
   return (
@@ -121,7 +120,6 @@ const Signup = () => {
         <div className="form-right">
           <h2 className="signup-title">Sign Up</h2>
           <p className="subtext">Create Your Account</p>
-          {error && <p className="error">{error}</p>}
           <form onSubmit={handleSubmit} className="signup-form">
             {step === 1 && (
               <>
