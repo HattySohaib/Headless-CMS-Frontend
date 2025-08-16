@@ -6,13 +6,10 @@ import Playground from "./pages/Playground/Playground";
 import Editor from "./pages/Editor/Editor";
 import Blogs from "./pages/Blogs/Blogs";
 import Categories from "./pages/Categories/Categories";
-import AuthorProfile from "./pages/AuthorProfile/AuthorProfile";
 import Analytics from "./pages/Analytics/Analytics";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Messages from "./pages/Messages/Messages";
 import Settings from "./pages/Settings/Settings";
-import ApiKeyPage from "./pages/AccessTokenPage/AccessTokenPage";
-import PasswordUpdateForm from "./pages/Password/Password";
 
 import { useAuthContext } from "./contexts/auth";
 import { DropAreaProvider } from "./contexts/file";
@@ -26,17 +23,9 @@ import Author from "./pages/Author/Author";
 
 import Navbar from "./components/Navbar/Navbar";
 import Draftboard from "./pages/Draftboard/Draftboard";
-import Loader from "./components/Loader/Loader";
 
 const App = () => {
   const { user } = useAuthContext();
-  if (!user) {
-    return (
-      <div className="app-container">
-        <Loader />
-      </div>
-    );
-  }
   return (
     <>
       <UserProvider>
