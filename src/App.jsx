@@ -9,6 +9,8 @@ import Categories from "./pages/Categories/Categories";
 import AuthorProfile from "./pages/AuthorProfile/AuthorProfile";
 import Analytics from "./pages/Analytics/Analytics";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import Messages from "./pages/Messages/Messages";
+import Settings from "./pages/Settings/Settings";
 import ApiKeyPage from "./pages/AccessTokenPage/AccessTokenPage";
 import PasswordUpdateForm from "./pages/Password/Password";
 
@@ -27,12 +29,14 @@ import Draftboard from "./pages/Draftboard/Draftboard";
 import Loader from "./components/Loader/Loader";
 
 const App = () => {
-  const { user, loading } = useAuthContext();
-
-  if (loading) {
-    return <Loader />;
+  const { user } = useAuthContext();
+  if (!user) {
+    return (
+      <div className="app-container">
+        <Loader />
+      </div>
+    );
   }
-
   return (
     <>
       <UserProvider>
@@ -46,7 +50,6 @@ const App = () => {
           element={user ? <Playground /> : <Navigate to={"/login"} />}
         >
           <Route
-            index
             path="dashboard"
             element={
               <UserProvider>
@@ -71,9 +74,15 @@ const App = () => {
             }
           />
           <Route path="categories" element={<Categories />} />
-          <Route path="edit-profile" element={<AuthorProfile />} />
-          <Route path="change-password" element={<PasswordUpdateForm />} />
-          <Route path="get-api-key" element={<ApiKeyPage />} />
+          <Route
+            path="messages"
+            element={
+              <RefreshProvider>
+                <Messages />
+              </RefreshProvider>
+            }
+          />
+          <Route path="settings" element={<Settings />} />
         </Route>
         <Route
           path="editor"

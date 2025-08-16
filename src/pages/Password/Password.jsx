@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuthContext } from "../../contexts/auth.js";
-import { toast } from "react-toastify";
 import { useTheme } from "../../contexts/theme.js";
-import { apiService } from "../../services/apiService";
 import {
   RiCheckboxCircleFill,
   RiCloseCircleFill,
   RiEyeFill,
   RiEyeOffFill,
 } from "@remixicon/react";
+import { userApi } from "../../API/userApi.js";
 
 const PasswordUpdateForm = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -77,17 +76,7 @@ const PasswordUpdateForm = () => {
       newPassword,
     };
 
-    try {
-      const result = await apiService.post(
-        `/users/edit-password/${user.id}`,
-        formData,
-        apiService.getAuthHeaders(user.token)
-      );
-      toast.success("Password updated successfully");
-    } catch (error) {
-      toast.error("Failed to update password");
-      console.error("Error:", error);
-    }
+    await userApi.changePassword(user.id, formData);
   };
 
   return (

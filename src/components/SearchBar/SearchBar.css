@@ -1,51 +1,75 @@
-/* CustomSearchBar.css */
+/* SearchBar.css */
 .bar-light {
-    --bg: #F8F8F8;
-    --bg2: #dbdbdb;
+    --bg: #f8f8f8;
+    --bg2: white;
     --txt: black;
-    --p: #979797;
-    --bor: #dbdbdb;
+    --p: #6d6d6d;
+    --bor: #c0c0c0;
+    /* More visible border */
+    --pri: #E43D11;
+    --hover: #f0f0f0;
 }
 
 .bar-dark {
     --bg: #0a0a0a;
     --bg2: #121212;
-    --txt: #F8F8F8;
-    --p: #444444;
-    --bor: #1A1A1A;
+    --txt: #d8d8d8;
+    --p: #6d6d6d;
+    --bor: #404040;
+    /* More visible border */
+    --pri: #E43D11;
+    --hover: #1a1a1a;
 }
 
 .search-bar {
     position: relative;
-    height: 3rem;
+    display: inline-block;
+    min-width: 250px;
 }
 
 .search-input {
-    height: 100%;
-    background-color: var(--bg);
     width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    background-color: var(--bg2);
     border: 1px solid var(--bor);
-    border-radius: 8px;
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    padding-left: 2.5rem;
+    border-radius: 0.5rem;
     color: var(--txt);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: var(--pri);
+    box-shadow: 0 0 0 2px rgba(228, 61, 17, 0.1);
+}
+
+.search-input:hover {
+    border-color: var(--pri);
+    background-color: var(--hover);
 }
 
 .search-input::placeholder {
     color: var(--p);
-    font-weight: 500;
+    font-weight: 400;
     font-size: 0.9rem;
 }
 
 .search-button {
     position: absolute;
-    left: 10px;
+    left: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
-    width: 1.4rem;
+    width: 1rem;
+    height: 1rem;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.search-button:hover {
+    opacity: 1;
 }

@@ -17,8 +17,8 @@ function AuthorCard({ author }) {
   const { theme } = useTheme();
   return (
     <Link
-      to={`/author/${author.authorId}`}
-      key={author.authorId}
+      to={`/author/${author._id}`}
+      key={author._id}
       className={`author author-${theme}`}
       style={{ flex: "0 0 auto", cursor: "pointer" }}
     >
@@ -29,23 +29,23 @@ function AuthorCard({ author }) {
       <img
         onLoad={handleImageLoaded}
         style={{ display: isLoading ? "none" : "block" }}
-        src={author?.user?.profile_image_url}
+        src={author?.profileImageUrl}
         alt=""
       />
       <div className="author-info">
-        <h3>{capitalizeFirstLetter(author?.user?.full_name)}</h3>
+        <h3>{capitalizeFirstLetter(author?.fullName)}</h3>
         <div className="author-metrics">
           <span className="author-metric">
             <img src={blog} alt="" />
-            {author.blogs.length}
+            {author.blogCount}
           </span>
           <span className="author-metric">
             <img src={followers} alt="" />
-            {author.followers.length}
+            {author.followersCount}
           </span>
           <span className="author-metric">
             <img src={heart} alt="" />
-            {author.likes}
+            {author.likesCount}
           </span>
         </div>
       </div>

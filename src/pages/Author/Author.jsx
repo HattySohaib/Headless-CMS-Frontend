@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Author.css";
-import { apiService } from "../../services/apiService";
+import { userApi } from "../../API/userApi";
+import { blogApi } from "../../API/blogApi";
 
 import heart from "../../assets/homeIcons/heart.png";
 import followers from "../../assets/homeIcons/follow.png";
@@ -8,7 +9,6 @@ import followings from "../../assets/homeIcons/followers.png";
 import blog from "../../assets/homeIcons/blog.png";
 import views from "../../assets/homeIcons/views.png";
 
-import Loader from "../../components/Loader/Loader";
 import GhostLoader from "../../components/GhostLoader/GhostLoader";
 
 import { useParams } from "react-router-dom";
@@ -17,177 +17,155 @@ import { useTheme } from "../../contexts/theme";
 import { toast } from "react-toastify";
 import BlogCard2 from "../../components/BlogCard2/BlogCard2";
 
-import { capitalizeFirstLetter, truncate } from "../../utils/stringFunctions";
+import { capitalizeFirstLetter } from "../../utils/stringFunctions";
+import Loader from "../../components/Loader/Loader";
 
 function Author() {
   const [author, setAuthor] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [published, setPublished] = useState([]);
   const [followed, setFollowed] = useState(false);
-
   const [imgLoading, setImgLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   const { id } = useParams();
   const { user } = useAuthContext();
   const { theme } = useTheme();
 
-  const followAuthor = async () => {
-    if (id && user) {
-      try {
-        const data = await apiService.post(
-          `/users/follow/${id}`,
-          null,
-          apiService.getAuthHeaders(user.token)
-        );
-        setFollowed(!followed);
-        toast.success(data.message);
-      } catch (error) {
-        toast.error(error);
-      }
-    } else {
+  const handleFollowUser = async () => {
+    if (!user) {
       toast.error("Please login to follow the author");
+      return;
     }
+    const res = await userApi.followUser(author.id);
+    setFollowed(!followed);
+    toast.success(res.message);
   };
 
-  const fetchAuthor = async () => {
+  const handleGetUserById = async () => {
     setLoading(true);
-    try {
-      const data = await apiService.get(`/users/author/${id}`);
-      setAuthor(data);
-      setFollowed(data.followers.includes(user.id));
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+    const data = await userApi.getUser(id);
+    setAuthor(data);
+    setLoading(false);
   };
 
-  const fetchPublishedByAuthor = async () => {
-    setLoading(true);
-    try {
-      const data = await apiService.get(`/blogs/get-published/${id}`);
-      console.log(data);
-      setPublished(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const handleGetBlogsByUser = async () => {
+    const data = await blogApi.getBlogs({ author: id });
+    setPublished(data);
   };
-
-  useEffect(() => {
-    if (id) {
-      fetchAuthor();
-      fetchPublishedByAuthor();
-    }
-  }, [id]);
 
   const handleImageLoaded = () => {
     setImgLoading(false);
   };
 
-  if (loading) return <Loader />;
-  else
-    return (
-      <div id="author-page" className={`author-page-${theme}`}>
-        <div className="author-details">
-          <div className="top-header">
-            <div className="lined-header">
-              <div className="line"></div>
-              <p>Author Details</p>
-            </div>
+  useEffect(() => {
+    handleGetUserById();
+    handleGetBlogsByUser();
+  }, [id]);
 
-            {user && (
-              <button className="follow-btn" onClick={followAuthor}>
-                {!followed ? "Follow" : "Unfollow"}
-              </button>
-            )}
+  if (loading) {
+    return <Loader />;
+  }
+
+  return (
+    <div id="author-page" className={`author-page-${theme}`}>
+      <div className="author-details">
+        <div className="top-header">
+          <div className="lined-header">
+            <div className="line"></div>
+            <p>Author Details</p>
           </div>
 
-          <div className="author-info2">
-            <img
-              onLoad={handleImageLoaded}
-              className="author-dp"
-              src={author?.user?.profile_image_url}
-              alt=""
-              style={{ display: imgLoading ? "none" : "block" }}
-            />
-            {imgLoading && (
-              <GhostLoader width={"8rem"} height={"8rem"} radius={"50%"} />
-            )}
-            <div className="author-text">
-              <h1>{capitalizeFirstLetter(author?.user?.full_name)}</h1>
-              <div className="author-personal">
-                <div className="author-sub-text">
-                  <p>Username</p>
-                  <p>@{author?.user?.username}</p>
-                </div>
-                <div className="author-sub-text">
-                  <p>Email</p>
-                  <p>{author?.user?.email}</p>
-                </div>
-                <div className="author-sub-text">
-                  <p>Joined</p>
-                  <p>{author?.user?.created_at}</p>
-                </div>
+          {user && (
+            <button className="follow-btn" onClick={handleFollowUser}>
+              {!followed ? "Follow" : "Unfollow"}
+            </button>
+          )}
+        </div>
+
+        <div className="author-info2">
+          <img
+            onLoad={handleImageLoaded}
+            className="author-dp"
+            src={author?.profileImageUrl}
+            alt=""
+            style={{ display: imgLoading ? "none" : "block" }}
+          />
+          {imgLoading && (
+            <GhostLoader width={"8rem"} height={"8rem"} radius={"50%"} />
+          )}
+          <div className="author-text">
+            <h1>{capitalizeFirstLetter(author?.fullName)}</h1>
+            <div className="author-personal">
+              <div className="author-sub-text">
+                <p>Username</p>
+                <p>@{author?.username}</p>
               </div>
-            </div>
-          </div>
-          <div className="author-stats">
-            <div className="stat">
-              <div className="stat-icon">
-                <img src={blog} alt="" />
+              <div className="author-sub-text">
+                <p>Email</p>
+                <p>{author?.email}</p>
               </div>
-              <div>
-                <h2>{author?.blogs?.length}</h2>
-                <p>Blogs</p>
-              </div>
-            </div>
-            <div className="stat">
-              <div className="stat-icon">
-                <img src={followers} alt="" />
-              </div>
-              <div>
-                <h2>{author?.followers?.length}</h2>
-                <p>Followers</p>
-              </div>
-            </div>
-            <div className="stat">
-              <div className="stat-icon">
-                <img src={followings} alt="" />
-              </div>
-              <div>
-                <h2>{author?.user?.following?.length}</h2>
-                <p>Following</p>
-              </div>
-            </div>
-            <div className="stat">
-              <div className="stat-icon">
-                <img src={heart} alt="" />
-              </div>
-              <div>
-                <h2>{author?.likes}</h2>
-                <p>Total Likes</p>
-              </div>
-            </div>
-            <div className="stat">
-              <div className="stat-icon">
-                <img src={views} alt="" />
-              </div>
-              <div>
-                <h2>{author?.views}</h2>
-                <p>Total Views</p>
+              <div className="author-sub-text">
+                <p>Joined</p>
+                <p>{author?.createdAt}</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="author-blogs">
-          {published.map((blog) => (
-            <BlogCard2 blog={blog} key={blog._id} />
-          ))}
+        <div className="author-stats">
+          <div className="stat">
+            <div className="stat-icon">
+              <img src={blog} alt="" />
+            </div>
+            <div>
+              <h2>{author?.blogCount}</h2>
+              <p>Blogs</p>
+            </div>
+          </div>
+          <div className="stat">
+            <div className="stat-icon">
+              <img src={followers} alt="" />
+            </div>
+            <div>
+              <h2>{author?.followersCount}</h2>
+              <p>Followers</p>
+            </div>
+          </div>
+          <div className="stat">
+            <div className="stat-icon">
+              <img src={followings} alt="" />
+            </div>
+            <div>
+              <h2>{author?.followingCount}</h2>
+              <p>Following</p>
+            </div>
+          </div>
+          <div className="stat">
+            <div className="stat-icon">
+              <img src={heart} alt="" />
+            </div>
+            <div>
+              <h2>{author?.likesCount}</h2>
+              <p>Total Likes</p>
+            </div>
+          </div>
+          <div className="stat">
+            <div className="stat-icon">
+              <img src={views} alt="" />
+            </div>
+            <div>
+              <h2>{author?.viewCount}</h2>
+              <p>Total Views</p>
+            </div>
+          </div>
         </div>
       </div>
-    );
+      <div className="author-blogs">
+        {published.map((blog) => (
+          <BlogCard2 blog={blog} key={blog._id} />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default Author;

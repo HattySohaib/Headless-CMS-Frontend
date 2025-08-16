@@ -1,87 +1,138 @@
 import React, { useState, useEffect } from "react";
 import "./Draftboard.css";
-import Dropdown from "../../components/Dropdown/Dropdown";
 import SearchBar from "../../components/SearchBar/SearchBar";
+import Filter from "../../components/Filter/Filter";
 import Draft from "../../components/Draft/Draft";
-import { apiService } from "../../services/apiService";
-
-import Loader from "../../components/Loader/Loader";
 
 import { useRefresh } from "../../contexts/refresh";
 import { useAuthContext } from "../../contexts/auth";
-import { toast } from "react-toastify";
 import { useTheme } from "../../contexts/theme";
+import { blogApi } from "../../API/blogApi";
+import { categoryApi } from "../../API/categoryApi";
+import {
+  RiArrowLeftSLine,
+  RiArrowRightSLine,
+  RiArrowLeftDoubleLine,
+  RiArrowRightDoubleLine,
+} from "@remixicon/react";
 
 function Draftboard() {
-  const [loading, setLoading] = useState(true);
-
   const [drafts, setDrafts] = useState([]);
-  const [categories, setCategories] = useState(["All"]);
-  const { refresh } = useRefresh();
-  const { setRefresh } = useRefresh();
-  const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalBlogs: 0,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false,
+  });
+  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterConfig, setFilterConfig] = useState(null);
 
+  const { refresh } = useRefresh();
   const { user } = useAuthContext();
   const { theme } = useTheme();
 
-  const fetchDrafts = async () => {
-    try {
-      const data = await apiService.get(
-        `/blogs/get-blogs-by-user/${user?.id}`,
-        apiService.getAuthHeaders(user.token)
-      );
-      setDrafts(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const handleGetBlogsByUser = async (page = 1) => {
+    const apiParams = filterConfig.buildApiParams(
+      filterConfig.frontendFilters,
+      searchTerm,
+      page,
+      user.id
+    );
+    const data = await blogApi.getBlogs(apiParams);
+    setDrafts(data.blogs || []);
+    setPagination(
+      data.pagination || {
+        currentPage: 1,
+        totalPages: 1,
+        totalBlogs: 0,
+        limit: 10,
+        hasNextPage: false,
+        hasPrevPage: false,
+      }
+    );
   };
 
-  const fetchCategories = async () => {
-    try {
-      const data = await apiService.get(
-        "/categories/",
-        apiService.getAuthHeaders(user.token)
-      );
-      setCategories(data.map((obj) => obj.value));
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
+  const handleGetCategories = async () => {
+    const data = await categoryApi.getCategories();
+    setCategories(data.map((obj) => obj.value) || []);
   };
 
   useEffect(() => {
-    try {
-      fetchDrafts();
-      fetchCategories();
-    } catch (error) {
-      toast.error(error);
+    if (filterConfig) {
+      handleGetBlogsByUser(currentPage);
     }
-  }, [refresh, setRefresh]);
+  }, [refresh, currentPage, searchTerm, filterConfig]);
 
-  const filteredDrafts = drafts.filter(
-    (blog) =>
-      blog.category.toLowerCase().includes(category.toLowerCase()) &&
-      blog.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    handleGetCategories();
+  }, []);
 
-  const handleOnCategoryChange = (e) => {
-    if (e === "All") setCategory("");
-    else setCategory(e);
+  useEffect(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [searchTerm, filterConfig]);
+
+  const handleOnSearchChange = (searchValue) => {
+    setSearchTerm(searchValue);
   };
 
-  const handleOnSearchChange = (e) => {
-    setSearchTerm(e);
+  const handleFiltersChange = (newFilterConfig) => {
+    setFilterConfig(newFilterConfig);
   };
 
-  if (loading) {
-    return (
-      <div className="loader-div">
-        <Loader />
-      </div>
-    );
-  }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  const handleLastPage = () => {
+    setCurrentPage(pagination.totalPages);
+  };
+
+  const handlePrevPage = () => {
+    if (pagination.hasPrevPage) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (pagination.hasNextPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const { currentPage, totalPages } = pagination;
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      let start = Math.max(1, currentPage - 2);
+      let end = Math.min(totalPages, start + maxVisiblePages - 1);
+
+      if (end - start < maxVisiblePages - 1) {
+        start = Math.max(1, end - maxVisiblePages + 1);
+      }
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+    }
+
+    return pages;
+  };
 
   return (
     <div id="draftboard" className={`draftboard-${theme}`}>
@@ -92,14 +143,13 @@ function Draftboard() {
         </div>
         <div className="dropdowns">
           <SearchBar
-            placeholder={"Search using a keyword"}
+            placeholder={"Search blogs by title or content..."}
             onSearch={handleOnSearchChange}
+            debounceMs={300}
           />
-          <Dropdown
-            text={"Category :"}
-            defaultText="All"
-            options={categories}
-            onSelect={handleOnCategoryChange}
+          <Filter
+            onFiltersChange={handleFiltersChange}
+            availableCategories={categories}
           />
         </div>
       </div>
@@ -107,16 +157,84 @@ function Draftboard() {
         <div className="table-headers">
           <p className="table-header">Title</p>
           <p className="table-header">Status</p>
+          <p className="table-header">Views</p>
+          <p className="table-header">Likes</p>
           <p className="table-header">Last Edited</p>
           <p className="table-header">Actions</p>
         </div>
-        {!filteredDrafts.length && (
-          <p className="blank-text">No records found.</p>
-        )}
-        {filteredDrafts.map((e, key) => (
-          <Draft key={key} blog={e} />
+        {!drafts.length && <p className="blank-text">No records found.</p>}
+        {drafts.map((e, key) => (
+          <Draft key={e._id || key} blog={e} />
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {pagination.totalPages > 1 && (
+        <div className="pagination-container">
+          <div className="pagination-info">
+            <p className="pagination-text">
+              Showing {(pagination.currentPage - 1) * pagination.limit + 1} to{" "}
+              {Math.min(
+                pagination.currentPage * pagination.limit,
+                pagination.totalBlogs
+              )}{" "}
+              of {pagination.totalBlogs} blogs
+            </p>
+          </div>
+
+          <div className="pagination-controls">
+            <button
+              className="pagination-btn"
+              onClick={handleFirstPage}
+              disabled={!pagination.hasPrevPage}
+              title="First Page"
+            >
+              <RiArrowLeftDoubleLine size={16} />
+            </button>
+
+            <button
+              className="pagination-btn"
+              onClick={handlePrevPage}
+              disabled={!pagination.hasPrevPage}
+              title="Previous Page"
+            >
+              <RiArrowLeftSLine size={16} />
+            </button>
+
+            <div className="pagination-numbers">
+              {getPageNumbers().map((pageNum) => (
+                <button
+                  key={pageNum}
+                  className={`pagination-number ${
+                    pageNum === pagination.currentPage ? "active" : ""
+                  }`}
+                  onClick={() => handlePageChange(pageNum)}
+                >
+                  {pageNum}
+                </button>
+              ))}
+            </div>
+
+            <button
+              className="pagination-btn"
+              onClick={handleNextPage}
+              disabled={!pagination.hasNextPage}
+              title="Next Page"
+            >
+              <RiArrowRightSLine size={16} />
+            </button>
+
+            <button
+              className="pagination-btn"
+              onClick={handleLastPage}
+              disabled={!pagination.hasNextPage}
+              title="Last Page"
+            >
+              <RiArrowRightDoubleLine size={16} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

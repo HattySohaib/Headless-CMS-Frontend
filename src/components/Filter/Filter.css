@@ -1,0 +1,210 @@
+.filter-light {
+    --bg: #f8f8f8;
+    --bg2: white;
+    --txt: black;
+    --bor: #c0c0c0;
+    /* More visible border */
+    --pri: #E43D11;
+    --sub: #6d6d6d;
+    --hover: #f0f0f0;
+}
+
+.filter-dark {
+    --bg: #0a0a0a;
+    --bg2: #121212;
+    --txt: #d8d8d8;
+    --bor: #404040;
+    /* More visible border */
+    --pri: #E43D11;
+    --sub: #6d6d6d;
+    --hover: #1a1a1a;
+}
+
+.filter-component {
+    position: relative;
+    display: inline-block;
+}
+
+.filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg2);
+    border: 1px solid var(--bor);
+    border-radius: 0.5rem;
+    color: var(--txt);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.filter-toggle:hover {
+    background-color: var(--hover);
+    border-color: var(--pri);
+}
+
+.filter-toggle.active {
+    background-color: var(--pri);
+    color: white;
+    border-color: var(--pri);
+}
+
+.filter-toggle.has-filters {
+    border-color: var(--pri);
+}
+
+.filter-indicator {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--pri);
+    border-radius: 50%;
+    border: 2px solid var(--bg2);
+}
+
+.filter-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1000;
+    min-width: 320px;
+    background-color: var(--bg2);
+    border: 1px solid var(--bor);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 0.5rem;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem 0.5rem;
+    border-bottom: 1px solid var(--bor);
+}
+
+.filter-header h4 {
+    margin: 0;
+    color: var(--txt);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--sub);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background-color: var(--hover);
+    color: var(--txt);
+}
+
+.filter-content {
+    padding: 1rem;
+}
+
+.filter-group {
+    margin-bottom: 1rem;
+}
+
+.filter-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.filter-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--txt);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background-color: var(--bg);
+    border: 1px solid var(--bor);
+    border-radius: 0.375rem;
+    color: var(--txt);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--pri);
+    box-shadow: 0 0 0 2px rgba(228, 61, 17, 0.1);
+}
+
+.filter-actions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--bor);
+}
+
+.clear-filters-btn {
+    width: 100%;
+    padding: 0.625rem;
+    background-color: var(--bg);
+    border: 1px solid var(--bor);
+    border-radius: 0.375rem;
+    color: var(--txt);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clear-filters-btn:hover {
+    background-color: var(--hover);
+    border-color: var(--pri);
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .filter-dropdown {
+        left: 0;
+        right: 0;
+        min-width: auto;
+        width: calc(100vw - 2rem);
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+
+    .filter-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .filter-content {
+        padding: 0.75rem;
+    }
+
+    .filter-header {
+        padding: 0.75rem 0.75rem 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-toggle {
+        padding: 0.625rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .filter-dropdown {
+        width: calc(100vw - 1rem);
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+    }
+}

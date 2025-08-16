@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { apiService } from "../../services/apiService";
-
-import Loader from "../../components/Loader/Loader";
 import GhostLoader from "../../components/GhostLoader/GhostLoader";
 import "./BlogRead.css";
 
@@ -18,6 +15,9 @@ import { useAuthContext } from "../../contexts/auth";
 import { useTheme } from "../../contexts/theme";
 
 import { capitalizeFirstLetter, truncate } from "../../utils/stringFunctions";
+import { userApi } from "../../API/userApi";
+import { blogApi } from "../../API/blogApi";
+import Loader from "../../components/Loader/Loader";
 
 function BlogRead() {
   const { id } = useParams();
@@ -28,99 +28,80 @@ function BlogRead() {
   const [author, setAuthor] = useState([]);
 
   const [followed, setFollowed] = useState(false);
-  const [liked, setLiked] = useState(false);
-
   const [loading, setLoading] = useState(true);
   const [imgLoading, setImgLoading] = useState(true);
 
   const formData = new FormData();
 
-  const followAuthor = async () => {
-    if (user) {
-      try {
-        const data = await apiService.post(
-          `/users/follow/${blog?.author}`,
-          null,
-          apiService.getAuthHeaders(user.token)
-        );
-        setFollowed(!followed);
-        toast.success(data.message);
-      } catch (error) {
-        toast.error(error);
-      }
-    } else {
+  const handleFollowUser = async () => {
+    if (!user) {
       toast.error("Please login to follow the author");
+      return;
     }
+    await userApi.followUser(author.id);
+    setFollowed(!followed);
   };
 
-  const likeBlog = async () => {
-    // if (user) {
-    //   await fetch(`/api/blogs/like/${id}`, {
-    //     method: "POST",
-    //     headers: { Authorization: user.token },
-    //   })
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       setLiked(!liked);
-    //       toast.success(data);
-    //     })
-    //     .catch((error) => {
-    //       toast.error(error);
-    //     });
-    // } else {
-    //   toast.error("Please login to like the blog");
-    // }
+  // const likeBlog = async () => {
+  // if (user) {
+  //   await fetch(`/api/blogs/like/${id}`, {
+  //     method: "POST",
+  //     headers: { Authorization: user.token },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setLiked(!liked);
+  //       toast.success(data);
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error);
+  //     });
+  // } else {
+  //   toast.error("Please login to like the blog");
+  // }
+  // };
+
+  // const commentOnBlog = async () => {
+  //   if (user) {
+  //     try {
+  //       const data = await apiService.post(
+  //         `/blogs/${id}/comment`,
+  //         formData,
+  //         apiService.getAuthHeaders(user.token)
+  //       );
+  //       toast.success(data.message);
+  //     } catch (error) {
+  //       toast.error(error.message);
+  //     }
+  //   } else {
+  //     toast.error("Please login to comment on the blog");
+  //   }
+  // };
+
+  const handleGetBlog = async () => {
+    setLoading(true);
+    const data = await blogApi.getBlog(id);
+    setBlog(data);
+    handleGetUserById(data.author._id);
   };
 
-  const commentOnBlog = async () => {
-    if (user) {
-      try {
-        const data = await apiService.post(
-          `/blogs/comment/${id}`,
-          formData,
-          apiService.getAuthHeaders(user.token)
-        );
-        toast.success(data.message);
-      } catch (error) {
-        toast.error(error.message);
-      }
-    } else {
-      toast.error("Please login to comment on the blog");
-    }
-  };
-
-  const fetchBlogDetails = async () => {
-    try {
-      const data = await apiService.get(`/blogs/blog-details?blog=${id}`);
-      setBlog(data);
-      setLiked(data?.liked_by?.includes(user?.id));
-      fetchAuthor(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchAuthor = async (blogData) => {
-    try {
-      const data = await apiService.get(`/users/author/${blogData?.author}`);
-      setAuthor(data);
-      setFollowed(data.followers?.includes(user.id));
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const handleGetUserById = async (authorId) => {
+    const data = await userApi.getUser(authorId);
+    setAuthor(data);
+    setLoading(false);
   };
 
   useEffect(() => {
-    if (id) fetchBlogDetails();
+    if (id) handleGetBlog();
   }, []);
 
   const handleImageLoaded = () => {
     setImgLoading(false);
   };
 
-  if (loading) return <Loader />;
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div id="blog-read" className={`blog-read-${theme}`}>
@@ -145,20 +126,20 @@ function BlogRead() {
       </div>
       <div className="data-container">
         <div className="left-pane">
-          <div className="blog-user-actions">
+          {/* <div className="blog-user-actions">
             <div style={{ display: "flex", gap: "2rem" }}>
-              <button onClick={likeBlog} className="like-btn">
+              <button className="like-btn">
                 <img src={liked ? heartfill : heart} alt="" />
                 {liked ? "Unlike" : "Like"}
               </button>
-              <button onClick={commentOnBlog} className="comment-btn">
+              <button className="comment-btn">
                 <img src={comment} alt="" /> Comment
               </button>
             </div>
             <button className="share-btn">
               <img src={share} alt="" /> Share
             </button>
-          </div>
+          </div> */}
           <div
             className="blog-content"
             dangerouslySetInnerHTML={{ __html: blog?.content }}
@@ -168,26 +149,26 @@ function BlogRead() {
           <p id="about-the-author">Written by</p>
           <br />
           <div className="dp">
-            <img src={author?.user?.profile_image_url} alt="" />
+            <img src={author?.profileImageUrl} alt="" />
           </div>
           <div className="author-info">
-            <p className="author-username">@{author?.user?.username}</p>
+            <p className="author-username">@{author?.username}</p>
             <h3 className="author-name">
-              {capitalizeFirstLetter(author?.user?.full_name)}
+              {capitalizeFirstLetter(author?.fullName)}
             </h3>
 
             <div className="author-metrics">
               <span className="author-metric">
                 <img src={blogIcon} alt="" />
-                {author?.blogs?.length}
+                {author?.blogCount}
               </span>
               <span className="author-metric">
                 <img src={followers} alt="" />
-                {author?.followers?.length}
+                {author?.followCount}
               </span>
               <span className="author-metric">
                 <img src={heart} alt="" />
-                {author?.likes}
+                {author?.likeCount}
               </span>
             </div>
           </div>
@@ -199,11 +180,11 @@ function BlogRead() {
             >
               View Profile
             </Link>
-            <button className="follow-btn" onClick={followAuthor}>
+            <button className="follow-btn" onClick={handleFollowUser}>
               {followed ? "Unfollow" : "Follow"}
             </button>
           </div>
-          <div className="about-para">{truncate(author?.user?.bio, 300)}</div>
+          <div className="about-para">{truncate(author?.bio, 300)}</div>
         </div>
       </div>
     </div>

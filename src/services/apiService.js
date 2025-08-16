@@ -1,7 +1,8 @@
+import { toast } from "react-toastify";
+
 /**
  * Simple API Service for centralized HTTP requests
  */
-
 class ApiService {
   constructor() {
     this.baseURL = process.env.REACT_APP_API_BASE_URL || "/api";
@@ -32,17 +33,9 @@ class ApiService {
 
     try {
       const response = await fetch(url, config);
-
-      // Handle response
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      // Return response for further processing
       return response;
     } catch (error) {
-      console.error("API Request failed:", error);
-      throw error;
+      toast.error("API Request failed:", error);
     }
   }
 
@@ -100,6 +93,35 @@ class ApiService {
   async put(endpoint, data = null, headers = {}) {
     const options = {
       method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
+    };
+
+    if (data) {
+      if (data instanceof FormData) {
+        delete options.headers["Content-Type"];
+        options.body = data;
+      } else {
+        options.body = JSON.stringify(data);
+      }
+    }
+
+    const response = await this.request(endpoint, options);
+    return response.json();
+  }
+
+  /**
+   * PATCH request
+   * @param {string} endpoint - API endpoint
+   * @param {Object} data - Request body data
+   * @param {Object} headers - Additional headers
+   * @returns {Promise} - JSON data
+   */
+  async patch(endpoint, data = null, headers = {}) {
+    const options = {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         ...headers,

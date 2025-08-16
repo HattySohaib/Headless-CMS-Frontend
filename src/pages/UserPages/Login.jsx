@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../contexts/auth";
 import { useTheme } from "../../contexts/theme";
 import Footer from "../../components/Footer/Footer";
-import { apiService } from "../../services/apiService";
 
 import { RiEyeFill, RiEyeOffFill } from "@remixicon/react";
+import { userApi } from "../../API/userApi";
+import { toast } from "react-toastify";
+import Loader from "../../components/Loader/Loader";
 
 const Login = () => {
   const { login } = useAuthContext();
@@ -15,9 +17,7 @@ const Login = () => {
     username: "",
     password: "",
   });
-
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = (prev) => {
     setShowPassword(!prev);
@@ -27,19 +27,16 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const result = await apiService.post("/users/login", formData);
-      setSuccess("Login successful!");
-      setError(null);
-
-      login(result);
+    setLoading(true);
+    const res = await userApi.login(formData);
+    if (res.status === "success") {
+      login(res.data);
       setTimeout(() => navigate("/playground/dashboard"), 1000);
-    } catch (err) {
-      console.error("Login error:", err);
-      setError(err.message || "An error occurred");
     }
+    setLoading(false);
   };
+
+  if (loading) return <Loader />;
 
   return (
     <>
@@ -47,8 +44,6 @@ const Login = () => {
         <div className="form-left">
           <h2>Login</h2>
           <p className="subtext">Login with your credentials.</p>
-          {error && <div className="error">{error}</div>}
-          {success && <div className="success">{success}</div>}
           <form onSubmit={handleSubmit}>
             <label>
               Username

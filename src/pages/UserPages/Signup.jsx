@@ -3,8 +3,6 @@ import "./UserPages.css";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Footer from "../../components/Footer/Footer";
-import { apiService } from "../../services/apiService";
-
 import { useTheme } from "../../contexts/theme";
 import {
   RiAccountCircleFill,
@@ -13,17 +11,17 @@ import {
   RiEyeFill,
   RiEyeOffFill,
 } from "@remixicon/react";
+import { userApi } from "../../API/userApi";
 
 const Signup = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const [step, setStep] = useState(1);
 
-  const [usernames, setUsernames] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    full_name: "",
+    fullName: "",
     username: "",
     email: "",
     password: "",
@@ -50,18 +48,17 @@ const Signup = () => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
 
-  const fetchUsernames = async () => {
-    try {
-      const data = await apiService.get("/users/get-usernames");
-      setUsernames(data.usernames);
-    } catch (error) {
-      console.error("Error fetching usernames:", error);
-    }
+  const checkUsername = async () => {
+    if (!formData.username) return false;
+    const available = await userApi.checkUserExists({
+      username: formData.username,
+    });
+    return available;
   };
 
   const handleNext = () => {
     if (!formData.email) toast.warn("Please enter your email");
-    else if (!formData.full_name) toast.warn("Please enter your full name");
+    else if (!formData.fullName) toast.warn("Please enter your full name");
     else setStep(step + 1);
   };
   const handleBack = () => {
@@ -79,9 +76,9 @@ const Signup = () => {
   };
 
   const handleUsernameChange = (e) => {
-    fetchUsernames();
+    const isAvailable = checkUsername();
     const { value } = e.target;
-    if (usernames && Array.isArray(usernames) && usernames.includes(value)) {
+    if (!isAvailable) {
       setMessage("Username already taken");
     } else {
       setMessage("Username available");
@@ -97,23 +94,20 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!formData.profileImage) {
+      toast.warn("Please upload a profile image");
+      return;
+    }
     const formDataToSend = new FormData();
-    formDataToSend.append("full_name", formData.full_name);
+    formDataToSend.append("fullName", formData.fullName);
     formDataToSend.append("username", formData.username);
     formDataToSend.append("email", formData.email);
     formDataToSend.append("bio", formData.bio);
     formDataToSend.append("password", formData.password);
     formDataToSend.append("profileImage", formData.profileImage);
 
-    try {
-      const result = await apiService.post("/users", formDataToSend);
-      toast.success("You have been signed up.");
-      setError(null);
-      setTimeout(() => navigate("/login"), 1000);
-    } catch (err) {
-      setError(err.message || "An error occurred");
-    }
+    const res = await userApi.signup(formDataToSend);
+    setTimeout(() => navigate("/login"), 1000);
   };
 
   return (
@@ -135,8 +129,8 @@ const Signup = () => {
                   Full Name
                   <input
                     type="text"
-                    name="full_name"
-                    value={formData.full_name}
+                    name="fullName"
+                    value={formData.fullName}
                     onChange={handleChange}
                     className="signup-input"
                     required

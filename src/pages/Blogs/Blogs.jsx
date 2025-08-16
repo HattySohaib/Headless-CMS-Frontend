@@ -1,49 +1,36 @@
 import React, { useState, useEffect } from "react";
-
 import "./Blogs.css";
-import { apiService } from "../../services/apiService";
 
 import Footer from "../../components/Footer/Footer";
-import Loader from "../../components/Loader/Loader";
 import Carousel from "../../components/Carousel/Carousel";
 import BlogCard2 from "../../components/BlogCard2/BlogCard2";
 import AuthorCard from "../../components/AuthorCard/AuthorCard";
 
 import arrow from "../../assets/editor_icons/back.png";
+
 import { useTheme } from "../../contexts/theme";
+import { blogApi } from "../../API/blogApi";
+import { userApi } from "../../API/userApi";
 
 function Blogs() {
-  const [loading, setLoading] = useState(true);
   const [published, setPublished] = useState([]);
   const [authors, setAuthors] = useState([]);
 
   const { theme } = useTheme();
 
-  const fetchPublished = async () => {
-    try {
-      const data = await apiService.get("/blogs/get-published");
-      setPublished(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const handleGetPublished = async () => {
+    const data = await blogApi.getBlogs({ published: true });
+    setPublished(data.blogs);
   };
 
-  const fetchAuthors = async () => {
-    try {
-      const data = await apiService.get("/users/author/get-authors");
-      setAuthors(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const handleGetUsers = async () => {
+    const data = await userApi.getUsers();
+    setAuthors(data.users);
   };
 
   useEffect(() => {
-    fetchPublished();
-    fetchAuthors();
+    handleGetPublished();
+    handleGetUsers();
   }, []);
 
   const filteredIPublished = published.filter((blog) => blog.featured === true);
@@ -57,8 +44,6 @@ function Blogs() {
   const scrollRight = () => {
     scrollContainerRef.current.scrollBy({ left: 200, behavior: "smooth" });
   };
-
-  if (loading) return <Loader />;
 
   return (
     <div id="blogs" className={`blogs-${theme}`}>

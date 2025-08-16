@@ -2,76 +2,139 @@ import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import BlogCard from "../../components/BlogCard/BlogCard";
 import { useRefresh } from "../../contexts/refresh";
-import Dropdown from "../../components/Dropdown/Dropdown";
 import SearchBar from "../../components/SearchBar/SearchBar";
-import Loader from "../../components/Loader/Loader";
+import Filter from "../../components/Filter/Filter";
 import { useAuthContext } from "../../contexts/auth";
-import { apiService } from "../../services/apiService";
-
 import { useTheme } from "../../contexts/theme";
+import { blogApi } from "../../API/blogApi";
+import { categoryApi } from "../../API/categoryApi";
+
+import {
+  RiArrowLeftSLine,
+  RiArrowRightSLine,
+  RiArrowLeftDoubleLine,
+  RiArrowRightDoubleLine,
+} from "@remixicon/react";
 
 function Dashboard() {
-  const [loading, setLoading] = useState(true);
-  const [published, setPublished] = useState([]);
-  const [categories, setCategories] = useState(["All"]);
-
-  const [category, setCategory] = useState("");
+  const [featured, setFeatured] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalBlogs: 0,
+    limit: 10,
+    hasNextPage: false,
+    hasPrevPage: false,
+  });
+  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterConfig, setFilterConfig] = useState(null);
 
   const { refresh } = useRefresh();
   const { user } = useAuthContext();
   const { theme } = useTheme();
 
-  const fetchPublished = async () => {
-    try {
-      const data = await apiService.get(`/blogs/get-featured/${user?.id}`);
-      setPublished(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const handleGetFeaturedByUser = async (page = 1) => {
+    const apiParams = filterConfig.buildApiParams(
+      filterConfig.frontendFilters,
+      searchTerm,
+      page,
+      user.id
+    );
+    // Add featured flag to ensure we only get featured blogs
+    apiParams.featured = true;
+    const data = await blogApi.getBlogs(apiParams);
+    setFeatured(data.blogs || []);
+    setPagination(
+      data.pagination || {
+        currentPage: 1,
+        totalPages: 1,
+        totalBlogs: 0,
+        limit: 10,
+        hasNextPage: false,
+        hasPrevPage: false,
+      }
+    );
   };
 
-  const fetchCategories = async () => {
-    try {
-      const data = await apiService.get(
-        "/categories/",
-        apiService.getAuthHeaders(user.token)
-      );
-      setCategories(data.map((obj) => obj.value));
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
+  const handleGetCategories = async () => {
+    const data = await categoryApi.getCategories();
+    setCategories(data.map((obj) => obj.value) || []);
   };
 
   useEffect(() => {
-    fetchPublished();
-    fetchCategories();
-  }, [refresh]);
+    if (filterConfig) {
+      handleGetFeaturedByUser(currentPage);
+    }
+  }, [refresh, currentPage, searchTerm, filterConfig]);
 
-  const handleOnCategoryChange = (e) => {
-    if (e === "All") setCategory("");
-    else setCategory(e);
+  useEffect(() => {
+    handleGetCategories();
+  }, []);
+
+  useEffect(() => {
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+  }, [searchTerm, filterConfig]);
+
+  const handleOnSearchChange = (searchValue) => {
+    setSearchTerm(searchValue);
   };
 
-  const handleOnSearchChange = (e) => {
-    setSearchTerm(e);
+  const handleFiltersChange = (newFilterConfig) => {
+    setFilterConfig(newFilterConfig);
   };
 
-  const filteredIPublished = published.filter(
-    (blog) =>
-      blog.category.toLowerCase().includes(category.toLowerCase()) &&
-      blog.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
-  if (loading) {
-    return (
-      <div className="loader-div">
-        <Loader />
-      </div>
-    );
-  }
+  const handleFirstPage = () => {
+    setCurrentPage(1);
+  };
+
+  const handleLastPage = () => {
+    setCurrentPage(pagination.totalPages);
+  };
+
+  const handlePrevPage = () => {
+    if (pagination.hasPrevPage) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (pagination.hasNextPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const { currentPage, totalPages } = pagination;
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      let start = Math.max(1, currentPage - 2);
+      let end = Math.min(totalPages, start + maxVisiblePages - 1);
+
+      if (end - start < maxVisiblePages - 1) {
+        start = Math.max(1, end - maxVisiblePages + 1);
+      }
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+    }
+
+    return pages;
+  };
 
   return (
     <div id="dashboard" className={`dashboard-${theme}`}>
@@ -82,25 +145,101 @@ function Dashboard() {
         </div>
         <div className="dropdowns">
           <SearchBar
-            placeholder={"Search using a keyword"}
+            placeholder={"Search featured blogs by title or content..."}
             onSearch={handleOnSearchChange}
+            debounceMs={300}
           />
-          <Dropdown
-            text={"Category :"}
-            defaultText="All"
-            options={categories}
-            onSelect={handleOnCategoryChange}
+          <Filter
+            onFiltersChange={handleFiltersChange}
+            availableCategories={categories}
           />
         </div>
       </div>
-      {!filteredIPublished.length && (
-        <p className="blank-text">No records found.</p>
+
+      {/* Results summary */}
+      <div className="results-summary">
+        <p className="summary-text">
+          Showing {(pagination.currentPage - 1) * pagination.limit + 1} to{" "}
+          {Math.min(
+            pagination.currentPage * pagination.limit,
+            pagination.totalBlogs
+          )}{" "}
+          of {pagination.totalBlogs} featured blogs
+          {searchTerm && ` for "${searchTerm}"`}
+        </p>
+      </div>
+
+      {!featured.length && (
+        <p className="blank-text">No featured blogs found.</p>
       )}
       <div className="recents-container">
-        {filteredIPublished.map((e, key) => (
-          <BlogCard blog={e} key={key} />
+        {featured.map((blog, key) => (
+          <BlogCard blog={blog} key={blog._id || key} />
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {pagination.totalPages > 1 && (
+        <div className="pagination-container">
+          <div className="pagination-info">
+            <p className="pagination-text">
+              Page {pagination.currentPage} of {pagination.totalPages}
+            </p>
+          </div>
+
+          <div className="pagination-controls">
+            <button
+              className="pagination-btn"
+              onClick={handleFirstPage}
+              disabled={!pagination.hasPrevPage}
+              title="First Page"
+            >
+              <RiArrowLeftDoubleLine size={16} />
+            </button>
+
+            <button
+              className="pagination-btn"
+              onClick={handlePrevPage}
+              disabled={!pagination.hasPrevPage}
+              title="Previous Page"
+            >
+              <RiArrowLeftSLine size={16} />
+            </button>
+
+            <div className="pagination-numbers">
+              {getPageNumbers().map((pageNum) => (
+                <button
+                  key={pageNum}
+                  className={`pagination-number ${
+                    pageNum === pagination.currentPage ? "active" : ""
+                  }`}
+                  onClick={() => handlePageChange(pageNum)}
+                >
+                  {pageNum}
+                </button>
+              ))}
+            </div>
+
+            <button
+              className="pagination-btn"
+              onClick={handleNextPage}
+              disabled={!pagination.hasNextPage}
+              title="Next Page"
+            >
+              <RiArrowRightSLine size={16} />
+            </button>
+
+            <button
+              className="pagination-btn"
+              onClick={handleLastPage}
+              disabled={!pagination.hasNextPage}
+              title="Last Page"
+            >
+              <RiArrowRightDoubleLine size={16} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

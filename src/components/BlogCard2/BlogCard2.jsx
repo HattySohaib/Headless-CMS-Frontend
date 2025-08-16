@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./BlogCard2.css";
 
-import { capitalizeFirstLetter, truncate } from "../../utils/stringFunctions";
+import { truncate } from "../../utils/stringFunctions";
 import GhostLoader from "../GhostLoader/GhostLoader";
 import { useTheme } from "../../contexts/theme";
 
@@ -30,10 +30,7 @@ function BlogCard2({ blog }) {
         <p>{truncate(blog.meta, 80)}</p>
       </div>
       <div className="details">
-        <span>
-          <img src={blog?.author?.profile_image_url} alt="" />
-          {capitalizeFirstLetter(blog?.author?.full_name)}
-        </span>
+        <span>{blog?.author?.fullName}</span>
         <span>{blog.date}</span>
       </div>
     </Link>

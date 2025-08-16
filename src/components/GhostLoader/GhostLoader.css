@@ -1,5 +1,5 @@
 .ghost-loader {
-    background-color: #1b1b1b;
+    background-color: #888888;
     animation: grad 1.5s ease-in-out infinite;
 }
 
@@ -7,14 +7,14 @@
 
 @keyframes grad {
     0% {
-        opacity: 0.9;
+        opacity: 0.6;
     }
 
     50% {
-        opacity: 1;
+        opacity: 8;
     }
 
     100% {
-        opacity: 0.9;
+        opacity: 0.6;
     }
 }

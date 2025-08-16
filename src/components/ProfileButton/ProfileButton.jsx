@@ -10,16 +10,17 @@ import {
   RiArrowUpSLine,
   RiLogoutCircleLine,
   RiHomeLine,
-  RiNotification4Line,
   RiDashboardLine,
   RiSettings3Line,
-  RiUser3Line,
+  RiMessage2Line,
 } from "@remixicon/react";
 
 import { useTheme } from "../../contexts/theme";
+import Loader from "../Loader/Loader";
+import GhostLoader from "../GhostLoader/GhostLoader";
 
 function ProfileButton() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const { userData } = useUserContext();
   const { logout } = useAuthContext();
 
@@ -30,15 +31,15 @@ function ProfileButton() {
   };
 
   if (!userData) {
-    return <p>Loading...</p>;
+    return <GhostLoader width={"10rem"} height={"3rem"} radius={"0.5rem"} />;
   }
 
   return (
     <div id="Profile-dropdown" className={`nav-${theme}`}>
       <div className="nav-account" onClick={toggleMenu}>
-        <img src={userData?.profile_image_url} alt="" className="dp" />
+        <img src={userData?.profileImageUrl} alt="" className="dp" />
         <div className="acc-details">
-          <p className="acc-name">{userData?.full_name}</p>
+          <p className="acc-name">{userData?.fullName}</p>
           <p className="acc-email">@{userData?.username}</p>
         </div>
         {menuVisible ? (
@@ -61,28 +62,19 @@ function ProfileButton() {
           <Link
             className="profile-dd-link"
             onClick={toggleMenu}
+            to="/playground/messages"
+          >
+            <RiMessage2Line size="1rem" />
+            <span>Messages</span>
+          </Link>
+
+          <Link
+            className="profile-dd-link"
+            onClick={toggleMenu}
             to="/playground/settings"
           >
             <RiSettings3Line size="1rem" />
             <span>Settings</span>
-          </Link>
-
-          <Link
-            className="profile-dd-link"
-            onClick={toggleMenu}
-            to="/playground/profile"
-          >
-            <RiUser3Line size="1rem" />
-            <span>Profile</span>
-          </Link>
-
-          <Link
-            className="profile-dd-link"
-            onClick={toggleMenu}
-            to="/playground/notifications"
-          >
-            <RiNotification4Line size="1rem" />
-            <span>Notifications</span>
           </Link>
 
           <div className="menu-divider"></div>

@@ -1,59 +1,41 @@
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import React, { useState, useEffect } from "react";
 import "./BlogCard.css";
 import { Link } from "react-router-dom";
 import { useRefresh } from "../../contexts/refresh.js";
 import { useTheme } from "../../contexts/theme.js";
 import GhostLoader from "../GhostLoader/GhostLoader";
-import { useAuthContext } from "../../contexts/auth";
-import { apiService } from "../../services/apiService";
+import { blogApi } from "../../API/blogApi.js";
 
 import { truncate } from "../../utils/stringFunctions";
 
 function BlogCard({ blog }) {
-  const { user } = useAuthContext();
   const { setRefresh } = useRefresh();
   const { theme } = useTheme();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [blogData, setBlogData] = useState(blog);
 
   const handleImageLoaded = () => {
     setIsLoading(false);
   };
 
-  const handleDraft = () => {
-    apiService
-      .post(
-        `/blogs/move-to-drafts?blog=${blog._id}`,
-        null,
-        apiService.getAuthHeaders(user.token)
-      )
-      .then((res) => res.json())
-      .then((result) => {
-        setRefresh((prev) => !prev);
-        toast.success(result);
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
+  const handlePublish = async () => {
+    const data = await blogApi.updateBlog(blog._id, {
+      published: !blog.published,
+    });
+    setBlogData(data);
+    setRefresh((prev) => !prev);
   };
 
-  const handleFeaturedToggle = () => {
-    apiService
-      .post(
-        `/blogs/toggle-blog-feature?blog=${blog._id}`,
-        null,
-        apiService.getAuthHeaders(user.token)
-      )
-      .then((res) => res.json())
-      .then((result) => {
-        setRefresh((prev) => !prev);
-        toast.success(result);
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
+  const handleFeaturedToggle = async () => {
+    const data = await blogApi.updateBlog(blog._id, {
+      featured: !blog.featured,
+    });
+    setBlogData(data);
+    setRefresh((prev) => !prev);
   };
+
+  useEffect(() => {}, [blogData]);
 
   return (
     <div key={blog._id} className={`blog-card recommended-blog blog-${theme}`}>
@@ -71,8 +53,8 @@ function BlogCard({ blog }) {
         </div>
       </Link>
       <div className="blog-card-actions">
-        <button onClick={handleDraft} className="blog-control">
-          Unpublish
+        <button onClick={handlePublish} className="blog-control">
+          {blog.published ? "Unpublish" : "Publish"}
         </button>
         <button onClick={handleFeaturedToggle} className="blog-control">
           {blog.featured ? "Unfeature" : "Feature"}

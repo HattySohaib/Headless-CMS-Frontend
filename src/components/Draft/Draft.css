@@ -1,9 +1,9 @@
 .draft {
     background-color: var(--bg);
-    padding: 1.5rem;
+    padding: 1rem;
     width: 100%;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 0.8fr 0.8fr 1fr 1.2fr;
     align-items: center;
     border-top: 1px solid var(--bor);
     transition: all 0.2s;
@@ -13,16 +13,51 @@
     cursor: pointer;
 }
 
+.draft:hover {
+    background-color: var(--bg2);
+}
+
 .draft-title {
     width: 100%;
     text-align: left;
+}
+
+.draft-stat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--txt);
+}
+
+.draft-stat svg {
+    color: #666;
+}
+
+.draft-stats-mobile {
+    display: flex;
+    gap: 1rem;
+}
+
+.draft-stat-mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--txt);
+}
+
+.draft-stat-mobile svg {
+    color: #666;
 }
 
 .draft-actions {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .background-layer {
@@ -36,48 +71,60 @@
 }
 
 .kebab-menu {
-    z-index: 3;
+    z-index: 5;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: stretch;
     position: absolute;
     right: 2rem;
     bottom: 80%;
     border-radius: 8px;
     background-color: var(--bg);
-
     border: 1px solid var(--bor);
-
-    box-shadow: 0 0 5px 1px rgba(44, 44, 44, 0.1);
+    min-width: 120px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 #kebab-menu-btn {
     background: none;
     border: none;
     border-radius: 0;
-    padding: 1rem 2rem;
+    padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--bor);
-
-    color: var(--p);
+    color: var(--txt);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
 }
 
 #kebab-menu-btn:hover {
     color: var(--pri);
+    background-color: var(--bg2);
 }
 
 
 .table-headers {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 0.8fr 0.8fr 1fr 1.2fr;
     padding: 1rem 1.5rem;
     width: 100%;
     background-color: var(--bg);
+    border-bottom: 1px solid var(--bor);
+    font-weight: 500;
+    color: #7e7e7e;
+    font-size: 0.875rem;
+    align-items: center;
 }
 
 .table-header {
     font-weight: 500;
     color: #7e7e7e;
     text-align: center;
+    font-size: 0.875rem;
 }
 
 /* Mobile responsive table */
@@ -87,9 +134,12 @@
     }
 
     .draft {
+        display: flex;
         flex-direction: column;
         padding: 1rem;
         border-bottom: 1px solid var(--bor);
+        grid-template-columns: unset;
+        justify-items: flex-start;
     }
 
     .draft:last-child {
@@ -102,15 +152,32 @@
         text-align: left;
     }
 
-    .draft-status,
-    .draft-date,
+    .draft-status-mobile,
+    .draft-edited-mobile,
     .draft-actions {
         text-align: left;
         margin-bottom: 0.5rem;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .draft-info-row {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .draft-stats-mobile {
+        display: flex;
+        gap: 0.75rem;
     }
 
     .draft-actions {
         margin-bottom: 0;
+        gap: 0.4rem;
     }
 }
 
@@ -133,7 +200,8 @@
     }
 }
 
-.draft-status {
+.draft-status,
+.draft-status-mobile {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -143,6 +211,46 @@
     width: min-content;
     padding: 0.25rem 0.5rem;
     border-radius: 1rem;
+}
+
+/* Mobile-specific classes */
+.draft-status-mobile,
+.draft-edited-mobile,
+.draft-info-row,
+.draft-stats-mobile,
+.draft-stat-mobile {
+    display: none;
+}
+
+/* Desktop status and edited styles remain unchanged */
+.draft-status,
+.draft-edited,
+.draft-stat {
+    display: flex;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+
+    /* Show mobile info row on mobile */
+    .draft-info-row,
+    .draft-stats-mobile,
+    .draft-stat-mobile {
+        display: flex;
+    }
+
+    /* Show mobile status and edited on mobile */
+    .draft-status-mobile,
+    .draft-edited-mobile {
+        display: flex;
+    }
+
+    /* Hide desktop status, edited and stats on mobile */
+    .draft-status,
+    .draft-edited,
+    .draft-stat {
+        display: none;
+    }
 }
 
 .status-green {
@@ -172,37 +280,50 @@
 
 .draft button {
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem;
     background-color: var(--bg2);
     color: var(--txt);
     border: 1px solid var(--bor);
     border-radius: 6px;
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    width: 2.2rem;
+    height: 2.2rem;
 }
 
-.draft button img {
-    width: 1.5rem;
-    height: 1.5rem;
-}
-
-.draft-action-btn:hover,
-.draft-action-btn:focus {
+.draft-action-btn:hover {
     background-color: var(--pri);
     color: white;
+    border-color: var(--pri);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+
 #draft-kebab-btn {
-    background-color: var(--bg);
-    padding: 0;
-    border-radius: 50%;
-    border: none;
+    background-color: var(--bg2);
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid var(--bor);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
+    width: 2.2rem;
+    height: 2.2rem;
 }
 
 #draft-kebab-btn:hover,
 #draft-kebab-btn:focus {
-    outline: 1px solid var(--bor);
+    background-color: var(--pri);
+    color: white;
+    border-color: var(--pri);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

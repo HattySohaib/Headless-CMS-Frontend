@@ -1,103 +1,173 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useAuthContext } from "../../contexts/auth";
-import { toast } from "react-toastify";
 import "./AuthorProfile.css";
 import { useTheme } from "../../contexts/theme";
-import { apiService } from "../../services/apiService";
 
-import { RiFileImageFill } from "@remixicon/react";
+import {
+  RiFileImageFill,
+  RiCloseCircleFill,
+  RiCheckboxCircleFill,
+} from "@remixicon/react";
+import { userApi } from "../../API/userApi";
+import Loader from "../../components/Loader/Loader";
 
 function AuthorProfile() {
   const { user } = useAuthContext();
   const [newDp, setNewDp] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(false);
+  const [message, setMessage] = useState("");
   const [inputsDisabled, setInputsDisabled] = useState(true);
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+
+  // Track the original username to check if it was changed
+  const originalUsernameRef = useRef("");
+  // Store timeout ID for cleanup
+  const debounceTimerRef = useRef(null);
 
   const { theme } = useTheme();
 
-  const [formData, setFormData] = useState({
-    full_name: "",
+  const [userData, setUserData] = useState({
+    fullName: "",
     username: "",
+    profileImageUrl: "",
     email: "",
     bio: "",
   });
-  const [dp, setDp] = useState("");
 
   const toggleInputs = () => {
     setInputsDisabled(!inputsDisabled);
   };
 
+  const handleGetUserByID = async () => {
+    setLoading(true);
+    const data = await userApi.getUser(user.id);
+    setUserData(data);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userData = await apiService.get(
-          `/users/${user.id}`,
-          apiService.getAuthHeaders(user.token)
-        );
-        setFormData({
-          full_name: userData.full_name || "",
-          username: userData.username || "",
-          email: userData.email || "",
-          bio: userData.bio || "",
-        });
-        setDp(userData.profile_image_url);
-      } catch (err) {
-        toast.error(err.message || "An error occurred");
+    handleGetUserByID();
+  }, [user, inputsDisabled]);
+
+  // Store original username when user data is fetched
+  useEffect(() => {
+    if (userData.username) {
+      originalUsernameRef.current = userData.username;
+      // Username is initially valid if it's the user's current username
+      setIsAvailable(true);
+    }
+  }, [userData.username]);
+
+  // Clean up effect
+  useEffect(() => {
+    return () => {
+      // Clean up any pending requests or timeouts
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
       }
     };
-
-    fetchUserData();
-  }, [user, inputsDisabled]);
+  }, []);
 
   const handleFileChange = (e) => {
     setNewDp(e.target.files[0]);
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+
+  // Debounced username check function
+  const debouncedCheckUsername = useCallback((value) => {
+    // Clear any pending timeout
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Don't check if username is unchanged from original
+    if (value === originalUsernameRef.current) {
+      setIsAvailable(true);
+      setMessage("");
+      setIsCheckingUsername(false);
+      return;
+    }
+
+    if (!value) {
+      setIsAvailable(false);
+      setMessage("");
+      setIsCheckingUsername(false);
+      return;
+    }
+
+    setIsCheckingUsername(true);
+    setMessage("Checking username...");
+
+    // Set new timeout
+    debounceTimerRef.current = setTimeout(async () => {
+      try {
+        const available = await userApi.checkUsername(value);
+        setIsAvailable(available);
+        console.log("Username availability checked:", available);
+        setMessage(available ? "Username available" : "Username already taken");
+      } catch (error) {
+        console.error("Error checking username:", error);
+        setIsAvailable(false);
+        setMessage("Error checking username");
+      } finally {
+        setIsCheckingUsername(false);
+      }
+    }, 500); // 500ms debounce delay
+  }, []);
+
+  const handleUsernameChange = (e) => {
+    const { value } = e.target;
+    setUserData({ ...userData, username: value });
+    debouncedCheckUsername(value);
+    console.log("Checking username:", value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (/\s/.test(formData.username)) {
-      toast.error("Username should not contain spaces");
-      return;
-    }
+
+    const formData = new FormData();
+    formData.append("fullName", userData.fullName);
+    formData.append("username", userData.username);
+    formData.append("email", userData.email);
+    formData.append("bio", userData.bio);
     if (newDp) {
-      formData.append({ profile_image_url: newDp });
+      formData.append("profileImage", newDp);
     }
-    try {
-      const result = await apiService.post(
-        `/users/${user.id}`,
-        formData,
-        apiService.getAuthHeaders(user.token)
-      );
-      console.log(result);
-      setInputsDisabled(true);
-      toast.success(result.message);
-    } catch (err) {
-      toast.error(err.message || "An error occurred");
-    }
+    await userApi.updateProfile(user.id, formData);
+    setInputsDisabled(true);
+    handleGetUserByID(user.id);
   };
 
+  if (loading) return <Loader />;
   return (
     <div className={`edit-profile-${theme} edit`}>
       <form className="profile-form" onSubmit={handleSubmit}>
-        <h2 className="form-header">Hi, {formData.full_name.split(" ")[0]}</h2>
+        <h2 className="form-header">Hi, {userData.fullName.split(" ")[0]}</h2>
         <div className="form-group dp-holder">
-          <label htmlFor="profile_image_url">
-            {!inputsDisabled && (
+          <label htmlFor="profileImageUrl">
+            {!inputsDisabled && !newDp && (
               <div className="img-overlay">
                 <RiFileImageFill color="white" />
               </div>
             )}
-            <img className="profile-picture" src={dp} alt={formData.username} />
+            <img
+              className="profile-picture"
+              src={
+                newDp ? URL.createObjectURL(newDp) : userData.profileImageUrl
+              }
+              alt={userData.username}
+            />
           </label>
           <input
             disabled={inputsDisabled}
             style={{ display: "none" }}
             type="file"
-            id="profile_image_url"
-            name="profile_image_url"
+            id="profileImageUrl"
+            name="profileImageUrl"
             onChange={handleFileChange}
           />
         </div>
@@ -107,7 +177,7 @@ function AuthorProfile() {
             disabled={true}
             id="email"
             name="email"
-            value={formData.email}
+            value={userData.email}
             onChange={handleChange}
           ></input>
         </div>
@@ -116,9 +186,9 @@ function AuthorProfile() {
           <input
             disabled={inputsDisabled}
             type="text"
-            id="full_name"
-            name="full_name"
-            value={formData.full_name}
+            id="fullName"
+            name="fullName"
+            value={userData.fullName}
             onChange={handleChange}
             required
           />
@@ -131,10 +201,29 @@ function AuthorProfile() {
             type="text"
             id="username"
             name="username"
-            value={formData.username}
-            onChange={handleChange}
+            value={userData.username}
+            onChange={handleUsernameChange}
             required
           />
+          {message && !inputsDisabled && userData.username && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "5px 0",
+                gap: "5px",
+              }}
+            >
+              {isCheckingUsername ? (
+                <span className="spinner-small"></span>
+              ) : message === "Username already taken" ? (
+                <RiCloseCircleFill size={20} color="red" />
+              ) : (
+                <RiCheckboxCircleFill size={20} color="green" />
+              )}
+              <p>{message}</p>
+            </div>
+          )}
         </div>
 
         <div className="form-group bio-form">
@@ -143,7 +232,7 @@ function AuthorProfile() {
             disabled={inputsDisabled}
             id="bio"
             name="bio"
-            value={formData.bio}
+            value={userData.bio}
             onChange={handleChange}
           ></textarea>
         </div>
@@ -154,7 +243,12 @@ function AuthorProfile() {
         )}
         {!inputsDisabled && (
           <div className="float-btns">
-            <button className="submit-btn" type="submit">
+            <button
+              className="submit-btn"
+              type="submit"
+              disabled={!isAvailable || isCheckingUsername}
+              title={!isAvailable ? "Please choose an available username" : ""}
+            >
               Save Changes
             </button>
             <button className="cancel-btn" onClick={toggleInputs}>

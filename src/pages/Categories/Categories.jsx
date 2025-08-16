@@ -1,96 +1,49 @@
 import React, { useState, useEffect } from "react";
 import "./Categories.css";
-import { apiService } from "../../services/apiService";
-
-import Loader from "../../components/Loader/Loader";
-import { useAuthContext } from "../../contexts/auth";
 import { useTheme } from "../../contexts/theme";
+import { categoryApi } from "../../API/categoryApi";
 
 const CategoryManager = () => {
-  const { user } = useAuthContext();
   const { theme } = useTheme();
-  const [loading, setLoading] = useState(true);
 
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState("");
   const [editingCategory, setEditingCategory] = useState(null);
 
   useEffect(() => {
-    fetchCategories();
+    handleGetCategories();
   }, []);
 
-  const fetchCategories = async () => {
-    try {
-      const data = await apiService.get(
-        "/categories",
-        apiService.getAuthHeaders(user.token)
-      );
-      setCategories(data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
+  const handleGetCategories = async () => {
+    const data = await categoryApi.getCategories();
+    setCategories(data);
   };
 
-  const handleAddCategory = async () => {
+  const handleCreateCategory = async () => {
     if (newCategory === "") return;
     const category = {
       value: newCategory,
     };
-
-    try {
-      const result = await apiService.post(
-        "/categories",
-        category,
-        apiService.getAuthHeaders(user.token)
-      );
-      fetchCategories();
-      setNewCategory("");
-    } catch (error) {
-      console.error("Error adding category:", error);
-    }
+    await categoryApi.createCategory(category);
+    setNewCategory("");
+    handleGetCategories();
   };
 
-  const handleEditCategory = async (id) => {
+  const handleUpdateCategory = async (id) => {
     if (!editingCategory) return;
 
     const updatedCategory = {
       value: editingCategory.value,
     };
-
-    try {
-      const result = await apiService.post(
-        `/categories/edit-category?id=${id}`,
-        updatedCategory,
-        apiService.getAuthHeaders(user.token)
-      );
-      fetchCategories();
-      setEditingCategory(null);
-    } catch (error) {
-      console.error("Error updating category:", error);
-    }
+    await categoryApi.updateCategory(id, updatedCategory);
+    handleGetCategories();
+    setEditingCategory(null);
   };
 
   const handleDeleteCategory = async (id) => {
-    try {
-      await apiService.post(
-        `/categories/delete-category/?id=${id}`,
-        {},
-        apiService.getAuthHeaders(user.token)
-      );
-      fetchCategories();
-    } catch (error) {
-      console.error("Error deleting category:", error);
-    }
+    await categoryApi.deleteCategory(id);
+    handleGetCategories();
   };
-
-  if (loading) {
-    return (
-      <div className="loader-div">
-        <Loader />
-      </div>
-    );
-  }
 
   return (
     <div className={`cat-board-${theme} catboard`}>
@@ -108,7 +61,7 @@ const CategoryManager = () => {
             className="custom-category-input"
           />
           <button
-            onClick={handleAddCategory}
+            onClick={handleCreateCategory}
             className="custom-category-button"
           >
             Add Category
@@ -140,7 +93,7 @@ const CategoryManager = () => {
                 <p>{cat.blogCount}</p>
                 <div className="cat-actions">
                   <button
-                    onClick={() => handleEditCategory(cat._id)}
+                    onClick={() => handleUpdateCategory(cat._id)}
                     className="custom-save-button"
                   >
                     Save

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import Loader from "../../components/Loader/Loader";
 import { useTheme } from "../../contexts/theme";
-import { apiService } from "../../services/apiService";
-
+import { keyApi } from "../../API/keyApi";
+import { toast } from "react-toastify";
 import { truncate } from "../../utils/stringFunctions";
 
 import "./AccessToken.css";
@@ -22,57 +21,29 @@ const ApiKeyPage = () => {
 
   const { theme } = useTheme();
 
-  useEffect(() => {
-    const fetchKeys = async () => {
-      try {
-        setLoading(true);
-        const data = await apiService.get(
-          "/token/key",
-          apiService.getAuthHeaders()
-        );
-        setApiKey(data.apiKey);
-      } catch (error) {
-        toast.error("Error fetching API key.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleGetApiKey = async () => {
+    setLoading(true);
+    const data = await keyApi.getApiKey();
+    setApiKey(data.apiKey);
+    setLoading(false);
+  };
 
-    fetchKeys();
+  useEffect(() => {
+    handleGetApiKey();
   }, []);
 
   const handleGenerateApiKey = async () => {
-    try {
-      setLoading(true);
-      const data = await apiService.post(
-        "/token/generate-api-key",
-        null,
-        apiService.getAuthHeaders()
-      );
-      setApiKey(data.apiKey);
-      toast.success("API key generated successfully!");
-    } catch (error) {
-      toast.error("Error generating API key.");
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    const data = await keyApi.generateApiKey();
+    setApiKey(data.apiKey);
+    setLoading(false);
   };
 
   const handleRevokeApiKey = async () => {
-    try {
-      setLoading(true);
-      await apiService.post(
-        "/token/revoke-api-key",
-        null,
-        apiService.getAuthHeaders()
-      );
-      setApiKey("Not Generated");
-      toast.success("API key revoked successfully!");
-    } catch (error) {
-      toast.error("Error revoking API key.");
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    await keyApi.revokeApiKey();
+    setApiKey("Not Generated");
+    setLoading(false);
   };
 
   const handleCopy = (text) => {
@@ -94,33 +65,39 @@ const ApiKeyPage = () => {
           be used to identify which blogs to show you.
         </p>
         <div className="key-section">
-          <p className="api-value">
-            {showApiKey ? apiKey : truncate(apiKey, 70)}
-          </p>
-          {apiKey !== "Not Generated" && (
-            <div className="key-opt-btns">
-              <button
-                className="key-opt-btn"
-                onClick={() => setShowApiKey((prev) => !prev)}
-              >
-                {showApiKey ? (
-                  <RiEyeFill size={20} color="#7d7d7d" />
-                ) : (
-                  <RiEyeOffFill size={20} color="#7d7d7d" />
-                )}
-              </button>
-              <button
-                className="key-opt-btn"
-                onClick={() => handleCopy(apiKey)}
-              >
-                {copiedAPI ? (
-                  <RiCheckDoubleFill size={20} color="#7d7d7d" />
-                ) : (
-                  <RiClipboardFill size={20} color="#7d7d7d" />
-                )}
-              </button>
-            </div>
-          )}
+          <div className="api-value-container">
+            <p className="api-value">
+              {showApiKey
+                ? apiKey
+                : apiKey === "Not Generated"
+                ? "Not Generated"
+                : "•••••••••••••••••••••••••••••••••••••••••••••••"}
+            </p>
+            {apiKey !== "Not Generated" && (
+              <div className="key-opt-btns">
+                <button
+                  className="key-opt-btn"
+                  onClick={() => setShowApiKey((prev) => !prev)}
+                >
+                  {showApiKey ? (
+                    <RiEyeOffFill size={20} color="#7d7d7d" />
+                  ) : (
+                    <RiEyeFill size={20} color="#7d7d7d" />
+                  )}
+                </button>
+                <button
+                  className="key-opt-btn"
+                  onClick={() => handleCopy(apiKey)}
+                >
+                  {copiedAPI ? (
+                    <RiCheckDoubleFill size={20} color="#7d7d7d" />
+                  ) : (
+                    <RiClipboardFill size={20} color="#7d7d7d" />
+                  )}
+                </button>
+              </div>
+            )}
+          </div>
           {apiKey === "Not Generated" && (
             <button
               className="key-btn"

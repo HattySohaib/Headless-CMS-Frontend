@@ -6,20 +6,6 @@
     --pri: #E43D11;
     --bor: #dbdbdb;
 
-    /* Jodit Editor Theme Variables */
-    --jd-color-background-default: #ffffff;
-    --jd-color-background-default-dark: #f8f8f8;
-    --jd-color-border: #dbdbdb;
-    --jd-color-panel: #ffffff;
-    --jd-color-icon: #727272;
-    --jd-color-text: black;
-    --jd-color-text-dark: #333333;
-    --jd-color-background-input: #ffffff;
-    --jd-color-background-button: #f8f8f8;
-    --jd-color-background-button-hover: #e8e8e8;
-    --jd-color-toolbar: #ffffff;
-    --jd-color-toolbar-button: #f8f8f8;
-    --jd-color-toolbar-button-active: #e0e0e0;
 }
 
 .editor-dark {
@@ -29,135 +15,39 @@
     --p: #afafaf;
     --pri: #E43D11;
     --bor: #222222;
-
-    /* Jodit Editor Theme Variables */
-    --jd-color-background-default: #0d0d0d;
-    --jd-color-background-default-dark: #080808;
-    --jd-color-border: #222222;
-    --jd-color-panel: #0d0d0d;
-    --jd-color-icon: #afafaf;
-    --jd-color-text: #F8F8F8;
-    --jd-color-text-dark: #cccccc;
-    --jd-color-background-input: #111111;
-    --jd-color-background-button: #1a1a1a;
-    --jd-color-background-button-hover: #2a2a2a;
-    --jd-color-toolbar: #0d0d0d;
-    --jd-color-toolbar-button: #1a1a1a;
-    --jd-color-toolbar-button-active: #2a2a2a;
 }
 
-/* Jodit Editor Theme Styling */
-.editorpanel .jodit-container {
-    background-color: var(--jd-color-background-default) !important;
-    border-color: var(--jd-color-border) !important;
-}
-
-.editorpanel .jodit-toolbar {
-    background-color: var(--jd-color-toolbar) !important;
-    border-color: var(--jd-color-border) !important;
-}
-
-.editorpanel .jodit-toolbar-button {
-    background-color: var(--jd-color-toolbar-button) !important;
-    color: var(--jd-color-icon) !important;
-    border-color: var(--jd-color-border) !important;
-}
-
-.editorpanel .jodit-toolbar-button:hover {
-    background-color: var(--jd-color-toolbar-button-active) !important;
-    color: var(--jd-color-text) !important;
-}
-
-.editorpanel .jodit-toolbar-button.jodit-toolbar-button_active {
-    background-color: var(--jd-color-toolbar-button-active) !important;
-    color: var(--jd-color-text) !important;
-}
-
-.editorpanel .jodit-workplace {
-    background-color: var(--jd-color-background-default) !important;
-    color: var(--jd-color-text) !important;
-}
-
-.editorpanel .jodit-wysiwyg {
-    background-color: var(--jd-color-background-default) !important;
-    color: var(--jd-color-text) !important;
-}
-
-.editorpanel .jodit-status-bar {
-    background-color: var(--jd-color-background-default-dark) !important;
-    border-color: var(--jd-color-border) !important;
-    color: var(--jd-color-text-dark) !important;
-}
-
-.editorpanel .jodit-popup {
-    background-color: var(--jd-color-panel) !important;
-    border-color: var(--jd-color-border) !important;
-    color: var(--jd-color-text) !important;
-}
-
-.editorpanel .jodit-dialog {
-    background-color: var(--jd-color-panel) !important;
-    color: var(--jd-color-text) !important;
-}
-
-.editorpanel .jodit-dialog .jodit-dialog__header {
-    background-color: var(--jd-color-background-default-dark) !important;
-    border-color: var(--jd-color-border) !important;
-    color: var(--jd-color-text) !important;
-}
-
-.editorpanel .jodit-input,
-.editorpanel .jodit-select,
-.editorpanel .jodit-textarea {
-    background-color: var(--jd-color-background-input) !important;
-    border-color: var(--jd-color-border) !important;
-    color: var(--jd-color-text) !important;
-}
-
-.editorpanel .jodit-button {
-    background-color: var(--jd-color-background-button) !important;
-    border-color: var(--jd-color-border) !important;
-    color: var(--jd-color-text) !important;
-}
-
-.editorpanel .jodit-button:hover {
-    background-color: var(--jd-color-background-button-hover) !important;
-}
-
-.editorpanel .jodit-toolbar__box {
-    background-color: var(--jd-color-toolbar) !important;
-    border-color: var(--jd-color-border) !important;
-}
-
-.editorpanel .jodit-icon {
-    fill: var(--jd-color-icon) !important;
-}
-
-.editorpanel .jodit-toolbar-button:hover .jodit-icon {
-    fill: var(--jd-color-text) !important;
-}
 
 .editorpanel {
     background-color: var(--bg);
-    padding: 2rem;
+    padding: 0.5rem 2rem;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-top: 4rem;
 }
 
+.editorpanel * {
+    font-family: 'Bricolage Grotesque', sans-serif;
+}
 
 .top-panel {
-    position: absolute;
-    top: 0;
+    /* Position below navbar */
     left: 0;
     width: 100%;
-    padding: 1rem 2rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg);
+    z-index: 999;
+    /* Lower than navbar */
 }
 
 .back-btn {
     font-weight: 500;
     color: var(--pri);
+    background: none;
+    border: none;
     text-decoration: none;
     width: fit-content;
     display: flex;
@@ -181,6 +71,7 @@
     font-size: 2rem;
     color: var(--txt);
     outline: none;
+
 }
 
 #title::placeholder {
@@ -210,12 +101,269 @@
     box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.059);
 }
 
-#meta-label {
+#meta-label,
+#slug-label {
     font-size: 0.9rem;
     margin-top: 1.5rem;
     color: var(--p);
     font-weight: 500;
     padding-left: 5px;
+}
+
+/* Meta Section Collapsible */
+.meta-section {
+    margin: 1.5rem 0;
+}
+
+.meta-toggle-btn {
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background: none;
+    padding: 0.75rem 0.5rem;
+    color: var(--pri);
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.meta-toggle-btn:hover {
+    background-color: var(--bor);
+}
+
+.meta-fields {
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.meta-fields.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.meta-fields.expanded {
+    max-height: 500px;
+    opacity: 1;
+    margin-top: 1rem;
+}
+
+.meta-fields #slug-label {
+    margin-top: 0;
+}
+
+.meta-fields #meta-label {
+    margin-top: 1rem;
+}
+
+.meta-fields .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Banner Preview Section */
+.banner-preview-section {
+    margin: 2rem 0;
+}
+
+.banner-preview-container {
+    position: relative;
+    width: 100%;
+    height: 40vh;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px dashed var(--bor);
+    transition: all 0.3s ease;
+}
+
+.banner-preview-container:hover {
+    border-color: var(--pri);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.banner-preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.banner-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--bg2) 0%, var(--bor) 100%);
+    color: var(--p);
+}
+
+.banner-placeholder-content {
+    text-align: center;
+}
+
+.banner-placeholder-content span {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--txt);
+}
+
+.banner-placeholder-content small {
+    font-size: 0.9rem;
+    color: var(--p);
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: white;
+    font-weight: 500;
+}
+
+.banner-preview-container:hover .banner-overlay {
+    opacity: 1;
+}
+
+#slug {
+    background-color: var(--bg2);
+    margin: 0;
+    border: 1px solid var(--bor);
+    height: 3rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    color: var(--txt);
+}
+
+#slug::placeholder {
+    color: var(--p);
+}
+
+#slug:focus {
+    outline: none;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.059);
+}
+
+#tags {
+    background-color: var(--bg2);
+    padding: 0.5rem;
+    border: 1px solid var(--bor);
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--txt);
+    flex: 1;
+}
+
+#tags::placeholder {
+    color: var(--p);
+}
+
+#tags:focus {
+    outline: none;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.059);
+}
+
+/* YouTube Studio-style Tags */
+.tags-input-container {
+    position: relative;
+    flex: 1;
+}
+
+.tag-character-count {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--p);
+    pointer-events: none;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding: 0.5rem;
+    background-color: var(--bg2);
+    border: 1px solid var(--bor);
+    border-radius: 8px;
+    min-height: 2.5rem;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+.tag-bubble {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--pri);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    max-width: 200px;
+    transition: all 0.2s ease;
+}
+
+.tag-bubble:hover {
+    background-color: #d63610;
+    transform: translateY(-1px);
+}
+
+.tag-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 0.25rem;
+}
+
+.tag-remove {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.tag-remove:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.meta-counter {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--p);
+    margin-top: 0.25rem;
+    padding-right: 5px;
 }
 
 .editor-top-bar {
@@ -225,18 +373,6 @@
     align-items: center;
     padding: 0.75rem 0;
     margin-bottom: 1rem;
-}
-
-/* Hide mobile button row on desktop */
-.mobile-button-row {
-    display: none;
-}
-
-/* Simple button row container */
-.button-row {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
 }
 
 .top-bar-header {
@@ -265,11 +401,16 @@
 }
 
 .editor-action-btns {
-    background-color: var(--bg2);
     display: flex;
-    gap: 1rem;
-    padding: 0.35rem;
-    border-radius: 8px;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* When in top panel, adjust styling */
+.top-panel .editor-action-btns {
+    background: none;
+    padding: 0;
+    border-radius: 0;
 }
 
 select,
@@ -303,61 +444,6 @@ option {
     color: var(--txt);
 }
 
-
-.backdrop {
-    height: 100vh;
-    width: 100vw;
-    z-index: 98;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(48, 48, 48, 0.18);
-    backdrop-filter: blur(5px);
-    overflow: hidden;
-}
-
-.backdrop button {
-    position: absolute;
-    background: var(--bg2);
-    border: 1px solid var(--bor);
-    border-radius: 12px;
-    padding: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: var(--txt);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.upload-img-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--txt);
-    background-color: var(--pri);
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 12px;
-    gap: 0.75rem;
-    border: none;
-    position: absolute;
-    bottom: 2rem;
-    right: 50%;
-    transform: translateX(50%);
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-}
-
-.upload-img-btn:hover {
-    background-color: #d63610;
-}
-
-.upload-img-btn p {
-    margin: 0;
-    color: white;
-}
-
 /* Banner Upload Button */
 .banner-input {
     display: none;
@@ -373,7 +459,6 @@ option {
 }
 
 .file-upload-btn,
-.insert-img-btn,
 .save-btn,
 .publish-btn {
     color: var(--txt);
@@ -390,7 +475,6 @@ option {
 }
 
 .file-upload-btn:hover,
-.insert-img-btn:hover,
 .save-btn:hover,
 .publish-btn:hover {
     background-color: var(--bor);
@@ -405,18 +489,20 @@ option {
 }
 
 #save-btn {
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
     height: 2.5rem;
     background-color: var(--bg2);
     border: 1px solid var(--bor);
+    white-space: nowrap;
 }
 
 #publish-btn {
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
     height: 2.5rem;
     background-color: var(--pri);
     color: white;
     border: 1px solid var(--pri);
+    white-space: nowrap;
 }
 
 #publish-btn:hover {
@@ -424,20 +510,37 @@ option {
     border-color: #d63610;
 }
 
-.upload-img-btn:active {
-    background-color: #00193f;
-}
-
-
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
     .editorpanel {
         padding: 1rem;
-        padding-top: 5rem;
     }
 
     .top-panel {
         padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .top-panel .editor-action-btns {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .top-panel .editor-action-btns button {
+        flex: 1;
+        max-width: calc(50% - 0.375rem);
+    }
+
+    .meta-toggle-btn {
+        font-size: 0.9rem;
+        padding: 0.65rem 0.85rem;
+    }
+
+    .banner-preview-container {
+        height: 250px;
     }
 
     #title {
@@ -459,17 +562,6 @@ option {
         align-items: stretch;
     }
 
-    .button-row {
-        gap: 0.75rem;
-        width: 100%;
-    }
-
-    .button-row .banner-label,
-    .button-row .insert-img-btn {
-        flex: 1;
-        width: 100%;
-    }
-
     #categories {
         width: 100%;
         padding: 0.75rem;
@@ -480,6 +572,16 @@ option {
         color: var(--txt);
     }
 
+    /* Tablet tag styling */
+    .editor-top-bar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .tags-input-container {
+        width: 100%;
+    }
+
     .editor-action-btns {
         display: flex;
         flex-direction: column;
@@ -488,7 +590,6 @@ option {
     }
 
     .file-upload-btn,
-    .insert-img-btn,
     .save-btn,
     .publish-btn {
         padding: 0.75rem;
@@ -508,11 +609,6 @@ option {
         width: 100%;
     }
 
-    .insert-img-btn {
-        width: 100%;
-        margin-top: 0;
-    }
-
     /* JoditEditor responsive */
     .jodit-container {
         width: 100% !important;
@@ -521,16 +617,62 @@ option {
     .jodit-workplace {
         min-height: 400px !important;
     }
+
+    /* ReactQuill tablet adjustments */
+    .editorpanel .ql-editor {
+        min-height: 45vh !important;
+        /* Slightly smaller on tablets */
+    }
+
+    .editorpanel .ql-container {
+        min-height: calc(45vh + 42px) !important;
+    }
 }
 
 @media (max-width: 480px) {
     .editorpanel {
         padding: 0.75rem;
-        padding-top: 4.5rem;
     }
 
     .top-panel {
         padding: 0.75rem;
+    }
+
+    .top-panel .editor-action-btns {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .top-panel .editor-action-btns button {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .meta-toggle-btn {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .banner-preview-container {
+        height: 200px;
+    }
+
+    .banner-placeholder-content span {
+        font-size: 1rem;
+    }
+
+    .banner-placeholder-content small {
+        font-size: 0.8rem;
+    }
+
+    /* Mobile ReactQuill adjustments */
+    .editorpanel .ql-editor {
+        min-height: 40vh !important;
+        /* Smaller minimum height on mobile */
+    }
+
+    .editorpanel .ql-container {
+        min-height: calc(40vh + 42px) !important;
     }
 
     #title {
@@ -558,12 +700,27 @@ option {
         font-size: 0.9rem;
     }
 
+    /* Mobile tag styling */
+    .tags-container {
+        gap: 0.375rem;
+        padding: 0.375rem;
+    }
+
+    .tag-bubble {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.4rem;
+        max-width: 150px;
+    }
+
+    .tag-character-count {
+        font-size: 0.7rem;
+    }
+
     .editor-action-btns {
         gap: 0.5rem;
     }
 
     .file-upload-btn,
-    .insert-img-btn,
     .save-btn,
     .publish-btn {
         padding: 0.5rem;
@@ -576,10 +733,6 @@ option {
         height: 2.5rem;
     }
 
-    .insert-img-btn {
-        margin-top: 0.25rem;
-    }
-
     /* Smaller JoditEditor on small screens */
     .jodit-workplace {
         min-height: 300px !important;
@@ -588,4 +741,67 @@ option {
     .jodit-toolbar {
         flex-wrap: wrap !important;
     }
+}
+
+/* ReactQuill Editor Styling */
+.editorpanel .ql-editor {
+    background-color: var(--bg2) !important;
+    color: var(--txt) !important;
+    border: 1px solid var(--bor) !important;
+    min-height: 50vh !important;
+    /* At least half the viewport height */
+}
+
+.editorpanel .ql-toolbar {
+    background-color: var(--bg2) !important;
+    border: 1px solid var(--bor) !important;
+    border-bottom: none !important;
+}
+
+.editorpanel .ql-container {
+    border: 1px solid var(--bor) !important;
+    border-top: none !important;
+    min-height: calc(50vh + 42px) !important;
+    /* Account for toolbar height */
+}
+
+.editorpanel .ql-toolbar .ql-stroke {
+    stroke: var(--txt) !important;
+}
+
+.editorpanel .ql-toolbar .ql-fill {
+    fill: var(--txt) !important;
+}
+
+.editorpanel .ql-toolbar button:hover .ql-stroke {
+    stroke: var(--pri) !important;
+}
+
+.editorpanel .ql-toolbar button:hover .ql-fill {
+    fill: var(--pri) !important;
+}
+
+.editorpanel .ql-toolbar button.ql-active .ql-stroke {
+    stroke: var(--pri) !important;
+}
+
+.editorpanel .ql-toolbar button.ql-active .ql-fill {
+    fill: var(--pri) !important;
+}
+
+.editorpanel .ql-picker-label {
+    color: var(--txt) !important;
+}
+
+.editorpanel .ql-picker-options {
+    background-color: var(--bg2) !important;
+    border: 1px solid var(--bor) !important;
+}
+
+.editorpanel .ql-picker-item {
+    color: var(--txt) !important;
+}
+
+.editorpanel .ql-picker-item:hover {
+    background-color: var(--bor) !important;
 }
