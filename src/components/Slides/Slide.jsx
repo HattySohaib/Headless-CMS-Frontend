@@ -1,7 +1,7 @@
 // src/Slide1.js
 import React, { useState } from "react";
 import "./Slide.css";
-import arrow from "../../assets/arrow.png";
+import { RiArrowRightLine } from "@remixicon/react";
 import { Link } from "react-router-dom";
 
 import GhostLoader from "../GhostLoader/GhostLoader";
@@ -25,7 +25,7 @@ const Slide = ({ header, preview, bannerimg, id }) => {
         />
       </div>
       <div className="icon-wrapper">
-        <img className="arrow-icon" src={arrow} alt="" />
+        <RiArrowRightLine className="arrow-icon" size={24} />
       </div>
       <div className="featured-card-data">
         <p className="featured">Featured</p>

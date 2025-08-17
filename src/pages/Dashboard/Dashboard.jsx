@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import BlogCard from "../../components/BlogCard/BlogCard";
+import Loader from "../../components/Loader/Loader";
 import { useRefresh } from "../../contexts/refresh";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Filter from "../../components/Filter/Filter";
@@ -19,6 +20,7 @@ import {
 function Dashboard() {
   const [featured, setFeatured] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -36,26 +38,33 @@ function Dashboard() {
   const { theme } = useTheme();
 
   const handleGetFeaturedByUser = async (page = 1) => {
-    const apiParams = filterConfig.buildApiParams(
-      filterConfig.frontendFilters,
-      searchTerm,
-      page,
-      user.id
-    );
-    // Add featured flag to ensure we only get featured blogs
-    apiParams.featured = true;
-    const data = await blogApi.getBlogs(apiParams);
-    setFeatured(data.blogs || []);
-    setPagination(
-      data.pagination || {
-        currentPage: 1,
-        totalPages: 1,
-        totalBlogs: 0,
-        limit: 10,
-        hasNextPage: false,
-        hasPrevPage: false,
-      }
-    );
+    setLoading(true);
+    try {
+      const apiParams = filterConfig.buildApiParams(
+        filterConfig.frontendFilters,
+        searchTerm,
+        page,
+        user.id
+      );
+      // Add featured flag to ensure we only get featured blogs
+      apiParams.featured = true;
+      const data = await blogApi.getBlogs(apiParams);
+      setFeatured(data.blogs || []);
+      setPagination(
+        data.pagination || {
+          currentPage: 1,
+          totalPages: 1,
+          totalBlogs: 0,
+          limit: 10,
+          hasNextPage: false,
+          hasPrevPage: false,
+        }
+      );
+    } catch (error) {
+      console.error("Error fetching featured blogs:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGetCategories = async () => {
@@ -169,14 +178,20 @@ function Dashboard() {
         </p>
       </div>
 
-      {!featured.length && (
-        <p className="blank-text">No featured blogs found.</p>
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {!featured.length && (
+            <p className="blank-text">No featured blogs found.</p>
+          )}
+          <div className="recents-container">
+            {featured.map((blog, key) => (
+              <BlogCard blog={blog} key={blog._id || key} />
+            ))}
+          </div>
+        </>
       )}
-      <div className="recents-container">
-        {featured.map((blog, key) => (
-          <BlogCard blog={blog} key={blog._id || key} />
-        ))}
-      </div>
 
       {/* Pagination Controls */}
       {pagination.totalPages > 1 && (

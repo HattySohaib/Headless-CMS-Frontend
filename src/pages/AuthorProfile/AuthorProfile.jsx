@@ -10,6 +10,7 @@ import {
 } from "@remixicon/react";
 import { userApi } from "../../API/userApi";
 import Loader from "../../components/Loader/Loader";
+import GhostLoader from "../../components/GhostLoader/GhostLoader";
 
 function AuthorProfile() {
   const { user } = useAuthContext();
@@ -19,6 +20,7 @@ function AuthorProfile() {
   const [message, setMessage] = useState("");
   const [inputsDisabled, setInputsDisabled] = useState(true);
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   // Track the original username to check if it was changed
   const originalUsernameRef = useRef("");
@@ -41,9 +43,14 @@ function AuthorProfile() {
 
   const handleGetUserByID = async () => {
     setLoading(true);
+    setImageLoaded(false); // Reset image loaded state when fetching new data
     const data = await userApi.getUser(user.id);
     setUserData(data);
     setLoading(false);
+  };
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
   };
 
   useEffect(() => {
@@ -71,6 +78,7 @@ function AuthorProfile() {
 
   const handleFileChange = (e) => {
     setNewDp(e.target.files[0]);
+    setImageLoaded(false); // Reset image loaded state when new file is selected
   };
 
   const handleChange = (e) => {
@@ -154,13 +162,20 @@ function AuthorProfile() {
                 <RiFileImageFill color="white" />
               </div>
             )}
-            <img
-              className="profile-picture"
-              src={
-                newDp ? URL.createObjectURL(newDp) : userData.profileImageUrl
-              }
-              alt={userData.username}
-            />
+            <div style={{ position: "relative" }}>
+              {!imageLoaded && (
+                <GhostLoader width={"8rem"} height={"8rem"} radius={"50%"} />
+              )}
+              <img
+                className="profile-picture"
+                src={
+                  newDp ? URL.createObjectURL(newDp) : userData.profileImageUrl
+                }
+                alt={userData.username}
+                onLoad={handleImageLoad}
+                style={{ display: imageLoaded ? "block" : "none" }}
+              />
+            </div>
           </label>
           <input
             disabled={inputsDisabled}

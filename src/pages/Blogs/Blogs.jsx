@@ -5,8 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import Carousel from "../../components/Carousel/Carousel";
 import BlogCard2 from "../../components/BlogCard2/BlogCard2";
 import AuthorCard from "../../components/AuthorCard/AuthorCard";
-
-import arrow from "../../assets/editor_icons/back.png";
+import { RiArrowRightSLine, RiArrowLeftSLine } from "@remixicon/react";
 
 import { useTheme } from "../../contexts/theme";
 import { blogApi } from "../../API/blogApi";
@@ -58,11 +57,11 @@ function Blogs() {
           ))}
         </div>
         <div className="scroll-buttons">
-          <button className="scroll-button scroll-left" onClick={scrollLeft}>
-            <img src={arrow} alt="" />
+          <button className="scroll-button" onClick={scrollLeft}>
+            <RiArrowLeftSLine size={24} />
           </button>
-          <button className="scroll-button scroll-right" onClick={scrollRight}>
-            <img src={arrow} alt="" />
+          <button className="scroll-button" onClick={scrollRight}>
+            <RiArrowRightSLine size={24} />
           </button>
         </div>
       </div>

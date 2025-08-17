@@ -3,6 +3,7 @@ import "./Draftboard.css";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Filter from "../../components/Filter/Filter";
 import Draft from "../../components/Draft/Draft";
+import Loader from "../../components/Loader/Loader";
 
 import { useRefresh } from "../../contexts/refresh";
 import { useAuthContext } from "../../contexts/auth";
@@ -19,6 +20,7 @@ import {
 function Draftboard() {
   const [drafts, setDrafts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -36,24 +38,31 @@ function Draftboard() {
   const { theme } = useTheme();
 
   const handleGetBlogsByUser = async (page = 1) => {
-    const apiParams = filterConfig.buildApiParams(
-      filterConfig.frontendFilters,
-      searchTerm,
-      page,
-      user.id
-    );
-    const data = await blogApi.getBlogs(apiParams);
-    setDrafts(data.blogs || []);
-    setPagination(
-      data.pagination || {
-        currentPage: 1,
-        totalPages: 1,
-        totalBlogs: 0,
-        limit: 10,
-        hasNextPage: false,
-        hasPrevPage: false,
-      }
-    );
+    setLoading(true);
+    try {
+      const apiParams = filterConfig.buildApiParams(
+        filterConfig.frontendFilters,
+        searchTerm,
+        page,
+        user.id
+      );
+      const data = await blogApi.getBlogs(apiParams);
+      setDrafts(data.blogs || []);
+      setPagination(
+        data.pagination || {
+          currentPage: 1,
+          totalPages: 1,
+          totalBlogs: 0,
+          limit: 10,
+          hasNextPage: false,
+          hasPrevPage: false,
+        }
+      );
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGetCategories = async () => {
@@ -162,10 +171,16 @@ function Draftboard() {
           <p className="table-header">Last Edited</p>
           <p className="table-header">Actions</p>
         </div>
-        {!drafts.length && <p className="blank-text">No records found.</p>}
-        {drafts.map((e, key) => (
-          <Draft key={e._id || key} blog={e} />
-        ))}
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            {!drafts.length && <p className="blank-text">No records found.</p>}
+            {drafts.map((e, key) => (
+              <Draft key={e._id || key} blog={e} />
+            ))}
+          </>
+        )}
       </div>
 
       {/* Pagination Controls */}

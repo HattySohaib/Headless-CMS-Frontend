@@ -28,7 +28,6 @@ import { useAuthContext } from "../../contexts/auth";
 import { truncate } from "../../utils/stringFunctions";
 
 const getDailyViewsLast30Days = (dailyViewsData) => {
-  const today = new Date();
   const last30DaysCounts = Array(30).fill(0);
 
   // Create a map of dates to view counts
@@ -44,6 +43,27 @@ const getDailyViewsLast30Days = (dailyViewsData) => {
     const dateString = date.toISOString().split("T")[0]; // Format: YYYY-MM-DD
 
     last30DaysCounts[i] = viewsMap[dateString] || 0;
+  }
+
+  return last30DaysCounts;
+};
+
+const getDailyLikesLast30Days = (dailyLikesData) => {
+  const last30DaysCounts = Array(30).fill(0);
+
+  // Create a map of dates to like counts
+  const likesMap = {};
+  dailyLikesData.forEach((item) => {
+    likesMap[item._id] = item.totalLikes;
+  });
+
+  // Fill the array with like counts for the last 30 days
+  for (let i = 0; i < 30; i++) {
+    const date = new Date();
+    date.setDate(date.getDate() - (29 - i));
+    const dateString = date.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+
+    last30DaysCounts[i] = likesMap[dateString] || 0;
   }
 
   return last30DaysCounts;
@@ -158,6 +178,7 @@ export default function Analytics() {
   const id = user?.id;
 
   const [monthlyViews, setMonthlyViews] = useState([]);
+  const [monthlyLikes, setMonthlyLikes] = useState([]);
   const [topBlogs, setTopBlogs] = useState([]);
   const [quarterViewShare, setQuarterViewShare] = useState([]);
 
@@ -191,6 +212,13 @@ export default function Analytics() {
           dailyViews30Data || []
         );
         setMonthlyViews(monthlyViewsArray);
+
+        // 1.1. Fetch 30-day daily like counts for StatCard
+        const dailyLikes30Data = await analyticsApi.getDailyLikes();
+        const monthlyLikesArray = getDailyLikesLast30Days(
+          dailyLikes30Data || []
+        );
+        setMonthlyLikes(monthlyLikesArray);
 
         // 2. Fetch detailed views with timestamps for blog-specific analysis
         const detailedViews7Data = await analyticsApi.getDetailedViews7Days();
@@ -275,63 +303,53 @@ export default function Analytics() {
       <div className="kpi-section">
         <div className="kpi-grid">
           <div className="kpi-card">
-            <div className="kpi-content">
-              <h4>Total Views</h4>
-              <p className="kpi-value">
-                {(
-                  userData?.viewCount ||
-                  userData?.views ||
-                  userData?.totalViews ||
-                  0
-                ).toLocaleString()}
-              </p>
-              <span
-                className={`kpi-change ${
-                  getViewGrowthRate() >= 0 ? "positive" : "negative"
-                }`}
-              >
-                {getViewGrowthRate() >= 0 ? "+" : ""}
-                {getViewGrowthRate()}% today
-              </span>
-            </div>
+            <h4>Total Views</h4>
+            <p className="kpi-value">
+              {(
+                userData?.viewCount ||
+                userData?.views ||
+                userData?.totalViews ||
+                0
+              ).toLocaleString()}
+            </p>
+            <span
+              className={`kpi-change ${
+                getViewGrowthRate() >= 0 ? "positive" : "negative"
+              }`}
+            >
+              {getViewGrowthRate() >= 0 ? "+" : ""}
+              {getViewGrowthRate()}% today
+            </span>
           </div>
 
           <div className="kpi-card">
-            <div className="kpi-content">
-              <h4>Published Blogs</h4>
-              <p className="kpi-value">
-                {userData?.blogCount ||
-                  userData?.blogs ||
-                  userData?.totalBlogs ||
-                  0}
-              </p>
-              <span className="kpi-subtitle">
-                {blogStats.draftBlogs} drafts
-              </span>
-            </div>
+            <h4>Live Blogs</h4>
+            <p className="kpi-value">
+              {userData?.blogCount ||
+                userData?.blogs ||
+                userData?.totalBlogs ||
+                0}
+            </p>
+            <span className="kpi-subtitle">Finish that draft!</span>
           </div>
 
           <div className="kpi-card">
-            <div className="kpi-content">
-              <h4>Messages</h4>
-              <p className="kpi-value">{messageStats.totalMessages}</p>
-              <span className="kpi-change positive">
-                +{getMessageGrowth()}% this week
-              </span>
-            </div>
+            <h4>Messages</h4>
+            <p className="kpi-value">{messageStats.unreadMessages}</p>
+            <span className="kpi-change positive">
+              +{messageStats.messagesThisWeek} messages this week
+            </span>
           </div>
 
           <div className="kpi-card">
-            <div className="kpi-content">
-              <h4>Follower Count</h4>
-              <p className="kpi-value">
-                {userData?.followerCount ||
-                  userData?.followers ||
-                  userData?.followersCount ||
-                  0}
-              </p>
-              <span className="kpi-subtitle">People following you</span>
-            </div>
+            <h4>Followers</h4>
+            <p className="kpi-value">
+              {userData?.followerCount ||
+                userData?.followers ||
+                userData?.followersCount ||
+                0}
+            </p>
+            <span className="kpi-subtitle">People following you</span>
           </div>
         </div>
       </div>
@@ -423,7 +441,7 @@ export default function Analytics() {
                 {
                   data: messageStats.messagesByDay,
                   label: "Messages",
-                  color: "#E43D11",
+                  color: "#b6563cff",
                 },
               ]}
               xAxis={[
@@ -458,6 +476,20 @@ export default function Analytics() {
               })}
             />
           </div>
+          <div className="quick-actions-section">
+            <div className="quick-actions">
+              <Link to="/playground/all-blogs" className="action-card">
+                <RiFileTextLine size={24} />
+                <h4>Manage Blogs</h4>
+                <p>View and edit your blogs</p>
+              </Link>
+              <Link to="/playground/messages" className="action-card">
+                <RiMailLine size={24} />
+                <h4>Check Messages</h4>
+                <p>{messageStats.unreadMessages} unread messages</p>
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* Right Column - Performance Cards and Pie Chart */}
@@ -474,16 +506,11 @@ export default function Analytics() {
                 icon={<RiBarChartLine />}
               />
               <StatCard
-                color={"blue"}
-                data={Array(7).fill(Math.floor(userData?.likeCount / 7) || 0)}
+                color={"red"}
+                data={monthlyLikes}
                 header={"Total Likes"}
-                desc={"Likes received on your blogs"}
-                value={
-                  userData?.likeCount ||
-                  userData?.likes ||
-                  userData?.totalLikes ||
-                  0
-                }
+                desc={"Daily likes in the last 30 days"}
+                value={monthlyLikes.reduce((a, b) => a + b, 0)}
                 icon={<RiHeartLine />}
               />
             </div>
@@ -528,28 +555,6 @@ export default function Analytics() {
               <PieCenterLabel>Total Views</PieCenterLabel>
             </PieChart>
           </div>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="quick-actions-section">
-        <h3 className="section-title">Quick Actions</h3>
-        <div className="quick-actions">
-          <Link to="/playground/all-blogs" className="action-card">
-            <RiFileTextLine size={24} />
-            <h4>Manage Blogs</h4>
-            <p>View and edit your blogs</p>
-          </Link>
-          <Link to="/playground/messages" className="action-card">
-            <RiMailLine size={24} />
-            <h4>Check Messages</h4>
-            <p>{messageStats.unreadMessages} unread messages</p>
-          </Link>
-          <Link to="/playground/settings" className="action-card">
-            <RiUserLine size={24} />
-            <h4>Account Settings</h4>
-            <p>Update your profile</p>
-          </Link>
         </div>
       </div>
     </div>

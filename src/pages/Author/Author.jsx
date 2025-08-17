@@ -3,11 +3,13 @@ import "./Author.css";
 import { userApi } from "../../API/userApi";
 import { blogApi } from "../../API/blogApi";
 
-import heart from "../../assets/homeIcons/heart.png";
-import followers from "../../assets/homeIcons/follow.png";
-import followings from "../../assets/homeIcons/followers.png";
-import blog from "../../assets/homeIcons/blog.png";
-import views from "../../assets/homeIcons/views.png";
+import {
+  RiHeartLine,
+  RiUserAddLine,
+  RiTeamLine,
+  RiFileTextLine,
+  RiEyeLine,
+} from "@remixicon/react";
 
 import GhostLoader from "../../components/GhostLoader/GhostLoader";
 
@@ -114,7 +116,7 @@ function Author() {
         <div className="author-stats">
           <div className="stat">
             <div className="stat-icon">
-              <img src={blog} alt="" />
+              <RiFileTextLine size={24} />
             </div>
             <div>
               <h2>{author?.blogCount}</h2>
@@ -123,7 +125,7 @@ function Author() {
           </div>
           <div className="stat">
             <div className="stat-icon">
-              <img src={followers} alt="" />
+              <RiUserAddLine size={24} />
             </div>
             <div>
               <h2>{author?.followersCount}</h2>
@@ -132,7 +134,7 @@ function Author() {
           </div>
           <div className="stat">
             <div className="stat-icon">
-              <img src={followings} alt="" />
+              <RiTeamLine size={24} />
             </div>
             <div>
               <h2>{author?.followingCount}</h2>
@@ -141,7 +143,7 @@ function Author() {
           </div>
           <div className="stat">
             <div className="stat-icon">
-              <img src={heart} alt="" />
+              <RiHeartLine size={24} />
             </div>
             <div>
               <h2>{author?.likesCount}</h2>
@@ -150,7 +152,7 @@ function Author() {
           </div>
           <div className="stat">
             <div className="stat-icon">
-              <img src={views} alt="" />
+              <RiEyeLine size={24} />
             </div>
             <div>
               <h2>{author?.viewCount}</h2>

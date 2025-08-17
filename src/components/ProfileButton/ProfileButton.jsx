@@ -25,9 +25,14 @@ function ProfileButton() {
   const { logout } = useAuthContext();
 
   const [menuVisible, setMenuVisible] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
+  };
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
   };
 
   if (!userData) {
@@ -37,7 +42,18 @@ function ProfileButton() {
   return (
     <div id="Profile-dropdown" className={`nav-${theme}`}>
       <div className="nav-account" onClick={toggleMenu}>
-        <img src={userData?.profileImageUrl} alt="" className="dp" />
+        <div style={{ position: "relative" }}>
+          {!imageLoaded && (
+            <GhostLoader width={"2.5rem"} height={"2.5rem"} radius={"50%"} />
+          )}
+          <img
+            src={userData?.profileImageUrl}
+            alt=""
+            className="dp"
+            onLoad={handleImageLoad}
+            style={{ display: imageLoaded ? "block" : "none" }}
+          />
+        </div>
         <div className="acc-details">
           <p className="acc-name">{userData?.fullName}</p>
           <p className="acc-email">@{userData?.username}</p>

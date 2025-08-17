@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./AuthorCard.css";
 import { capitalizeFirstLetter } from "../../utils/stringFunctions";
 import { Link } from "react-router-dom";
-import heart from "../../assets/homeIcons/heart.png";
-import followers from "../../assets/homeIcons/follow.png";
-import blog from "../../assets/homeIcons/blog.png";
+import { RiHeartLine, RiUserAddLine, RiFileTextLine } from "@remixicon/react";
 import { useTheme } from "../../contexts/theme";
 
 import GhostLoader from "../GhostLoader/GhostLoader";
 
 function AuthorCard({ author }) {
   const [isLoading, setIsLoading] = useState(true);
+
+  // Reset loading state when author changes
+  useEffect(() => {
+    setIsLoading(true);
+  }, [author._id]);
+
   const handleImageLoaded = () => {
     setIsLoading(false);
   };
@@ -36,15 +40,15 @@ function AuthorCard({ author }) {
         <h3>{capitalizeFirstLetter(author?.fullName)}</h3>
         <div className="author-metrics">
           <span className="author-metric">
-            <img src={blog} alt="" />
+            <RiFileTextLine size={16} />
             {author.blogCount}
           </span>
           <span className="author-metric">
-            <img src={followers} alt="" />
+            <RiUserAddLine size={16} />
             {author.followersCount}
           </span>
           <span className="author-metric">
-            <img src={heart} alt="" />
+            <RiHeartLine size={16} />
             {author.likesCount}
           </span>
         </div>

@@ -34,6 +34,7 @@ const App = () => {
       <Routes>
         <Route index element={<Home />} />
         <Route index path="blogs" element={<Blogs />} />
+        <Route path="categories" element={<Categories />} />
         <Route
           path="playground"
           element={user ? <Playground /> : <Navigate to={"/login"} />}
@@ -62,7 +63,6 @@ const App = () => {
               </RefreshProvider>
             }
           />
-          <Route path="categories" element={<Categories />} />
           <Route
             path="messages"
             element={

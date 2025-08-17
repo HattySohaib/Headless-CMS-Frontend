@@ -4,12 +4,14 @@ import { toast } from "react-toastify";
 import GhostLoader from "../../components/GhostLoader/GhostLoader";
 import "./BlogRead.css";
 
-import heart from "../../assets/homeIcons/heart.png";
-import heartfill from "../../assets/homeIcons/heartfill.png";
-import comment from "../../assets/homeIcons/comment.png";
-import share from "../../assets/homeIcons/share.png";
-import followers from "../../assets/homeIcons/follow.png";
-import blogIcon from "../../assets/homeIcons/blog.png";
+import {
+  RiHeartLine,
+  RiHeartFill,
+  RiChat3Line,
+  RiShareLine,
+  RiUserAddLine,
+  RiFileTextLine,
+} from "@remixicon/react";
 
 import { useAuthContext } from "../../contexts/auth";
 import { useTheme } from "../../contexts/theme";
@@ -129,15 +131,15 @@ function BlogRead() {
           {/* <div className="blog-user-actions">
             <div style={{ display: "flex", gap: "2rem" }}>
               <button className="like-btn">
-                <img src={liked ? heartfill : heart} alt="" />
+                {liked ? <RiHeartFill size={16} /> : <RiHeartLine size={16} />}
                 {liked ? "Unlike" : "Like"}
               </button>
               <button className="comment-btn">
-                <img src={comment} alt="" /> Comment
+                <RiChat3Line size={16} /> Comment
               </button>
             </div>
             <button className="share-btn">
-              <img src={share} alt="" /> Share
+              <RiShareLine size={16} /> Share
             </button>
           </div> */}
           <div
@@ -159,15 +161,15 @@ function BlogRead() {
 
             <div className="author-metrics">
               <span className="author-metric">
-                <img src={blogIcon} alt="" />
+                <RiFileTextLine size={16} />
                 {author?.blogCount}
               </span>
               <span className="author-metric">
-                <img src={followers} alt="" />
+                <RiUserAddLine size={16} />
                 {author?.followCount}
               </span>
               <span className="author-metric">
-                <img src={heart} alt="" />
+                <RiHeartLine size={16} />
                 {author?.likeCount}
               </span>
             </div>

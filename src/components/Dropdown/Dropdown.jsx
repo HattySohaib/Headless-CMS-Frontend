@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Dropdown.css";
-import down from "../../assets/dashboard_icons/down.png";
+import { RiArrowDownSLine } from "@remixicon/react";
 import { useTheme } from "../../contexts/theme";
 
 const Dropdown = ({ text, defaultText, options, onSelect }) => {
@@ -23,10 +23,9 @@ const Dropdown = ({ text, defaultText, options, onSelect }) => {
       <div className="dropdown-header" onClick={toggleDropdown}>
         <span className="dropdown-key">{text}</span>
         <span className="dropdown-value">{selectedOption || defaultText}</span>
-        <img
+        <RiArrowDownSLine
           className={`dropdown-arrow ${isOpen ? "open" : ""}`}
-          src={down}
-          alt=""
+          size={20}
         />
       </div>
       {isOpen && (

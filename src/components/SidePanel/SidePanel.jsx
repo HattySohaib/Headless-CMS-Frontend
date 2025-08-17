@@ -10,9 +10,11 @@ import {
   RiSidebarFoldLine,
   RiSidebarUnfoldLine,
   RiStackedView,
-  RiEqualizer2Fill,
-  RiMailFill,
   RiSettings3Fill,
+  RiGithubFill,
+  RiExternalLinkLine,
+  RiAddCircleFill,
+  RiMessage2Fill,
 } from "@remixicon/react";
 
 import { useTheme } from "../../contexts/theme";
@@ -20,7 +22,11 @@ import { useTheme } from "../../contexts/theme";
 function LeftPanel({ isOpen, onClose }) {
   const { theme } = useTheme();
 
-  const [collapsed, setCollapsed] = React.useState(false);
+  const [collapsed, setCollapsed] = React.useState(() => {
+    // Initialize from localStorage, default to false if not found
+    const savedState = localStorage.getItem("sidePanel-collapsed");
+    return savedState ? JSON.parse(savedState) : false;
+  });
   const [isMobile, setIsMobile] = React.useState(false);
 
   // Check if mobile on component mount and window resize
@@ -38,12 +44,22 @@ function LeftPanel({ isOpen, onClose }) {
   const toggleCollapse = () => {
     if (!isMobile) {
       // Only allow collapse on desktop
-      setCollapsed(!collapsed);
+      const newCollapsedState = !collapsed;
+      setCollapsed(newCollapsedState);
+      // Save state to localStorage
+      localStorage.setItem(
+        "sidePanel-collapsed",
+        JSON.stringify(newCollapsedState)
+      );
       toggleExpanded();
     }
   };
 
-  const [expanded, setExpanded] = React.useState(true);
+  const [expanded, setExpanded] = React.useState(() => {
+    // Initialize expanded state based on collapsed state
+    const savedCollapsedState = localStorage.getItem("sidePanel-collapsed");
+    return savedCollapsedState ? !JSON.parse(savedCollapsedState) : true;
+  });
 
   const toggleExpanded = () => {
     if (!isMobile && expanded === true) {
@@ -91,6 +107,16 @@ function LeftPanel({ isOpen, onClose }) {
             {shouldShowLabels && "Dashboard"}
           </NavLink>
           <NavLink
+            to="/editor"
+            className={({ isActive }) =>
+              isActive ? "panel-nav-link active" : "panel-nav-link"
+            }
+            onClick={isMobile ? onClose : undefined}
+          >
+            <RiAddCircleFill />
+            {shouldShowLabels && "Add Blog"}
+          </NavLink>
+          <NavLink
             to="/playground/all-blogs"
             className={({ isActive }) =>
               isActive ? "panel-nav-link active" : "panel-nav-link"
@@ -110,16 +136,8 @@ function LeftPanel({ isOpen, onClose }) {
             <RiStackedView />
             {shouldShowLabels && "Featured Blogs"}
           </NavLink>
-          <NavLink
-            to="/playground/categories"
-            className={({ isActive }) =>
-              isActive ? "panel-nav-link active" : "panel-nav-link"
-            }
-            onClick={isMobile ? onClose : undefined}
-          >
-            <RiEqualizer2Fill />
-            {shouldShowLabels && "Categories"}
-          </NavLink>
+        </div>
+        <div className="navigation">
           <NavLink
             to="/playground/messages"
             className={({ isActive }) =>
@@ -127,12 +145,34 @@ function LeftPanel({ isOpen, onClose }) {
             }
             onClick={isMobile ? onClose : undefined}
           >
-            <RiMailFill />
+            <RiMessage2Fill />
             {shouldShowLabels && "Messages"}
           </NavLink>
         </div>
       </div>
       <div className="other-options">
+        {/* GitHub Repo Card */}
+        {shouldShowLabels && (
+          <div className="github-card">
+            <div className="github-content">
+              <div className="github-header">
+                <RiGithubFill size={20} />
+                <span className="github-title">Bloggest</span>
+              </div>
+              <p className="github-desc">View source code on GitHub</p>
+              <a
+                href="https://github.com/HattySohaib/Headless-CMS-Frontend"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="github-link"
+                onClick={isMobile ? onClose : undefined}
+              >
+                <span>Visit Repository</span>
+                <RiExternalLinkLine size={14} />
+              </a>
+            </div>
+          </div>
+        )}
         <NavLink
           to="/playground/settings"
           className={({ isActive }) =>

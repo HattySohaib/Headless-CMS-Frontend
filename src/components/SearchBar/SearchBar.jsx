@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./SearchBar.css";
+import { RiSearchLine } from "@remixicon/react";
 
-import searchIcon from "../../assets/dashboard_icons/search.png";
 import { useTheme } from "../../contexts/theme";
 
 const SearchBar = ({ placeholder, onSearch, debounceMs = 500 }) => {
@@ -29,7 +29,7 @@ const SearchBar = ({ placeholder, onSearch, debounceMs = 500 }) => {
 
   return (
     <div className={`search-bar bar-${theme}`}>
-      <img className="search-button" src={searchIcon} alt="" />
+      <RiSearchLine className="search-button" size={20} />
       <input
         type="text"
         value={query}

@@ -44,4 +44,13 @@ export const analyticsApi = {
     if (!res.success) toast.warn(res.message);
     return res.data;
   },
+
+  async getDailyLikes() {
+    const res = await apiService.get(
+      `/analytics/daily-likes`,
+      apiService.getAuthHeaders()
+    );
+    if (!res.success) toast.warn(res.message);
+    return res.data;
+  },
 };

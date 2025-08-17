@@ -12,9 +12,9 @@ import {
   RiArrowLeftLine,
   RiArrowDownSLine,
   RiArrowUpSLine,
+  RiSendPlaneLine,
 } from "@remixicon/react";
 
-import publishIcon from "../../assets/editor_icons/publish.png";
 import { useTheme } from "../../contexts/theme.js";
 import { blogApi } from "../../API/blogApi.js";
 import { categoryApi } from "../../API/categoryApi.js";
@@ -272,7 +272,7 @@ export default function Editor() {
                 onClick={handlePublish}
                 className="publish-btn"
               >
-                <img className="btn-icon" src={publishIcon} alt="publish" />
+                <RiSendPlaneLine className="btn-icon" size={16} />
                 <span>Publish Now</span>
               </button>
             </>
