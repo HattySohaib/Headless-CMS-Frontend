@@ -217,8 +217,7 @@ function Messages() {
         <div className="lined-header">
           <div className="line"></div>
           <p className="top-bar-header">
-            Messages{" "}
-            {unreadCount && <span className="unread-badge">{unreadCount}</span>}
+            Messages {<span className="unread-badge">{unreadCount}</span>}
           </p>
         </div>
         <div className="dropdowns">
