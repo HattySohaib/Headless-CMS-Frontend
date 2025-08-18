@@ -19,7 +19,10 @@ function Blogs() {
   const { theme } = useTheme();
 
   const handleGetPublished = useCallback(async () => {
-    const response = await blogApi.getBlogs({ published: true });
+    const response = await blogApi.getBlogs({
+      published: true,
+      featured: true,
+    });
     if (response.success) {
       setPublished(response.data.blogs || []);
     }
@@ -39,8 +42,6 @@ function Blogs() {
     handleGetUsers();
   }, [handleGetPublished, handleGetUsers]);
 
-  const filteredIPublished = published.filter((blog) => blog.featured === true);
-
   const scrollContainerRef = React.createRef();
 
   const scrollLeft = () => {
@@ -54,7 +55,7 @@ function Blogs() {
   return (
     <div id="blogs" className={`blogs-${theme}`}>
       <div className="featured-authors">
-        <Carousel slides={Array.from(filteredIPublished)} />
+        <Carousel slides={Array.from(published)} />
       </div>
       <div className="author-list">
         <h2>Popular Authors</h2>

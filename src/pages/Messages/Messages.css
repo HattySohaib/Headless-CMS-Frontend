@@ -315,15 +315,6 @@
     }
 
     .messages-header {
-        grid-template-columns: 30px 60px 1fr 80px 80px;
-        gap: 0.5rem;
-        padding: 0.75rem;
-        font-size: 0.75rem;
-        min-width: auto;
-        /* Remove min-width constraint on mobile */
-    }
-
-    .header-subject {
         display: none;
     }
 
@@ -361,14 +352,6 @@
     }
 
     .messages-header {
-        grid-template-columns: 30px 1fr 60px 60px;
-        gap: 0.5rem;
-        min-width: auto;
-        /* Remove min-width constraint on small mobile */
-    }
-
-    .header-status,
-    .header-subject {
         display: none;
     }
 

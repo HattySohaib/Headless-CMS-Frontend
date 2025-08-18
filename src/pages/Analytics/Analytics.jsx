@@ -18,7 +18,6 @@ import { useUserContext } from "../../contexts/user";
 import {
   RiAddCircleFill,
   RiMailLine,
-  RiUserLine,
   RiFileTextLine,
   RiBarChartLine,
   RiHeartLine,
@@ -277,22 +276,6 @@ export default function Analytics() {
     return Math.round(percentageChange);
   };
 
-  const getEngagementRate = () => {
-    const { totalViews, totalLikes, totalComments } = blogStats;
-    if (totalViews === 0) return 0;
-    return (((totalLikes + totalComments) / totalViews) * 100).toFixed(1);
-  };
-
-  const getMessageGrowth = () => {
-    // Calculate growth based on this week vs average
-    const weeklyAverage = messageStats.totalMessages / 4; // Rough estimate
-    if (weeklyAverage === 0) return 0;
-    return (
-      ((messageStats.messagesThisWeek - weeklyAverage) / weeklyAverage) *
-      100
-    ).toFixed(1);
-  };
-
   if (!userData || isLoading) return <Loader />;
   return (
     <div id="analytics" className={`analytics-${theme}`}>
@@ -332,14 +315,14 @@ export default function Analytics() {
           </div>
 
           <div className="kpi-card">
-            <h4>Live Blogs</h4>
+            <h4>Total Blogs</h4>
             <p className="kpi-value">
               {userData?.blogCount ||
                 userData?.blogs ||
                 userData?.totalBlogs ||
                 0}
             </p>
-            <span className="kpi-subtitle">Finish that draft!</span>
+            <span className="kpi-subtitle">Including drafts</span>
           </div>
 
           <div className="kpi-card">

@@ -52,6 +52,14 @@
     /* Minimum width to prevent crushing */
 }
 
+.desktop-layout {
+    display: contents;
+}
+
+.mobile-layout {
+    display: none;
+}
+
 .message-checkbox {
     display: flex;
     align-items: center;
@@ -249,28 +257,127 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .message-row {
-        grid-template-columns: 30px 60px 1fr 80px 80px;
-        gap: 0.5rem;
-        padding: 0.75rem;
-        min-width: auto;
-        /* Remove min-width constraint on mobile */
-    }
-
-    .message-subject {
-        gap: 0.125rem;
-    }
-
-    .subject-text,
-    .sender-email {
-        font-size: 0.75rem;
-    }
-
-    .message-preview {
+    .desktop-layout {
         display: none;
     }
 
-    .message-date {
+    .mobile-layout {
+        display: block;
+        width: 100%;
+    }
+
+    .message-row {
+        display: block;
+        padding: 1rem;
+        min-width: auto;
+    }
+
+    .message-card {
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid var(--bor);
+    }
+
+    .message-card:last-child {
+        margin-bottom: 0;
+    }
+
+    .message-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+    }
+
+    .message-header-row .message-checkbox,
+    .message-header-row .message-status {
+        flex-shrink: 0;
+    }
+
+    .message-info-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .message-subject {
+        gap: 0.25rem;
+    }
+
+    .subject-text {
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    .message-preview {
+        font-size: 0.8rem;
+        display: block;
+    }
+
+    .message-meta-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.75rem;
+        color: var(--txt);
+        opacity: 0.7;
+    }
+
+    .message-meta-mobile .message-date {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .message-actions {
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    .message-expanded {
+        padding: 1rem;
+    }
+
+    .message-meta {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .message-row {
+        padding: 0.75rem;
+    }
+
+    .message-header-row {
+        margin-bottom: 0.5rem;
+    }
+
+    .message-info-row {
+        gap: 0.375rem;
+    }
+
+    .subject-text {
+        font-size: 0.8rem;
+    }
+
+    .message-preview {
+        font-size: 0.75rem;
+    }
+
+    .message-meta-mobile {
+        font-size: 0.7rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .message-meta-mobile .sender-email {
         font-size: 0.7rem;
     }
 
@@ -280,38 +387,19 @@
     }
 
     .message-expanded {
-        padding: 1rem;
+        padding: 0.75rem;
     }
 
     .message-meta {
-        flex-direction: column;
         gap: 0.5rem;
     }
-}
 
-@media (max-width: 480px) {
-    .message-row {
-        grid-template-columns: 30px 1fr 60px 60px;
-        gap: 0.5rem;
-        min-width: auto;
-        /* Remove min-width constraint on small mobile */
+    .meta-item {
+        font-size: 0.8rem;
     }
 
-    .message-status {
-        display: none;
-    }
-
-    .action-btn {
-        width: 1.25rem;
-        height: 1.25rem;
-    }
-
-    .sender-email,
-    .subject-text {
-        font-size: 0.7rem;
-    }
-
-    .message-date span {
-        display: none;
+    .content-text {
+        padding: 0.75rem;
+        font-size: 0.8rem;
     }
 }

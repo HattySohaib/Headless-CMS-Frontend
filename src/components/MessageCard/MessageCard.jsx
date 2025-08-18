@@ -81,65 +81,135 @@ const MessageCard = ({
       }`}
     >
       <div className="message-row" onClick={handleExpand}>
-        <div className="message-checkbox">
-          <input
-            type="checkbox"
-            checked={isSelected}
-            onChange={handleCheckboxChange}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
+        {/* Desktop Layout */}
+        <div className="desktop-layout">
+          <div className="message-checkbox">
+            <input
+              type="checkbox"
+              checked={isSelected}
+              onChange={handleCheckboxChange}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
 
-        <div className="message-status">
-          {message.read ? (
-            <RiMailOpenLine size={16} className="read-icon" />
-          ) : (
-            <RiMailLine size={16} className="unread-icon" />
-          )}
-        </div>
+          <div className="message-status">
+            {message.read ? (
+              <RiMailOpenLine size={16} className="read-icon" />
+            ) : (
+              <RiMailLine size={16} className="unread-icon" />
+            )}
+          </div>
 
-        <div className="message-sender">
-          <span className="sender-email">{message.senderEmail}</span>
-        </div>
+          <div className="message-sender">
+            <span className="sender-email">{message.senderEmail}</span>
+          </div>
 
-        <div className="message-subject">
-          <span className="subject-text">
-            {message.subject || "No Subject"}
-          </span>
-          <span className="message-preview">
-            {truncateText(message.message)}
-          </span>
-        </div>
+          <div className="message-subject">
+            <span className="subject-text">
+              {message.subject || "No Subject"}
+            </span>
+            <span className="message-preview">
+              {truncateText(message.message)}
+            </span>
+          </div>
 
-        <div className="message-date">
-          <RiTimeLine size={14} />
-          <span>{formatDate(message.createdAt)}</span>
-        </div>
+          <div className="message-date">
+            <RiTimeLine size={14} />
+            <span>{formatDate(message.createdAt)}</span>
+          </div>
 
-        <div className="message-actions">
-          <button
-            className="action-btn view-btn"
-            onClick={handleExpand}
-            title={isExpanded ? "Collapse" : "Expand"}
-          >
-            <RiEyeLine size={14} />
-          </button>
-          <button
-            className="action-btn delete-btn"
-            onClick={handleDelete}
-            title="Delete message"
-          >
-            <RiDeleteBin6Line size={14} />
-          </button>
-          {!message.read && (
+          <div className="message-actions">
             <button
-              className="action-btn mark-read-btn"
-              onClick={handleMarkAsRead}
-              title="Mark as read"
+              className="action-btn view-btn"
+              onClick={handleExpand}
+              title={isExpanded ? "Collapse" : "Expand"}
             >
-              <RiCheckLine size={14} />
+              <RiEyeLine size={14} />
             </button>
-          )}
+            <button
+              className="action-btn delete-btn"
+              onClick={handleDelete}
+              title="Delete message"
+            >
+              <RiDeleteBin6Line size={14} />
+            </button>
+            {!message.read && (
+              <button
+                className="action-btn mark-read-btn"
+                onClick={handleMarkAsRead}
+                title="Mark as read"
+              >
+                <RiCheckLine size={14} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile Layout */}
+        <div className="mobile-layout">
+          <div className="message-header-row">
+            <div className="message-checkbox">
+              <input
+                type="checkbox"
+                checked={isSelected}
+                onChange={handleCheckboxChange}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+
+            <div className="message-status">
+              {message.read ? (
+                <RiMailOpenLine size={16} className="read-icon" />
+              ) : (
+                <RiMailLine size={16} className="unread-icon" />
+              )}
+            </div>
+
+            <div className="message-actions">
+              <button
+                className="action-btn view-btn"
+                onClick={handleExpand}
+                title={isExpanded ? "Collapse" : "Expand"}
+              >
+                <RiEyeLine size={14} />
+              </button>
+              <button
+                className="action-btn delete-btn"
+                onClick={handleDelete}
+                title="Delete message"
+              >
+                <RiDeleteBin6Line size={14} />
+              </button>
+              {!message.read && (
+                <button
+                  className="action-btn mark-read-btn"
+                  onClick={handleMarkAsRead}
+                  title="Mark as read"
+                >
+                  <RiCheckLine size={14} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="message-info-row">
+            <div className="message-subject">
+              <span className="subject-text">
+                {message.subject || "No Subject"}
+              </span>
+              <span className="message-preview">
+                {truncateText(message.message)}
+              </span>
+            </div>
+
+            <div className="message-meta-mobile">
+              <span className="sender-email">{message.senderEmail}</span>
+              <div className="message-date">
+                <RiTimeLine size={12} />
+                <span>{formatDate(message.createdAt)}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
