@@ -13,7 +13,7 @@ REACT_APP_API_BASE_URL=http://localhost:5000/api
 ### Production (.env.production)
 
 ```properties
-REACT_APP_API_BASE_URL=https://api.bloggest.com/api
+REACT_APP_API_BASE_URL=https://api.Irada.com/api
 ```
 
 ## API Service Usage

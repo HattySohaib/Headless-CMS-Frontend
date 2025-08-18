@@ -169,7 +169,7 @@ function Draftboard() {
       <div className="editor-top-bar">
         <div className="lined-header">
           <div className="line"></div>
-          <p className="top-bar-header">Blogs</p>
+          <p className="top-bar-header">All Blogs</p>
         </div>
         <div className="dropdowns">
           <SearchBar

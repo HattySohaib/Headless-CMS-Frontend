@@ -30,7 +30,6 @@
     max-width: 100%;
     width: 100%;
     box-sizing: border-box;
-    padding-top: 1.7rem;
 }
 
 .messages-top-bar {
@@ -309,9 +308,8 @@
     }
 
     .dropdowns {
-        flex-direction: column;
         width: 100%;
-        gap: 1rem;
+        gap: 0.5rem;
     }
 
     .messages-header {

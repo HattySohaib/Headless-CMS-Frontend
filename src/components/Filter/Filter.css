@@ -5,7 +5,7 @@
     --bor: #c0c0c0;
     /* More visible border */
     --pri: #E43D11;
-    --sub: #6d6d6d;
+    --p: #6d6d6d;
     --hover: #f0f0f0;
 }
 
@@ -16,7 +16,7 @@
     --bor: #404040;
     /* More visible border */
     --pri: #E43D11;
-    --sub: #6d6d6d;
+    --p: #6d6d6d;
     --hover: #1a1a1a;
 }
 
@@ -32,8 +32,8 @@
     padding: 0.75rem 1rem;
     background-color: var(--bg2);
     border: 1px solid var(--bor);
-    border-radius: 0.5rem;
-    color: var(--txt);
+    border-radius: 2.5rem;
+    color: var(--p);
     cursor: pointer;
     font-size: 0.9rem;
     transition: all 0.2s ease;
@@ -41,12 +41,11 @@
 }
 
 .filter-toggle:hover {
-    background-color: var(--hover);
     border-color: var(--pri);
 }
 
 .filter-toggle.active {
-    background-color: var(--pri);
+    background-color: var(--bg);
     color: white;
     border-color: var(--pri);
 }
@@ -97,7 +96,7 @@
 .close-btn {
     background: none;
     border: none;
-    color: var(--sub);
+    color: var(--p);
     cursor: pointer;
     padding: 0.25rem;
     border-radius: 0.25rem;
@@ -173,13 +172,22 @@
 
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
+    .filter-indicator {
+        top: 2px;
+        right: 2px;
+        width: 6px;
+        height: 6px;
+        border-width: 1px;
+    }
+
     .filter-dropdown {
-        left: 0;
+        left: auto;
         right: 0;
-        min-width: auto;
-        width: calc(100vw - 2rem);
-        margin-left: -1rem;
-        margin-right: -1rem;
+        min-width: 320px;
+        width: auto;
+        max-width: calc(100vw - 2rem);
+        margin-left: 0;
+        margin-right: 0;
     }
 
     .filter-row {
@@ -197,14 +205,14 @@
 }
 
 @media (max-width: 480px) {
-    .filter-toggle {
-        padding: 0.625rem 0.75rem;
-        font-size: 0.8rem;
-    }
 
     .filter-dropdown {
-        width: calc(100vw - 1rem);
-        margin-left: -0.5rem;
-        margin-right: -0.5rem;
+        left: auto;
+        right: 0;
+        min-width: 280px;
+        width: auto;
+        max-width: calc(100vw - 1rem);
+        margin-left: 0;
+        margin-right: 0;
     }
 }

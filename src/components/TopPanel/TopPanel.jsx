@@ -3,7 +3,7 @@ import "./TopPanel.css";
 import { Link } from "react-router-dom";
 
 import {} from "@remixicon/react";
-import logo from "../../assets/logo2.png";
+import logo from "../../assets/logo.png";
 
 import { useTheme } from "../../contexts/theme";
 import ProfileButton from "../ProfileButton/ProfileButton";
@@ -13,7 +13,7 @@ function TopPanel() {
   return (
     <div id="top-panel" className={`top-panel-${theme}`}>
       <Link className="logo-header" to="/">
-        <img src={logo} alt="Bloggest" />
+        <img src={logo} alt="Irada" />
       </Link>
       <div className="top-panel-div">
         <ProfileButton />

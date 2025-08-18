@@ -1,8 +1,8 @@
-# Bloggest API Response Format Documentation
+# Irada API Response Format Documentation
 
 ## Overview
 
-The Bloggest API uses standardized response formats across all endpoints to ensure consistent error handling and data structure for frontend applications.
+The Irada API uses standardized response formats across all endpoints to ensure consistent error handling and data structure for frontend applications.
 
 ## Base Response Structure
 

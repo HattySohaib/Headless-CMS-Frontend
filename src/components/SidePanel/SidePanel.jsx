@@ -87,9 +87,9 @@ function LeftPanel({ isOpen, onClose }) {
           <div className="side-bar-btn-holder">
             <button onClick={toggleCollapse} className="side-bar-btn">
               {!collapsed ? (
-                <RiSidebarFoldLine color="#E16449" />
+                <RiSidebarFoldLine size={32} color="#E16449" />
               ) : (
-                <RiSidebarUnfoldLine color="#E16449" />
+                <RiSidebarUnfoldLine size={32} color="#E16449" />
               )}
             </button>
           </div>
@@ -97,7 +97,7 @@ function LeftPanel({ isOpen, onClose }) {
 
         <div className="navigation">
           <NavLink
-            to="/playground/dashboard"
+            to="/dashboard"
             className={({ isActive }) =>
               isActive ? "panel-nav-link active" : "panel-nav-link"
             }
@@ -117,7 +117,7 @@ function LeftPanel({ isOpen, onClose }) {
             {shouldShowLabels && "Add Blog"}
           </NavLink>
           <NavLink
-            to="/playground/all-blogs"
+            to="/dashboard/blogs"
             className={({ isActive }) =>
               isActive ? "panel-nav-link active" : "panel-nav-link"
             }
@@ -127,7 +127,7 @@ function LeftPanel({ isOpen, onClose }) {
             {shouldShowLabels && "All Blogs"}
           </NavLink>
           <NavLink
-            to="/playground/featured-blogs"
+            to="/dashboard/featured-blogs"
             className={({ isActive }) =>
               isActive ? "panel-nav-link active" : "panel-nav-link"
             }
@@ -139,7 +139,7 @@ function LeftPanel({ isOpen, onClose }) {
         </div>
         <div className="navigation">
           <NavLink
-            to="/playground/messages"
+            to="/dashboard/messages"
             className={({ isActive }) =>
               isActive ? "panel-nav-link active" : "panel-nav-link"
             }
@@ -157,7 +157,7 @@ function LeftPanel({ isOpen, onClose }) {
             <div className="github-content">
               <div className="github-header">
                 <RiGithubFill size={20} />
-                <span className="github-title">Bloggest</span>
+                <span className="github-title">Irada</span>
               </div>
               <p className="github-desc">View source code on GitHub</p>
               <a
@@ -174,7 +174,7 @@ function LeftPanel({ isOpen, onClose }) {
           </div>
         )}
         <NavLink
-          to="/playground/settings"
+          to="/dashboard/settings"
           className={({ isActive }) =>
             isActive ? "panel-nav-link active" : "panel-nav-link"
           }

@@ -5,7 +5,7 @@
     justify-content: center;
     cursor: pointer;
     padding: 0.5rem;
-    border-radius: 0.75rem;
+    border-radius: 2.5rem;
     border: 1px solid var(--bor);
 }
 
@@ -30,7 +30,7 @@
     position: absolute;
     top: 10vh;
     right: 1rem;
-    background-color: var(--bg2);
+    background-color: var(--bg);
     border: 1px solid #30343F;
     border-radius: 12px;
     padding: 0.75rem;
@@ -91,6 +91,27 @@
 
 .logout-btn:hover {
     background-color: rgba(255, 71, 87, 0.1);
+    transform: translateX(2px);
+}
+
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--txt);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--bg);
     transform: translateX(2px);
 }
 

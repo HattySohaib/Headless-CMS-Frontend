@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import BlogRead from "./pages/BlogRead/BlogRead";
 import Playground from "./pages/Playground/Playground";
@@ -27,24 +27,17 @@ import Draftboard from "./pages/Draftboard/Draftboard";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
 import NotFound from "./pages/NotFound/NotFound";
+import Loader from "./components/Loader/Loader";
 
 const App = () => {
   const { user, isLoading } = useAuthContext();
+  const location = useLocation();
 
   if (isLoading) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        Loading...
-      </div>
-    );
+    return <Loader />;
   }
+
+  const isDashboardRoute = location.pathname.startsWith("/dashboard");
 
   return (
     <ApiErrorProvider>
@@ -54,14 +47,16 @@ const App = () => {
         showContact={true}
       >
         <OfflineBanner />
-        <ErrorBoundary
-          title="Navigation Error"
-          message="There was an issue with the navigation bar."
-        >
-          <UserProvider>
-            <Navbar />
-          </UserProvider>
-        </ErrorBoundary>{" "}
+        {!isDashboardRoute && (
+          <ErrorBoundary
+            title="Navigation Error"
+            message="There was an issue with the navigation bar."
+          >
+            <UserProvider>
+              <Navbar />
+            </UserProvider>
+          </ErrorBoundary>
+        )}
         <Routes>
           <Route
             index
@@ -91,10 +86,10 @@ const App = () => {
           />
 
           <Route
-            path="playground"
+            path="dashboard"
             element={
               user ? (
-                <ErrorBoundary title="Playground Error">
+                <ErrorBoundary title="Dashboard Error">
                   <Playground />
                 </ErrorBoundary>
               ) : (
@@ -103,7 +98,7 @@ const App = () => {
             }
           >
             <Route
-              path="dashboard"
+              path=""
               element={
                 <ErrorBoundary title="Analytics Dashboard Error">
                   <UserProvider>
@@ -123,7 +118,7 @@ const App = () => {
               }
             />
             <Route
-              path="all-blogs"
+              path="blogs"
               element={
                 <ErrorBoundary title="Blogs Management Error">
                   <RefreshProvider>

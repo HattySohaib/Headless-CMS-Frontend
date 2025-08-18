@@ -91,7 +91,7 @@ const Login = () => {
         </div>
         <div className="form-right">
           <Link to={"/signup"} className="new">
-            New to Bloggest? <span> Sign Up here.</span>
+            New to Irada? <span> Sign Up here.</span>
           </Link>
         </div>
       </div>

@@ -1,13 +1,12 @@
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
 
 import "./Navbar.css";
 
 import { Link, useLocation } from "react-router-dom";
-import { useAuthContext } from "../../contexts/auth";
-import { useUserContext } from "../../contexts/user";
-import { useTheme } from "../../contexts/theme";
-import ProfileButton from "../ProfileButton/ProfileButton";
-import GhostLoader from "../GhostLoader/GhostLoader";
+import { useAuthContext } from "../../../contexts/auth";
+import { useUserContext } from "../../../contexts/user";
+import { useTheme } from "../../../contexts/theme";
+import GhostLoader from "../../GhostLoader/GhostLoader";
 import {
   RiMoonFill,
   RiSunFill,
@@ -98,27 +97,27 @@ export default function Navbar() {
             <div className="logged-nav">
               <div className="nav-profile-section">
                 <Link to="/dashboard" className="nav-dashboard-link">
-                  {userData && (
-                    <div className="nav-dashboard-profile-container">
-                      {!imageLoaded && (
-                        <GhostLoader
-                          width={"1.5rem"}
-                          height={"1.5rem"}
-                          radius={"50%"}
-                        />
-                      )}
-                      <img
-                        src={userData?.profileImageUrl}
-                        alt="Profile"
-                        className="nav-dashboard-profile-img"
-                        onLoad={handleImageLoad}
-                        style={{ display: imageLoaded ? "block" : "none" }}
-                      />
-                    </div>
-                  )}
                   <span>Dashboard</span>
                   <RiArrowRightSLine size="1.2rem" />
                 </Link>
+                <div className="nav-profile-image">
+                  {!imageLoaded && userData && (
+                    <GhostLoader
+                      width={"2.5rem"}
+                      height={"2.5rem"}
+                      radius={"50%"}
+                    />
+                  )}
+                  {userData && (
+                    <img
+                      src={userData?.profileImageUrl}
+                      alt="Profile"
+                      className="nav-dp"
+                      onLoad={handleImageLoad}
+                      style={{ display: imageLoaded ? "block" : "none" }}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           ) : (
@@ -186,12 +185,8 @@ export default function Navbar() {
           )}
 
           <ul className="mobile-nav-list">
-            <li className="mobile-nav-item">
-              <Link
-                to={"/"}
-                onClick={closeMobileMenu}
-                className={isActiveRoute("/") ? "active" : ""}
-              >
+            <li className="nav-list-item">
+              <Link to={"/"} className={isActiveRoute("/") ? "active" : ""}>
                 Home
               </Link>
             </li>

@@ -15,7 +15,7 @@ const config = {
   debugMode: process.env.NODE_ENV === "development",
 
   // Other app-specific configurations can go here
-  appName: "Bloggest",
+  appName: "Irada",
   version: "1.0.0",
 };
 

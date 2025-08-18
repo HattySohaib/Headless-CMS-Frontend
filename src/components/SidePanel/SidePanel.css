@@ -15,13 +15,12 @@
 }
 
 .side-panel {
-    height: 92vh;
+    height: 100vh;
     border-right: 1px solid var(--bor);
     width: 20%;
     overflow: hidden;
     position: sticky;
-    top: 8vh;
-
+    top: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

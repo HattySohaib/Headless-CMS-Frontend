@@ -4,8 +4,11 @@ import { Outlet } from "react-router-dom";
 import "./Playground.css";
 
 import LeftPanel from "../../components/SidePanel/SidePanel";
+import PlaygroundNavbar from "../../components/PlaygroundNavbar/PlaygroundNavbar";
 import { useTheme } from "../../contexts/theme";
 import { RiSidebarUnfoldLine } from "@remixicon/react";
+import ProfileButton from "../../components/ProfileButton/ProfileButton";
+import { UserProvider } from "../../contexts/user";
 
 function Panel() {
   const { theme } = useTheme();
@@ -58,6 +61,7 @@ function Panel() {
       <LeftPanel isOpen={isSidebarOpen} onClose={closeSidebar} />
 
       <div className="right">
+        <PlaygroundNavbar />
         <Outlet />
       </div>
     </div>

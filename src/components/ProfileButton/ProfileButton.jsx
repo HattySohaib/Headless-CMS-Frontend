@@ -13,6 +13,9 @@ import {
   RiDashboardLine,
   RiSettings3Line,
   RiMessage2Line,
+  RiArticleLine,
+  RiSunLine,
+  RiMoonLine,
 } from "@remixicon/react";
 
 import { useTheme } from "../../contexts/theme";
@@ -20,7 +23,7 @@ import Loader from "../Loader/Loader";
 import GhostLoader from "../GhostLoader/GhostLoader";
 
 function ProfileButton() {
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const { userData } = useUserContext();
   const { logout } = useAuthContext();
 
@@ -69,7 +72,7 @@ function ProfileButton() {
           <Link
             className="profile-dd-link"
             onClick={toggleMenu}
-            to={"/playground/dashboard"}
+            to={"/dashboard"}
           >
             <RiDashboardLine size="1rem" />
             <span>Dashboard</span>
@@ -78,7 +81,16 @@ function ProfileButton() {
           <Link
             className="profile-dd-link"
             onClick={toggleMenu}
-            to="/playground/messages"
+            to="/dashboard/blogs"
+          >
+            <RiArticleLine size="1rem" />
+            <span>Blogs</span>
+          </Link>
+
+          <Link
+            className="profile-dd-link"
+            onClick={toggleMenu}
+            to="/dashboard/messages"
           >
             <RiMessage2Line size="1rem" />
             <span>Messages</span>
@@ -87,11 +99,26 @@ function ProfileButton() {
           <Link
             className="profile-dd-link"
             onClick={toggleMenu}
-            to="/playground/settings"
+            to="/dashboard/settings"
           >
             <RiSettings3Line size="1rem" />
             <span>Settings</span>
           </Link>
+
+          <button
+            className="theme-toggle-btn"
+            onClick={() => {
+              toggleTheme();
+              toggleMenu();
+            }}
+          >
+            {theme === "light" ? (
+              <RiMoonLine size="1rem" />
+            ) : (
+              <RiSunLine size="1rem" />
+            )}
+            <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+          </button>
 
           <div className="menu-divider"></div>
 

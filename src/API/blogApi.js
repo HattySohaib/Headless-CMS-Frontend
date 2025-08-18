@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { apiService } from "../services/apiService";
 import { buildQueryString } from "../utils/buildQueryString";
 
@@ -20,25 +21,40 @@ export const blogApi = {
 
   // Create new blog
   async createBlog(blogData) {
-    return await apiService.post(
+    const res = await apiService.post(
       "/blogs",
       blogData,
       apiService.getAuthHeaders()
     );
+    if (res.success) {
+      toast.success("Blog created successfully!");
+    }
+    return res;
   },
 
   // Update blog
   async updateBlog(id, blogData) {
-    return await apiService.patch(
+    const res = await apiService.patch(
       `/blogs/${id}`,
       blogData,
       apiService.getAuthHeaders()
     );
+    if (res.success) {
+      toast.success("Blog updated successfully!");
+    }
+    return res;
   },
 
   // Delete blog
   async deleteBlog(id) {
-    return await apiService.delete(`/blogs/${id}`, apiService.getAuthHeaders());
+    const res = await apiService.delete(
+      `/blogs/${id}`,
+      apiService.getAuthHeaders()
+    );
+    if (res.success) {
+      toast.success("Blog deleted successfully!");
+    }
+    return res;
   },
 
   // Blog interactions
