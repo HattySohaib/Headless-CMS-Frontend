@@ -23,8 +23,11 @@ const ApiKeyPage = () => {
 
   const handleGetApiKey = async () => {
     setLoading(true);
-    const data = await keyApi.getApiKey();
-    setApiKey(data.apiKey);
+    const response = await keyApi.getApiKey();
+    if (response.success) {
+      setApiKey(response.data.apiKey);
+    }
+    // Error handling is done by apiService centrally
     setLoading(false);
   };
 
@@ -34,8 +37,12 @@ const ApiKeyPage = () => {
 
   const handleGenerateApiKey = async () => {
     setLoading(true);
-    const data = await keyApi.generateApiKey();
-    setApiKey(data.apiKey);
+    const response = await keyApi.generateApiKey();
+    if (response.success) {
+      setApiKey(response.data.apiKey);
+      toast.success("API key generated successfully");
+    }
+    // Error handling is done by apiService centrally
     setLoading(false);
   };
 

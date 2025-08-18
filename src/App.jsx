@@ -12,6 +12,7 @@ import Messages from "./pages/Messages/Messages";
 import Settings from "./pages/Settings/Settings";
 
 import { useAuthContext } from "./contexts/auth";
+import { ApiErrorProvider } from "./contexts/apiError";
 import { DropAreaProvider } from "./contexts/file";
 import { UserProvider } from "./contexts/user";
 import { RefreshProvider } from "./contexts/refresh";
@@ -23,107 +24,223 @@ import Author from "./pages/Author/Author";
 
 import Navbar from "./components/Navbar/Navbar";
 import Draftboard from "./pages/Draftboard/Draftboard";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
+import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
+import NotFound from "./pages/NotFound/NotFound";
 
 const App = () => {
-  const { user } = useAuthContext();
+  const { user, isLoading } = useAuthContext();
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <>
-      <UserProvider>
-        <Navbar />
-      </UserProvider>
-      <Routes>
-        <Route index element={<Home />} />
-        <Route index path="blogs" element={<Blogs />} />
-        <Route path="categories" element={<Categories />} />
-        <Route
-          path="playground"
-          element={user ? <Playground /> : <Navigate to={"/login"} />}
+    <ApiErrorProvider>
+      <ErrorBoundary
+        title="Application Error"
+        message="We're experiencing some technical difficulties. Please try refreshing the page."
+        showContact={true}
+      >
+        <OfflineBanner />
+        <ErrorBoundary
+          title="Navigation Error"
+          message="There was an issue with the navigation bar."
         >
+          <UserProvider>
+            <Navbar />
+          </UserProvider>
+        </ErrorBoundary>{" "}
+        <Routes>
           <Route
-            path="dashboard"
+            index
             element={
-              <UserProvider>
-                <Analytics />
-              </UserProvider>
+              <ErrorBoundary title="Homepage Error">
+                <Home />
+              </ErrorBoundary>
             }
           />
+
           <Route
-            path="featured-blogs"
+            path="blogs"
             element={
-              <RefreshProvider>
-                <Dashboard />
-              </RefreshProvider>
+              <ErrorBoundary title="Blogs Page Error">
+                <Blogs />
+              </ErrorBoundary>
             }
           />
+
           <Route
-            path="all-blogs"
+            path="categories"
             element={
-              <RefreshProvider>
-                <Draftboard />
-              </RefreshProvider>
+              <ErrorBoundary title="Categories Error">
+                <Categories />
+              </ErrorBoundary>
             }
           />
+
           <Route
-            path="messages"
+            path="playground"
             element={
-              <RefreshProvider>
-                <Messages />
-              </RefreshProvider>
+              user ? (
+                <ErrorBoundary title="Playground Error">
+                  <Playground />
+                </ErrorBoundary>
+              ) : (
+                <Navigate to={"/login"} />
+              )
+            }
+          >
+            <Route
+              path="dashboard"
+              element={
+                <ErrorBoundary title="Analytics Dashboard Error">
+                  <UserProvider>
+                    <Analytics />
+                  </UserProvider>
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="featured-blogs"
+              element={
+                <ErrorBoundary title="Featured Blogs Error">
+                  <RefreshProvider>
+                    <Dashboard />
+                  </RefreshProvider>
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="all-blogs"
+              element={
+                <ErrorBoundary title="Blogs Management Error">
+                  <RefreshProvider>
+                    <Draftboard />
+                  </RefreshProvider>
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="messages"
+              element={
+                <ErrorBoundary title="Messages Error">
+                  <RefreshProvider>
+                    <Messages />
+                  </RefreshProvider>
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="settings"
+              element={
+                <ErrorBoundary title="Settings Error">
+                  <Settings />
+                </ErrorBoundary>
+              }
+            />
+          </Route>
+
+          <Route
+            path="editor"
+            element={
+              user ? (
+                <ErrorBoundary title="Editor Error">
+                  <DropAreaProvider>
+                    <Editor />
+                  </DropAreaProvider>
+                </ErrorBoundary>
+              ) : (
+                <Navigate to={"/login"} />
+              )
             }
           />
-          <Route path="settings" element={<Settings />} />
-        </Route>
-        <Route
-          path="editor"
-          element={
-            user ? (
-              <DropAreaProvider>
-                <Editor />
-              </DropAreaProvider>
-            ) : (
-              <Navigate to={"/login"} />
-            )
-          }
-        />
-        <Route
-          path="editor/:blog"
-          element={
-            user ? (
-              <DropAreaProvider>
-                <Editor />
-              </DropAreaProvider>
-            ) : (
-              <Navigate to={"/login"} />
-            )
-          }
-        />
-        <Route
-          path="signup"
-          element={!user ? <Signup /> : <Navigate to={"/"} />}
-        />
-        <Route
-          path="login"
-          element={!user ? <Login /> : <Navigate to={"/"} />}
-        />
-        <Route
-          path="author/:id"
-          element={
-            <UserProvider>
-              <Author />
-            </UserProvider>
-          }
-        />
-        <Route
-          path="read-this-blog/:id"
-          element={
-            <UserProvider>
-              <BlogRead />
-            </UserProvider>
-          }
-        />
-        <Route path="*" element={<h1>Error 404, please enter valid URL!</h1>} />
-      </Routes>
-    </>
+
+          <Route
+            path="editor/:blog"
+            element={
+              user ? (
+                <ErrorBoundary title="Blog Editor Error">
+                  <DropAreaProvider>
+                    <Editor />
+                  </DropAreaProvider>
+                </ErrorBoundary>
+              ) : (
+                <Navigate to={"/login"} />
+              )
+            }
+          />
+
+          <Route
+            path="signup"
+            element={
+              !user ? (
+                <ErrorBoundary title="Signup Error">
+                  <Signup />
+                </ErrorBoundary>
+              ) : (
+                <Navigate to={"/"} />
+              )
+            }
+          />
+
+          <Route
+            path="login"
+            element={
+              !user ? (
+                <ErrorBoundary title="Login Error">
+                  <Login />
+                </ErrorBoundary>
+              ) : (
+                <Navigate to={"/"} />
+              )
+            }
+          />
+
+          <Route
+            path="author/:id"
+            element={
+              <ErrorBoundary title="Author Profile Error">
+                <UserProvider>
+                  <Author />
+                </UserProvider>
+              </ErrorBoundary>
+            }
+          />
+
+          <Route
+            path="read-this-blog/:id"
+            element={
+              <ErrorBoundary title="Blog Reading Error">
+                <UserProvider>
+                  <BlogRead />
+                </UserProvider>
+              </ErrorBoundary>
+            }
+          />
+
+          <Route
+            path="*"
+            element={
+              <ErrorBoundary title="Page Not Found">
+                <NotFound />
+              </ErrorBoundary>
+            }
+          />
+        </Routes>
+      </ErrorBoundary>
+    </ApiErrorProvider>
   );
 };
 

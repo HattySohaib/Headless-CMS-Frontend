@@ -27,19 +27,30 @@ function Draft({ blog }) {
   };
 
   const handleUpdateBlog = async (published) => {
-    await blogApi.updateBlog(blog._id, { published });
-    setRefresh((prev) => !prev);
+    const response = await blogApi.updateBlog(blog._id, { published });
+    if (response.success) {
+      setRefresh((prev) => !prev);
+    }
+    // Error handling is done by apiService centrally
   };
 
   const handleDeleteBlog = async () => {
-    await blogApi.deleteBlog(blog._id);
-    setRefresh((prev) => !prev);
-    openMenu();
+    const response = await blogApi.deleteBlog(blog._id);
+    if (response.success) {
+      setRefresh((prev) => !prev);
+      openMenu();
+    }
+    // Error handling is done by apiService centrally
   };
 
-  const handleFeaturedToggle = () => {
-    blogApi.updateBlog(blog._id, { featured: !blog.featured });
-    setRefresh((prev) => !prev);
+  const handleFeaturedToggle = async () => {
+    const response = await blogApi.updateBlog(blog._id, {
+      featured: !blog.featured,
+    });
+    if (response.success) {
+      setRefresh((prev) => !prev);
+    }
+    // Error handling is done by apiService centrally
   };
 
   return (

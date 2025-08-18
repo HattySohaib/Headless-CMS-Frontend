@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Blogs.css";
+import { toast } from "react-toastify";
 
 import Footer from "../../components/Footer/Footer";
 import Carousel from "../../components/Carousel/Carousel";
@@ -17,20 +18,26 @@ function Blogs() {
 
   const { theme } = useTheme();
 
-  const handleGetPublished = async () => {
-    const data = await blogApi.getBlogs({ published: true });
-    setPublished(data.blogs);
-  };
+  const handleGetPublished = useCallback(async () => {
+    const response = await blogApi.getBlogs({ published: true });
+    if (response.success) {
+      setPublished(response.data.blogs || []);
+    }
+    // Error handling is done by apiService centrally
+  }, []);
 
-  const handleGetUsers = async () => {
-    const data = await userApi.getUsers();
-    setAuthors(data.users);
-  };
+  const handleGetUsers = useCallback(async () => {
+    const response = await userApi.getUsers();
+    if (response.success) {
+      setAuthors(response.data.users || []);
+    }
+    // Error handling is done by apiService centrally
+  }, []);
 
   useEffect(() => {
     handleGetPublished();
     handleGetUsers();
-  }, []);
+  }, [handleGetPublished, handleGetUsers]);
 
   const filteredIPublished = published.filter((blog) => blog.featured === true);
 

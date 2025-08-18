@@ -15,8 +15,11 @@ const CategoryManager = () => {
   }, []);
 
   const handleGetCategories = async () => {
-    const data = await categoryApi.getCategories();
-    setCategories(data);
+    const response = await categoryApi.getCategories();
+    if (response.success) {
+      setCategories(response.data || []);
+    }
+    // Error handling is done by apiService centrally
   };
 
   const handleCreateCategory = async () => {
@@ -24,9 +27,12 @@ const CategoryManager = () => {
     const category = {
       value: newCategory,
     };
-    await categoryApi.createCategory(category);
-    setNewCategory("");
-    handleGetCategories();
+    const response = await categoryApi.createCategory(category);
+    if (response.success) {
+      setNewCategory("");
+      handleGetCategories();
+    }
+    // Error handling is done by apiService centrally
   };
 
   const handleUpdateCategory = async (id) => {
@@ -35,14 +41,20 @@ const CategoryManager = () => {
     const updatedCategory = {
       value: editingCategory.value,
     };
-    await categoryApi.updateCategory(id, updatedCategory);
-    handleGetCategories();
-    setEditingCategory(null);
+    const response = await categoryApi.updateCategory(id, updatedCategory);
+    if (response.success) {
+      handleGetCategories();
+      setEditingCategory(null);
+    }
+    // Error handling is done by apiService centrally
   };
 
   const handleDeleteCategory = async (id) => {
-    await categoryApi.deleteCategory(id);
-    handleGetCategories();
+    const response = await categoryApi.deleteCategory(id);
+    if (response.success) {
+      handleGetCategories();
+    }
+    // Error handling is done by apiService centrally
   };
 
   return (

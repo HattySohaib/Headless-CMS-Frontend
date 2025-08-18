@@ -12,8 +12,6 @@ import {
   RiArrowRightSLine,
   RiArrowLeftDoubleLine,
   RiArrowRightDoubleLine,
-  RiMailLine,
-  RiMailOpenLine,
   RiDeleteBin6Line,
   RiCheckLine,
 } from "@remixicon/react";
@@ -40,28 +38,36 @@ function Messages() {
   const { theme } = useTheme();
 
   const handleGetMessages = async (page = 1) => {
+    if (!filterConfig) return; // Guard clause to prevent errors
+
     const apiParams = filterConfig.buildApiParams(
       filterConfig.frontendFilters,
       searchTerm,
       page
     );
-    const data = await messageApi.getMessages(apiParams);
-    setMessages(data.messages || []);
-    setPagination(
-      data.pagination || {
-        currentPage: 1,
-        totalPages: 1,
-        totalMessages: 0,
-        limit: 10,
-        hasNextPage: false,
-        hasPrevPage: false,
-      }
-    );
+    const response = await messageApi.getMessages(apiParams);
+    if (response.success) {
+      setMessages(response.data.messages || []);
+      setPagination(
+        response.data.pagination || {
+          currentPage: 1,
+          totalPages: 1,
+          totalMessages: 0,
+          limit: 10,
+          hasNextPage: false,
+          hasPrevPage: false,
+        }
+      );
+    }
+    // Error handling is done by apiService centrally
   };
 
   const handleGetUnreadCount = async () => {
     const response = await messageApi.getUnreadCount();
-    setUnreadCount(response.unreadCount || 0);
+    if (response.success) {
+      setUnreadCount(response.data.unreadCount || 0);
+    }
+    // Error handling is done by apiService centrally
   };
 
   // Update data when search term, filter config, or page changes
@@ -157,31 +163,40 @@ function Messages() {
   };
 
   const handleMarkAsRead = async (messageId) => {
-    await messageApi.markAsRead(messageId);
-    // Update the message in the local state
-    setMessages((prevMessages) =>
-      prevMessages.map((msg) =>
-        msg._id === messageId ? { ...msg, read: true } : msg
-      )
-    );
-    // Update unread count
-    handleGetUnreadCount();
+    const response = await messageApi.markAsRead(messageId);
+    if (response.success) {
+      // Update the message in the local state
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg._id === messageId ? { ...msg, read: true } : msg
+        )
+      );
+      // Update unread count
+      handleGetUnreadCount();
+    }
+    // Error handling is done by apiService centrally
   };
 
   const handleDeleteMessage = async (messageId) => {
-    await messageApi.deleteMessage(messageId);
-    // Remove message from local state
-    setMessages((prevMessages) =>
-      prevMessages.filter((msg) => msg._id !== messageId)
-    );
-    // Update unread count
-    handleGetUnreadCount();
-    // Refresh pagination if needed
-    if (messages.length === 1 && currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    } else {
-      handleGetMessages(currentPage);
+    const response = await messageApi.deleteMessage(messageId);
+    if (response.success) {
+      // Remove message from local state
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg._id !== messageId)
+      );
+      // Update unread count
+      handleGetUnreadCount();
+      // If this was the last message on the page and we're not on page 1, go back a page
+      if (messages.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+      // Update pagination count locally to avoid unnecessary API call
+      setPagination((prev) => ({
+        ...prev,
+        totalMessages: Math.max(0, prev.totalMessages - 1),
+      }));
     }
+    // Error handling is done by apiService centrally
   };
 
   const handleBulkMarkAsRead = async () => {
@@ -190,9 +205,27 @@ function Messages() {
       return message && !message.read;
     });
 
-    for (const messageId of unreadSelected) {
-      await handleMarkAsRead(messageId);
+    if (unreadSelected.length === 0) {
+      setSelectedMessages(new Set());
+      setSelectAll(false);
+      return;
     }
+
+    // Mark all unread selected messages as read
+    for (const messageId of unreadSelected) {
+      const response = await messageApi.markAsRead(messageId);
+      if (response.success) {
+        // Update the message in the local state
+        setMessages((prevMessages) =>
+          prevMessages.map((msg) =>
+            msg._id === messageId ? { ...msg, read: true } : msg
+          )
+        );
+      }
+    }
+
+    // Update unread count once at the end
+    handleGetUnreadCount();
     setSelectedMessages(new Set());
     setSelectAll(false);
   };
@@ -203,9 +236,38 @@ function Messages() {
         `Are you sure you want to delete ${selectedMessages.size} message(s)?`
       )
     ) {
-      for (const messageId of selectedMessages) {
-        await handleDeleteMessage(messageId);
+      const selectedIds = Array.from(selectedMessages);
+      let deletedCount = 0;
+
+      // Delete all selected messages
+      for (const messageId of selectedIds) {
+        const response = await messageApi.deleteMessage(messageId);
+        if (response.success) {
+          deletedCount++;
+        }
       }
+
+      // Update local state by removing all successfully deleted messages
+      if (deletedCount > 0) {
+        setMessages((prevMessages) =>
+          prevMessages.filter((msg) => !selectedIds.includes(msg._id))
+        );
+
+        // Update pagination count
+        setPagination((prev) => ({
+          ...prev,
+          totalMessages: Math.max(0, prev.totalMessages - deletedCount),
+        }));
+
+        // Update unread count
+        handleGetUnreadCount();
+
+        // If all messages on current page were deleted and we're not on page 1
+        if (messages.length === deletedCount && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+        }
+      }
+
       setSelectedMessages(new Set());
       setSelectAll(false);
     }

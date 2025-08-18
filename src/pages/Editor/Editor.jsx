@@ -81,24 +81,28 @@ export default function Editor() {
   const handleGetBlogById = async () => {
     if (blog) {
       setLoading(true);
-      const blogData = await blogApi.getBlog(blog);
-      setForm((prev) => ({
-        ...prev,
-        title: blogData.title,
-        meta: blogData.meta || "",
-        category: blogData.category || "",
-        content: blogData.content || "",
-        slug: blogData.slug || slugify(blogData.title || ""),
-        banner: blogData.banner || null,
-        published: blogData.published || false,
-        tags: Array.isArray(blogData.tags)
-          ? blogData.tags.map((tag) => ({
-              id: Date.now() + Math.random(),
-              text: tag.trim(),
-            }))
-          : [],
-      }));
-      setBannerPreview(blogData.banner || null);
+      const response = await blogApi.getBlog(blog);
+      if (response.success) {
+        const blogData = response.data;
+        setForm((prev) => ({
+          ...prev,
+          title: blogData.title,
+          meta: blogData.meta || "",
+          category: blogData.category || "",
+          content: blogData.content || "",
+          slug: blogData.slug || slugify(blogData.title || ""),
+          banner: blogData.banner || null,
+          published: blogData.published || false,
+          tags: Array.isArray(blogData.tags)
+            ? blogData.tags.map((tag) => ({
+                id: Date.now() + Math.random(),
+                text: tag.trim(),
+              }))
+            : [],
+        }));
+        setBannerPreview(blogData.banner || null);
+      }
+      // Error handling is done by apiService centrally
       setLoading(false);
     } else {
       setLoading(false);
@@ -106,10 +110,12 @@ export default function Editor() {
   };
 
   const handleGetCategories = async () => {
-    const data = await categoryApi.getCategories();
-    setCategories(data);
+    const response = await categoryApi.getCategories();
+    if (response.success) {
+      setCategories(response.data || []);
+    }
+    // Error handling is done by apiService centrally
   };
-
   const handleBannerChange = (event) => {
     const file = event.target.files?.[0] || null;
     setForm((prev) => ({ ...prev, banner: file }));

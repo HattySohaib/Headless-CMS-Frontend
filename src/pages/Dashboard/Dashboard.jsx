@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Dashboard.css";
+import { toast } from "react-toastify";
 import BlogCard from "../../components/BlogCard/BlogCard";
 import Loader from "../../components/Loader/Loader";
+import AsyncErrorBoundary from "../../components/ErrorBoundary/AsyncErrorBoundary";
 import { useRefresh } from "../../contexts/refresh";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Filter from "../../components/Filter/Filter";
@@ -37,50 +39,63 @@ function Dashboard() {
   const { user } = useAuthContext();
   const { theme } = useTheme();
 
-  const handleGetFeaturedByUser = async (page = 1) => {
-    setLoading(true);
-    try {
-      const apiParams = filterConfig.buildApiParams(
+  const handleGetFeaturedByUser = useCallback(
+    async (page = 1) => {
+      if (!user?.id) return; // Guard clause
+
+      setLoading(true);
+      const apiParams = filterConfig?.buildApiParams(
         filterConfig.frontendFilters,
         searchTerm,
         page,
-        user.id
+        user?.id
       );
       // Add featured flag to ensure we only get featured blogs
-      apiParams.featured = true;
-      const data = await blogApi.getBlogs(apiParams);
-      setFeatured(data.blogs || []);
-      setPagination(
-        data.pagination || {
-          currentPage: 1,
-          totalPages: 1,
-          totalBlogs: 0,
-          limit: 10,
-          hasNextPage: false,
-          hasPrevPage: false,
+      if (apiParams) {
+        apiParams.featured = true;
+      }
+      const response = await blogApi.getBlogs(apiParams || { featured: true });
+      if (response.success) {
+        setFeatured(response.data.blogs || []);
+        setPagination(
+          response.data.pagination || {
+            currentPage: 1,
+            totalPages: 1,
+            totalBlogs: 0,
+            limit: 10,
+            hasNextPage: false,
+            hasPrevPage: false,
+          }
+        );
+        // Sync the current page state with the pagination response
+        if (response.data.pagination?.currentPage) {
+          setCurrentPage(response.data.pagination.currentPage);
         }
-      );
-    } catch (error) {
-      console.error("Error fetching featured blogs:", error);
-    } finally {
+      }
+      // Error handling is done by apiService centrally
       setLoading(false);
-    }
-  };
+    },
+    [filterConfig, searchTerm, user?.id]
+  );
 
-  const handleGetCategories = async () => {
-    const data = await categoryApi.getCategories();
-    setCategories(data.map((obj) => obj.value) || []);
-  };
+  const handleGetCategories = useCallback(async () => {
+    const response = await categoryApi.getCategories();
+    if (response.success) {
+      setCategories(response.data?.map((obj) => obj.value) || []);
+    }
+    // Error handling is done by apiService centrally
+  }, []);
 
   useEffect(() => {
-    if (filterConfig) {
+    // Always call handleGetFeaturedByUser, but only if we have a user
+    if (user?.id) {
       handleGetFeaturedByUser(currentPage);
     }
-  }, [refresh, currentPage, searchTerm, filterConfig]);
+  }, [refresh, currentPage, searchTerm, filterConfig, user?.id]);
 
   useEffect(() => {
     handleGetCategories();
-  }, []);
+  }, [handleGetCategories]);
 
   useEffect(() => {
     if (currentPage !== 1) {
@@ -122,7 +137,7 @@ function Dashboard() {
 
   const getPageNumbers = () => {
     const pages = [];
-    const { currentPage, totalPages } = pagination;
+    const { totalPages } = pagination;
     const maxVisiblePages = 5;
 
     if (totalPages <= maxVisiblePages) {
@@ -168,12 +183,9 @@ function Dashboard() {
       {/* Results summary */}
       <div className="results-summary">
         <p className="summary-text">
-          Showing {(pagination.currentPage - 1) * pagination.limit + 1} to{" "}
-          {Math.min(
-            pagination.currentPage * pagination.limit,
-            pagination.totalBlogs
-          )}{" "}
-          of {pagination.totalBlogs} featured blogs
+          Showing {(currentPage - 1) * pagination.limit + 1} to{" "}
+          {Math.min(currentPage * pagination.limit, pagination.totalBlogs)} of{" "}
+          {pagination.totalBlogs} featured blogs
           {searchTerm && ` for "${searchTerm}"`}
         </p>
       </div>
@@ -185,11 +197,18 @@ function Dashboard() {
           {!featured.length && (
             <p className="blank-text">No featured blogs found.</p>
           )}
-          <div className="recents-container">
-            {featured.map((blog, key) => (
-              <BlogCard blog={blog} key={blog._id || key} />
-            ))}
-          </div>
+          <AsyncErrorBoundary
+            name="Dashboard-BlogCards"
+            title="Blog Loading Error"
+            message="There was an error loading the blog cards. Please try again."
+            compact={true}
+          >
+            <div className="recents-container">
+              {featured.map((blog, key) => (
+                <BlogCard blog={blog} key={blog._id || key} />
+              ))}
+            </div>
+          </AsyncErrorBoundary>
         </>
       )}
 
@@ -198,7 +217,7 @@ function Dashboard() {
         <div className="pagination-container">
           <div className="pagination-info">
             <p className="pagination-text">
-              Page {pagination.currentPage} of {pagination.totalPages}
+              Page {currentPage} of {pagination.totalPages}
             </p>
           </div>
 
@@ -226,7 +245,7 @@ function Dashboard() {
                 <button
                   key={pageNum}
                   className={`pagination-number ${
-                    pageNum === pagination.currentPage ? "active" : ""
+                    pageNum === currentPage ? "active" : ""
                   }`}
                   onClick={() => handlePageChange(pageNum)}
                 >

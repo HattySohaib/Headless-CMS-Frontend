@@ -39,20 +39,28 @@ function Author() {
       return;
     }
     const res = await userApi.followUser(author.id);
-    setFollowed(!followed);
-    toast.success(res.message);
+    if (res.success) {
+      setFollowed(!followed);
+    }
+    // Error handling is done by apiService centrally
   };
 
   const handleGetUserById = async () => {
     setLoading(true);
-    const data = await userApi.getUser(id);
-    setAuthor(data);
+    const response = await userApi.getUser(id);
+    if (response.success) {
+      setAuthor(response.data);
+    }
+    // Error handling is done by apiService centrally
     setLoading(false);
   };
 
   const handleGetBlogsByUser = async () => {
-    const data = await blogApi.getBlogs({ author: id });
-    setPublished(data);
+    const response = await blogApi.getBlogs({ author: id });
+    if (response.success) {
+      setPublished(response.data.blogs || []);
+    }
+    // Error handling is done by apiService centrally
   };
 
   const handleImageLoaded = () => {

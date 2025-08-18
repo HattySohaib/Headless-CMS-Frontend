@@ -205,47 +205,56 @@ export default function Analytics() {
     const fetchAnalytics = async () => {
       if (!userData) return;
       setIsLoading(true);
-      try {
-        // 1. Fetch 30-day daily view counts for StatCard
-        const dailyViews30Data = await analyticsApi.getDailyViews30Days();
+
+      // 1. Fetch 30-day daily view counts for StatCard
+      const dailyViews30Response = await analyticsApi.getDailyViews30Days();
+      if (dailyViews30Response.success) {
         const monthlyViewsArray = getDailyViewsLast30Days(
-          dailyViews30Data || []
+          dailyViews30Response.data || []
         );
         setMonthlyViews(monthlyViewsArray);
+      }
 
-        // 1.1. Fetch 30-day daily like counts for StatCard
-        const dailyLikes30Data = await analyticsApi.getDailyLikes();
+      // 1.1. Fetch 30-day daily like counts for StatCard
+      const dailyLikes30Response = await analyticsApi.getDailyLikes();
+      if (dailyLikes30Response.success) {
         const monthlyLikesArray = getDailyLikesLast30Days(
-          dailyLikes30Data || []
+          dailyLikes30Response.data || []
         );
         setMonthlyLikes(monthlyLikesArray);
-
-        // 2. Fetch detailed views with timestamps for blog-specific analysis
-        const detailedViews7Data = await analyticsApi.getDetailedViews7Days();
-        setTopBlogs(getTopBlogsWithDailyViews(detailedViews7Data || []));
-
-        // 3. Fetch quarterly view distribution
-        const quarterlyData = await analyticsApi.getQuarterlyViews();
-        setQuarterViewShare(getQuarterViewShare(quarterlyData));
-
-        // Use userData context for basic stats instead of API call
-        setBlogStats({
-          totalBlogs: userData.blogCount || 0,
-          publishedBlogs: userData.blogCount || 0, // Assuming published = total for now
-          draftBlogs: 0, // Will need to be fetched separately if needed
-          totalViews: userData.viewCount || 0,
-          totalLikes: userData.likeCount || 0,
-          totalComments: 0, // Will need to be fetched if available
-        });
-
-        // Fetch message statistics
-        const messageStatsData = await analyticsApi.getMessageStats();
-        setMessageStats(messageStatsData);
-      } catch (error) {
-        console.log("Error fetching analytics:", error);
-      } finally {
-        setIsLoading(false);
       }
+
+      // 2. Fetch detailed views with timestamps for blog-specific analysis
+      const detailedViews7Response = await analyticsApi.getDetailedViews7Days();
+      if (detailedViews7Response.success) {
+        setTopBlogs(
+          getTopBlogsWithDailyViews(detailedViews7Response.data || [])
+        );
+      }
+
+      // 3. Fetch quarterly view distribution
+      const quarterlyResponse = await analyticsApi.getQuarterlyViews();
+      if (quarterlyResponse.success) {
+        setQuarterViewShare(getQuarterViewShare(quarterlyResponse.data));
+      }
+
+      // Use userData context for basic stats instead of API call
+      setBlogStats({
+        totalBlogs: userData.blogCount || 0,
+        publishedBlogs: userData.blogCount || 0, // Assuming published = total for now
+        draftBlogs: 0, // Will need to be fetched separately if needed
+        totalViews: userData.viewCount || 0,
+        totalLikes: userData.likeCount || 0,
+        totalComments: 0, // Will need to be fetched if available
+      });
+
+      // Fetch message statistics
+      const messageStatsResponse = await analyticsApi.getMessageStats();
+      if (messageStatsResponse.success) {
+        setMessageStats(messageStatsResponse.data);
+      }
+
+      setIsLoading(false);
     };
 
     fetchAnalytics();

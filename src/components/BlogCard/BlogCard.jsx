@@ -20,19 +20,25 @@ function BlogCard({ blog }) {
   };
 
   const handlePublish = async () => {
-    const data = await blogApi.updateBlog(blog._id, {
+    const response = await blogApi.updateBlog(blog._id, {
       published: !blog.published,
     });
-    setBlogData(data);
-    setRefresh((prev) => !prev);
+    if (response.success) {
+      setBlogData(response.data);
+      setRefresh((prev) => !prev);
+    }
+    // Error handling is done by apiService centrally
   };
 
   const handleFeaturedToggle = async () => {
-    const data = await blogApi.updateBlog(blog._id, {
+    const response = await blogApi.updateBlog(blog._id, {
       featured: !blog.featured,
     });
-    setBlogData(data);
-    setRefresh((prev) => !prev);
+    if (response.success) {
+      setBlogData(response.data);
+      setRefresh((prev) => !prev);
+    }
+    // Error handling is done by apiService centrally
   };
 
   useEffect(() => {}, [blogData]);

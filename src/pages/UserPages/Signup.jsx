@@ -50,10 +50,10 @@ const Signup = () => {
 
   const checkUsername = async () => {
     if (!formData.username) return false;
-    const available = await userApi.checkUserExists({
+    const response = await userApi.checkUserExists({
       username: formData.username,
     });
-    return available;
+    return response.success ? response.data : false;
   };
 
   const handleNext = () => {

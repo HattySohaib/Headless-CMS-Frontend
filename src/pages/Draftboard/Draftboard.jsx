@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Draftboard.css";
+import { toast } from "react-toastify";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import Filter from "../../components/Filter/Filter";
 import Draft from "../../components/Draft/Draft";
@@ -37,48 +38,68 @@ function Draftboard() {
   const { user } = useAuthContext();
   const { theme } = useTheme();
 
-  const handleGetBlogsByUser = async (page = 1) => {
-    setLoading(true);
-    try {
-      const apiParams = filterConfig.buildApiParams(
+  const handleGetBlogsByUser = useCallback(
+    async (page = 1) => {
+      if (!user?.id) return; // Guard clause
+
+      setLoading(true);
+      const apiParams = filterConfig?.buildApiParams(
         filterConfig.frontendFilters,
         searchTerm,
         page,
-        user.id
+        user?.id
       );
-      const data = await blogApi.getBlogs(apiParams);
-      setDrafts(data.blogs || []);
-      setPagination(
-        data.pagination || {
-          currentPage: 1,
-          totalPages: 1,
-          totalBlogs: 0,
-          limit: 10,
-          hasNextPage: false,
-          hasPrevPage: false,
+      const response = await blogApi.getBlogs(
+        apiParams || { author: user?.id }
+      );
+      if (response.success) {
+        setDrafts(response.data.blogs || []);
+        setPagination(
+          response.data.pagination || {
+            currentPage: 1,
+            totalPages: 1,
+            totalBlogs: 0,
+            limit: 10,
+            hasNextPage: false,
+            hasPrevPage: false,
+          }
+        );
+        // Sync the current page state with the pagination response
+        if (response.data.pagination?.currentPage) {
+          setCurrentPage(response.data.pagination.currentPage);
         }
-      );
-    } catch (error) {
-      console.error("Error fetching blogs:", error);
-    } finally {
+      }
+      // Error handling is done by apiService centrally
       setLoading(false);
-    }
-  };
+    },
+    [filterConfig, searchTerm, user?.id]
+  );
 
-  const handleGetCategories = async () => {
-    const data = await categoryApi.getCategories();
-    setCategories(data.map((obj) => obj.value) || []);
-  };
+  const handleGetCategories = useCallback(async () => {
+    const response = await categoryApi.getCategories();
+    if (response.success) {
+      setCategories(response.data?.map((obj) => obj.value) || []);
+    }
+    // Error handling is done by apiService centrally
+  }, []);
 
   useEffect(() => {
-    if (filterConfig) {
+    // Always call handleGetBlogsByUser, but only if we have a user
+    if (user?.id) {
       handleGetBlogsByUser(currentPage);
     }
-  }, [refresh, currentPage, searchTerm, filterConfig]);
+  }, [
+    refresh,
+    currentPage,
+    searchTerm,
+    filterConfig,
+    handleGetBlogsByUser,
+    user?.id,
+  ]);
 
   useEffect(() => {
     handleGetCategories();
-  }, []);
+  }, [handleGetCategories]);
 
   useEffect(() => {
     if (currentPage !== 1) {
@@ -120,7 +141,7 @@ function Draftboard() {
 
   const getPageNumbers = () => {
     const pages = [];
-    const { currentPage, totalPages } = pagination;
+    const { totalPages } = pagination;
     const maxVisiblePages = 5;
 
     if (totalPages <= maxVisiblePages) {
@@ -188,11 +209,8 @@ function Draftboard() {
         <div className="pagination-container">
           <div className="pagination-info">
             <p className="pagination-text">
-              Showing {(pagination.currentPage - 1) * pagination.limit + 1} to{" "}
-              {Math.min(
-                pagination.currentPage * pagination.limit,
-                pagination.totalBlogs
-              )}{" "}
+              Showing {(currentPage - 1) * pagination.limit + 1} to{" "}
+              {Math.min(currentPage * pagination.limit, pagination.totalBlogs)}{" "}
               of {pagination.totalBlogs} blogs
             </p>
           </div>
@@ -221,7 +239,7 @@ function Draftboard() {
                 <button
                   key={pageNum}
                   className={`pagination-number ${
-                    pageNum === pagination.currentPage ? "active" : ""
+                    pageNum === currentPage ? "active" : ""
                   }`}
                   onClick={() => handlePageChange(pageNum)}
                 >

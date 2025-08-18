@@ -9,10 +9,12 @@ export const UserProvider = ({ children }) => {
   const { user, userReset } = useAuthContext();
   const [userData, setUserData] = useState(null);
 
+  console.log("UserProvider initialized with user:", user);
+
   const fetchUserData = async () => {
     if (user) {
-      const data = await userApi.getUser(user.id);
-      setUserData(data);
+      const res = await userApi.getUser(user.id);
+      setUserData(res.data);
     }
   };
 

@@ -1,71 +1,52 @@
-import { toast } from "react-toastify";
 import { apiService } from "../services/apiService";
 import { buildQueryString } from "../utils/buildQueryString";
 
+/**
+ * User-related API calls - Returns standardized response envelopes
+ * UI components should handle success/error messaging
+ */
 export const userApi = {
   // Authentication
   async login(credentials) {
-    const res = await apiService.post("/users/login", credentials);
-    if (res.success) toast.success(res.message);
-    else toast.warn(res.message);
-    return res;
+    return await apiService.post("/users/login", credentials);
   },
 
   async signup(userData) {
-    const res = await apiService.post("/users", userData);
-    if (res.success) {
-      toast.success(res.message);
-    } else {
-      // Handle validation errors
-      if (res.code === "VALIDATION_ERROR" && res.errors) {
-        Object.values(res.errors).forEach((errorMessage) => {
-          toast.error(errorMessage);
-        });
-      } else {
-        // Handle other types of errors
-        toast.error(res.message || "Signup failed");
-      }
-    }
-    return res;
+    return await apiService.post("/users", userData);
   },
 
   async logout() {
     localStorage.removeItem("token");
-    return Promise.resolve();
+    return Promise.resolve({
+      success: true,
+      message: "Logged out successfully",
+    });
   },
 
   // User profile
   async getUser(id) {
-    const res = await apiService.get(`/users/${id}`);
-    if (!res.success) toast.warn(res.message);
-    return res.data;
+    return await apiService.get(`/users/${id}`);
   },
 
   async updateProfile(id, profileData) {
-    const res = await apiService.patch(
+    return await apiService.patch(
       `/users/${id}`,
       profileData,
       apiService.getAuthHeaders()
     );
-    if (!res.success) toast.warn(res.message);
-    else toast.success(res.message);
-    return res;
   },
 
   async changePassword(id, passwordData) {
-    const res = await apiService.patch(
+    return await apiService.patch(
       `/users/${id}/password`,
       passwordData,
       apiService.getAuthHeaders()
     );
-    if (!res.success) toast.warn(res.message);
-    else toast.success(res.message);
-    return res;
   },
 
   // User interactions
   async followUser(id) {
-    return apiService.post(
+    return await apiService.post(
       `/users/${id}/follow`,
       {},
       apiService.getAuthHeaders()
@@ -73,7 +54,7 @@ export const userApi = {
   },
 
   async unfollowUser(id) {
-    return apiService.delete(
+    return await apiService.delete(
       `/users/${id}/follow`,
       apiService.getAuthHeaders()
     );
@@ -83,25 +64,20 @@ export const userApi = {
   async getUsers(filters = {}) {
     const queryString = buildQueryString(filters);
     const endpoint = queryString ? `/users?${queryString}` : "/users";
-    const res = await apiService.get(endpoint);
-    if (!res.success) toast.warn(res.message);
-    return res.data;
+    return await apiService.get(endpoint);
   },
 
   //check username availability
   async checkUsername(username) {
     const queryString = buildQueryString({ username });
-    const res = await apiService.get(`/users/check-username?${queryString}`);
-    if (!res.success) toast.warn(res.message);
-    return res.data.available;
+    return await apiService.get(`/users/check-username?${queryString}`);
   },
 
   // Check if user exists
   async checkUserExists(filters = {}) {
     const queryString = buildQueryString(filters);
-    const res = await apiService.get(
+    return await apiService.get(
       `/users${queryString ? `?${queryString}` : ""}`
     );
-    return res.data;
   },
 };

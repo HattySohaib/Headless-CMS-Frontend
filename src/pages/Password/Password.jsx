@@ -78,7 +78,14 @@ const PasswordUpdateForm = () => {
       newPassword,
     };
 
-    await userApi.changePassword(user.id, formData);
+    const response = await userApi.changePassword(user.id, formData);
+    if (response.success) {
+      // Password changed successfully, apiService will show success toast
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    }
+    // Error handling is done by apiService centrally
     setLoading(false);
   };
 

@@ -1,15 +1,37 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userReset, setUserReset] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("token");
 
-  const resetUser = () => {
+  const resetUser = useCallback(() => {
     setUserReset(!userReset);
-  };
+  }, []);
+
+  const isTokenExpired = useCallback((token) => {
+    try {
+      const decoded = JSON.parse(atob(token.split(".")[1]));
+      return decoded.exp * 1000 < Date.now();
+    } catch (error) {
+      console.error("Token parsing error:", error);
+      return true;
+    }
+  }, []);
+
+  const logout = useCallback(() => {
+    setUser(null);
+    localStorage.removeItem("token");
+  }, []);
 
   useEffect(() => {
     if (token && !isTokenExpired(token)) {
@@ -19,13 +41,8 @@ export const AuthProvider = ({ children }) => {
     } else {
       logout();
     }
-  }, [token]);
-
-  const isTokenExpired = (token) => {
-    const decoded = JSON.parse(atob(token.split(".")[1]));
-    resetUser();
-    return decoded.exp * 1000 < Date.now();
-  };
+    setIsLoading(false);
+  }, [token, isTokenExpired, resetUser, logout]);
 
   const login = (userData) => {
     setUser(userData);
@@ -33,13 +50,10 @@ export const AuthProvider = ({ children }) => {
     setTimeout(() => setUserReset(!userReset), 1000);
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("token");
-  };
-
   return (
-    <AuthContext.Provider value={{ user, login, logout, userReset, resetUser }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, userReset, resetUser, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

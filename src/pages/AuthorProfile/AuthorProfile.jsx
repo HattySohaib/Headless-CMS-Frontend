@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useAuthContext } from "../../contexts/auth";
 import "./AuthorProfile.css";
 import { useTheme } from "../../contexts/theme";
+import { toast } from "react-toastify";
 
 import {
   RiFileImageFill,
@@ -42,10 +43,11 @@ function AuthorProfile() {
   };
 
   const handleGetUserByID = async () => {
-    setLoading(true);
     setImageLoaded(false); // Reset image loaded state when fetching new data
-    const data = await userApi.getUser(user.id);
-    setUserData(data);
+    const response = await userApi.getUser(user.id);
+    if (response.success) {
+      setUserData(response.data);
+    }
     setLoading(false);
   };
 
@@ -55,7 +57,7 @@ function AuthorProfile() {
 
   useEffect(() => {
     handleGetUserByID();
-  }, [user, inputsDisabled]);
+  }, [inputsDisabled]);
 
   // Store original username when user data is fetched
   useEffect(() => {
@@ -112,18 +114,18 @@ function AuthorProfile() {
 
     // Set new timeout
     debounceTimerRef.current = setTimeout(async () => {
-      try {
-        const available = await userApi.checkUsername(value);
-        setIsAvailable(available);
-        console.log("Username availability checked:", available);
-        setMessage(available ? "Username available" : "Username already taken");
-      } catch (error) {
-        console.error("Error checking username:", error);
+      const response = await userApi.checkUsername(value);
+      if (response.success) {
+        setIsAvailable(response.data);
+        console.log("Username availability checked:", response.data);
+        setMessage(
+          response.data ? "Username available" : "Username already taken"
+        );
+      } else {
         setIsAvailable(false);
         setMessage("Error checking username");
-      } finally {
-        setIsCheckingUsername(false);
       }
+      setIsCheckingUsername(false);
     }, 500); // 500ms debounce delay
   }, []);
 
@@ -145,9 +147,12 @@ function AuthorProfile() {
     if (newDp) {
       formData.append("profileImage", newDp);
     }
-    await userApi.updateProfile(user.id, formData);
-    setInputsDisabled(true);
-    handleGetUserByID(user.id);
+    const response = await userApi.updateProfile(user.id, formData);
+    if (response.success) {
+      setInputsDisabled(true);
+      handleGetUserByID(user.id);
+    }
+    // Error handling is done by apiService centrally
   };
 
   if (loading) return <Loader />;

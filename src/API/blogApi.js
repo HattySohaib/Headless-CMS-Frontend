@@ -1,74 +1,49 @@
-import { toast } from "react-toastify";
 import { apiService } from "../services/apiService";
 import { buildQueryString } from "../utils/buildQueryString";
 
 /**
- * Blog-related API calls
+ * Blog-related API calls - Returns standardized response envelopes
+ * UI components should handle success/error messaging
  */
 export const blogApi = {
   // Get blogs with filtering and pagination
   async getBlogs(filters = {}) {
     const queryString = buildQueryString(filters);
     const endpoint = queryString ? `/blogs?${queryString}` : "/blogs";
-    const res = await apiService.get(endpoint, apiService.getAuthHeaders());
-    return res.data;
+    return await apiService.get(endpoint, apiService.getAuthHeaders());
   },
 
   // Get single blog
   async getBlog(id) {
-    const res = await apiService.get(`/blogs/${id}`);
-    return res.data;
+    return await apiService.get(`/blogs/${id}`);
   },
 
   // Create new blog
   async createBlog(blogData) {
-    const res = await apiService.post(
+    return await apiService.post(
       "/blogs",
       blogData,
       apiService.getAuthHeaders()
     );
-    if (res.success) {
-      toast.success(res.message);
-    } else {
-      toast.error(res.message);
-    }
-    return res;
   },
 
   // Update blog
   async updateBlog(id, blogData) {
-    const res = await apiService.patch(
+    return await apiService.patch(
       `/blogs/${id}`,
       blogData,
       apiService.getAuthHeaders()
     );
-    if (res.success) {
-      toast.success(res.message);
-    } else {
-      toast.error(res.message);
-    }
-    console.log("Blog updated:", res);
-    return res;
   },
 
   // Delete blog
   async deleteBlog(id) {
-    const res = await apiService.delete(
-      `/blogs/${id}`,
-      apiService.getAuthHeaders(),
-      true
-    );
-    if (res.success) {
-      toast.success(res.message);
-    } else {
-      toast.error(res.message);
-    }
-    return res;
+    return await apiService.delete(`/blogs/${id}`, apiService.getAuthHeaders());
   },
 
   // Blog interactions
   async likeBlog(id) {
-    return apiService.post(
+    return await apiService.post(
       `/blogs/${id}/like`,
       {},
       apiService.getAuthHeaders()
@@ -76,7 +51,7 @@ export const blogApi = {
   },
 
   async commentOnBlog(id, comment) {
-    return apiService.post(
+    return await apiService.post(
       `/blogs/${id}/comment`,
       { comment },
       apiService.getAuthHeaders()
@@ -84,6 +59,6 @@ export const blogApi = {
   },
 
   async getBlogViews(id) {
-    return apiService.get(`/blogs/${id}/views`);
+    return await apiService.get(`/blogs/${id}/views`);
   },
 };

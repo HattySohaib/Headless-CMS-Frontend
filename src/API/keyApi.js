@@ -1,34 +1,22 @@
-import { toast } from "react-toastify";
 import { apiService } from "../services/apiService";
 
 /**
- * API Key/Token-related API calls
+ * API Key/Token-related API calls - Returns standardized response envelopes
+ * UI components should handle success/error messaging
  */
 export const keyApi = {
   // Get current API key
   async getApiKey() {
-    const res = await apiService.get("/token/", apiService.getAuthHeaders());
-    if (!res.success) toast.warn(res.message);
-    return res.data;
+    return await apiService.get("/token/", apiService.getAuthHeaders());
   },
 
   // Generate new API key
   async generateApiKey() {
-    const res = await apiService.post(
-      "/token/",
-      null,
-      apiService.getAuthHeaders()
-    );
-    if (!res.success) toast.warn(res.message);
-    else toast.success(res.message);
-    return res.data;
+    return await apiService.post("/token/", null, apiService.getAuthHeaders());
   },
 
   // Revoke API key
   async revokeApiKey() {
-    const res = await apiService.delete("/token/", apiService.getAuthHeaders());
-    if (!res.success) toast.warn(res.message);
-    else toast.success(res.message);
-    return res;
+    return await apiService.delete("/token/", apiService.getAuthHeaders());
   },
 };

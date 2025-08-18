@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import GhostLoader from "../../components/GhostLoader/GhostLoader";
 import "./BlogRead.css";
 
-import {
-  RiHeartLine,
-  RiHeartFill,
-  RiChat3Line,
-  RiShareLine,
-  RiUserAddLine,
-  RiFileTextLine,
-} from "@remixicon/react";
+import { RiHeartLine, RiUserAddLine, RiFileTextLine } from "@remixicon/react";
 
 import { useAuthContext } from "../../contexts/auth";
 import { useTheme } from "../../contexts/theme";
@@ -20,6 +13,7 @@ import { capitalizeFirstLetter, truncate } from "../../utils/stringFunctions";
 import { userApi } from "../../API/userApi";
 import { blogApi } from "../../API/blogApi";
 import Loader from "../../components/Loader/Loader";
+import NotFound from "../NotFound/NotFound";
 
 function BlogRead() {
   const { id } = useParams();
@@ -32,16 +26,18 @@ function BlogRead() {
   const [followed, setFollowed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [imgLoading, setImgLoading] = useState(true);
-
-  const formData = new FormData();
+  const [notFound, setNotFound] = useState(false);
 
   const handleFollowUser = async () => {
     if (!user) {
       toast.error("Please login to follow the author");
       return;
     }
-    await userApi.followUser(author.id);
-    setFollowed(!followed);
+    const response = await userApi.followUser(author.id);
+    if (response.success) {
+      setFollowed(!followed);
+    }
+    // Error handling is done by apiService centrally
   };
 
   // const likeBlog = async () => {
@@ -80,30 +76,37 @@ function BlogRead() {
   //   }
   // };
 
-  const handleGetBlog = async () => {
-    setLoading(true);
-    const data = await blogApi.getBlog(id);
-    setBlog(data);
-    handleGetUserById(data.author._id);
-  };
+  const handleGetBlog = useCallback(async () => {
+    const res = await blogApi.getBlog(id);
+    if (!res || !res.success) {
+      // Show 404 page when backend indicates failure or missing resource
+      setNotFound(true);
+      setLoading(false);
+      return;
+    }
+    setBlog(res.data);
+    handleGetUserById(res.data.author._id);
+  }, [id]);
 
-  const handleGetUserById = async (authorId) => {
-    const data = await userApi.getUser(authorId);
-    setAuthor(data);
+  const handleGetUserById = useCallback(async (authorId) => {
+    const response = await userApi.getUser(authorId);
+    if (response.success) {
+      setAuthor(response.data);
+    }
+    // Error handling is done by apiService centrally
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (id) handleGetBlog();
-  }, []);
+  }, [id, handleGetBlog]);
 
   const handleImageLoaded = () => {
     setImgLoading(false);
   };
 
-  if (loading) {
-    return <Loader />;
-  }
+  if (notFound) return <NotFound />;
+  if (loading) return <Loader />;
 
   return (
     <div id="blog-read" className={`blog-read-${theme}`}>
