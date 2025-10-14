@@ -196,11 +196,11 @@ export default function Navbar() {
             </li>
             <li className="mobile-nav-item">
               <Link
-                to={"/blogs"}
+                to={"/trending"}
                 onClick={closeMobileMenu}
-                className={isActiveRoute("/blogs") ? "active" : ""}
+                className={isActiveRoute("/trending") ? "active" : ""}
               >
-                Blogs
+                Trending
               </Link>
             </li>
             <li className="mobile-nav-item">
@@ -214,11 +214,11 @@ export default function Navbar() {
             </li>
             <li className="mobile-nav-item">
               <Link
-                to={"/"}
+                to={"/widgets"}
                 onClick={closeMobileMenu}
-                className={isActiveRoute("/components") ? "active" : ""}
+                className={isActiveRoute("/widgets") ? "active" : ""}
               >
-                Components
+                Widgets
               </Link>
             </li>
           </ul>
