@@ -45,8 +45,9 @@ function Panel() {
         <button
           className={`mobile-sidebar-toggle ${isSidebarOpen ? "open" : ""}`}
           onClick={toggleSidebar}
+          aria-label="Toggle sidebar"
         >
-          <RiSidebarUnfoldLine color="#E16449" size="1.35rem" />
+          <RiSidebarUnfoldLine size="1.5rem" />
         </button>
       )}
 

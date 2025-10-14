@@ -128,8 +128,8 @@
 }
 
 .authors-grid {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -137,7 +137,6 @@
 
 .author-card {
   position: relative;
-  width: 20%;
   background: var(--bg-primary);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -315,7 +314,7 @@
    ============================================ */
 
 .featured-section {
-  padding: 3rem 0;
+  padding: 4rem 0;
   background-color: var(--bg-primary);
 }
 

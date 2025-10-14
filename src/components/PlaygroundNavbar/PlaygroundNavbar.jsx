@@ -20,8 +20,6 @@ import {
   RiArticleLine,
   RiSunLine,
   RiMoonLine,
-  RiMenuLine,
-  RiCloseLine,
 } from "@remixicon/react";
 import { useNavigate } from "react-router-dom";
 
@@ -221,19 +219,6 @@ const PlaygroundNavbar = () => {
       {isMobileMenuOpen && (
         <div className="mobile-profile-overlay" onClick={closeMobileMenu}></div>
       )}
-
-      {/* Mobile Floating Menu Button */}
-      <button
-        className={`mobile-floating-menu-btn mobile-floating-menu-btn-${theme}`}
-        onClick={toggleMobileMenu}
-        aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-      >
-        {isMobileMenuOpen ? (
-          <RiCloseLine size={24} />
-        ) : (
-          <RiMenuLine size={24} />
-        )}
-      </button>
     </>
   );
 };
