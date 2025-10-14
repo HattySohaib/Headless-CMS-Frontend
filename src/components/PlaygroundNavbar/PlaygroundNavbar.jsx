@@ -213,6 +213,13 @@ const PlaygroundNavbar = () => {
             </div>
           </div>
         </div>
+        {/* Mobile Overlay */}
+        {isMobileMenuOpen && (
+          <div
+            className="mobile-profile-overlay"
+            onClick={closeMobileMenu}
+          ></div>
+        )}
       </div>
     </>
   );
