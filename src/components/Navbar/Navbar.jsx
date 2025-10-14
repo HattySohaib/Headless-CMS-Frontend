@@ -6,7 +6,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "../../contexts/auth";
 import { useUserContext } from "../../contexts/user";
 import { useTheme } from "../../contexts/theme";
-import ProfileButton from "../ProfileButton/ProfileButton";
 import GhostLoader from "../GhostLoader/GhostLoader";
 import {
   RiMoonFill,
@@ -62,10 +61,10 @@ export default function Navbar() {
           </li>
           <li className="nav-list-item">
             <Link
-              to={"/blogs"}
-              className={isActiveRoute("/blogs") ? "active" : ""}
+              to={"/trending"}
+              className={isActiveRoute("/trending") ? "active" : ""}
             >
-              Blogs
+              Trending
             </Link>
           </li>
           <li className="nav-list-item">
@@ -78,7 +77,7 @@ export default function Navbar() {
           </li>
           <li className="nav-list-item">
             <Link
-              to={"/widgets"}
+              to={"https://www.npmjs.com/package/irada-widgets"}
               className={isActiveRoute("/widgets") ? "active" : ""}
             >
               Widgets

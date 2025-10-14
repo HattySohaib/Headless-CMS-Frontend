@@ -5,7 +5,7 @@ import { IradaBlogsPage } from "irada-widgets";
 import BlogRead from "./pages/BlogRead/BlogRead";
 import Playground from "./pages/Playground/Playground";
 import Editor from "./pages/Editor/Editor";
-import Blogs from "./pages/Blogs/Blogs";
+import Trending from "./pages/Trending/Trending";
 import Categories from "./pages/Categories/Categories";
 import Analytics from "./pages/Analytics/Analytics";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -85,16 +85,16 @@ const App = () => {
           />
 
           <Route
-            path="blogs"
+            path="trending"
             element={
-              <ErrorBoundary title="Blogs Page Error">
-                <Blogs />
+              <ErrorBoundary title="Trending Page Error">
+                <Trending />
               </ErrorBoundary>
             }
           />
 
           <Route
-            path="blog/*"
+            path="blogs/*"
             element={
               <ErrorBoundary title="Blog Content Error">
                 <IradaBlogsPageWrapper />

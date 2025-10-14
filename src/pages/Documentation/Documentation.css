@@ -66,6 +66,20 @@ html {
     line-height: 1.6;
     color: var(--txt);
     transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Global responsive utilities */
+.documentation-page * {
+    box-sizing: border-box;
+}
+
+.documentation-page pre,
+.documentation-page code {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 
 /* Professional Sidebar Navigation - React Native Docs Style */
@@ -101,22 +115,6 @@ html {
     letter-spacing: -0.025em;
     text-transform: uppercase;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.documentation-page .doc-sidebar .mobile-close-btn {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--txt-muted);
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
-    transition: all 0.2s;
-}
-
-.documentation-page .doc-sidebar .mobile-close-btn:hover {
-    background-color: var(--bg-hover);
-    color: var(--txt);
 }
 
 /* Navigation List - React Native Style with Dropdowns */
@@ -290,32 +288,62 @@ html {
     background: var(--txt-muted);
 }
 
-/* Mobile Menu Button */
+/* Mobile Menu Button - Floating Bottom Right */
 .documentation-page .mobile-menu-btn {
     display: none;
     position: fixed;
-    top: 1rem;
-    left: 1rem;
+    bottom: 2rem;
+    right: 2rem;
     z-index: 1001;
     background: var(--primary);
-    color: var(--txt-invert);
+    color: white;
     border: none;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
+    padding: 0;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 1.5rem;
     align-items: center;
-    gap: 0.5rem;
-    box-shadow: 0 4px 12px var(--shadow);
-    transition: all 0.2s;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
 }
 
 .documentation-page .mobile-menu-btn:hover {
-    background: var(--primary-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px var(--shadow);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.documentation-page .mobile-menu-btn:active {
+    transform: scale(0.95);
+}
+
+.documentation-page .mobile-menu-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.documentation-page .mobile-menu-btn:hover svg {
+    transform: rotate(90deg);
+}
+
+/* Mobile Overlay */
+.documentation-page .mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.documentation-page .mobile-overlay.active {
+    display: block;
+    opacity: 1;
 }
 
 /* Main Content Area */
@@ -330,7 +358,7 @@ html {
 .documentation-page .doc-content .doc-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: var(--txt-invert);
-    padding: 3rem 2rem;
+    padding: 2rem 1.5rem;
     border-bottom: 1px solid var(--border);
 }
 
@@ -418,9 +446,11 @@ html {
 /* Content Sections */
 .documentation-page .doc-content .doc-section {
     margin: 0;
-    padding: 3rem 4rem;
+    padding: 2rem 2.5rem;
     border-bottom: 1px solid var(--border-light);
     scroll-margin-top: 80px;
+    max-width: 100%;
+    overflow-x: hidden;
     /* For smooth scroll targeting */
 }
 
@@ -480,10 +510,10 @@ html {
     background-color: var(--code-bg);
     border-radius: 0.75rem;
     overflow: hidden;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     border: 1px solid var(--code-border);
     position: relative;
-    box-shadow: 0 4px 6px var(--shadow);
+    box-shadow: 0 2px 4px var(--shadow);
 }
 
 .documentation-page .code-block::before {
@@ -498,7 +528,7 @@ html {
 
 .documentation-page .code-block .code-header {
     background-color: var(--bg-accent);
-    padding: 0.75rem 1rem;
+    padding: 0.625rem 1rem;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -508,11 +538,11 @@ html {
 
 .documentation-page .code-block .code-header::before {
     content: '';
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background-color: var(--error);
-    box-shadow: 18px 0 0 var(--warning), 36px 0 0 var(--success);
+    box-shadow: 16px 0 0 var(--warning), 32px 0 0 var(--success);
 }
 
 .documentation-page .code-block .code-language {
@@ -550,7 +580,7 @@ html {
 
 .documentation-page .code-block pre {
     margin: 0;
-    padding: 1.5rem;
+    padding: 1rem;
     overflow-x: auto;
     font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Consolas', 'Courier New', monospace;
     font-size: 0.875rem;
@@ -728,6 +758,12 @@ html {
     margin: 2rem 0;
 }
 
+@media (max-width: 600px) {
+    .documentation-page .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .documentation-page .feature-item {
     padding: 1rem;
     background-color: var(--bg-hover);
@@ -795,8 +831,8 @@ html {
 .documentation-page .step-header {
     display: flex;
     align-items: flex-start;
-    gap: 1.5rem;
-    padding: 2rem 2rem 1rem 2rem;
+    gap: 1rem;
+    padding: 1.25rem 1.25rem 0.875rem 1.25rem;
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border);
 }
@@ -854,11 +890,11 @@ html {
 }
 
 .documentation-page .step-body {
-    padding: 1.5rem 2rem 2rem 2rem;
+    padding: 1rem 1.25rem 1.25rem 1.25rem;
 }
 
 .documentation-page .step-body p {
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 1rem 0;
     color: var(--txt-secondary);
     line-height: 1.6;
 }
@@ -878,8 +914,8 @@ html {
 .documentation-page .sub-steps {
     background: var(--bg-hover);
     border-radius: 8px;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
+    padding: 1rem;
+    margin: 1rem 0;
     border: 1px solid var(--border);
 }
 
@@ -1175,6 +1211,8 @@ html {
 
 .documentation-page .component-header .component-info {
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .documentation-page .component-header h2 {
@@ -1183,6 +1221,8 @@ html {
     font-weight: 700;
     color: var(--txt);
     line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .documentation-page .component-header p {
@@ -1190,6 +1230,8 @@ html {
     color: var(--txt-secondary);
     font-size: 1.125rem;
     line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Component Features - Compact Pills */
@@ -1278,16 +1320,16 @@ html {
 }
 
 .documentation-page .styling-category {
-    background-color: #f8fafc;
+    background-color: var(--bg-secondary);
     padding: 1.5rem;
     border-radius: 0.5rem;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border);
 }
 
 .documentation-page .styling-category h4 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: #1a202c;
+    color: var(--txt);
     margin: 0 0 1rem 0;
 }
 
@@ -1332,31 +1374,31 @@ html {
 
 .documentation-page .capability {
     padding: 1.5rem;
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: 0.5rem;
     transition: all 0.2s;
 }
 
 .documentation-page .capability:hover {
-    border-color: #cbd5e0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-color: var(--border);
+    box-shadow: 0 2px 8px var(--shadow-light);
 }
 
 .documentation-page .capability svg {
-    color: #3182ce;
+    color: var(--primary);
     margin-bottom: 1rem;
 }
 
 .documentation-page .capability h4 {
     font-size: 1rem;
     font-weight: 600;
-    color: #1a202c;
+    color: var(--txt);
     margin: 0 0 0.75rem 0;
 }
 
 .documentation-page .capability p {
-    color: #4a5568;
+    color: var(--txt-secondary);
     margin: 0;
     font-size: 0.875rem;
 }
@@ -1620,40 +1662,82 @@ html {
         display: flex;
     }
 
-    .documentation-page .mobile-close-btn {
-        display: block;
-    }
-
     .documentation-page .doc-content {
         margin-left: 0;
+        width: 100%;
+        overflow-x: hidden;
     }
 
     .documentation-page .doc-header {
-        padding: 2rem 1rem;
+        padding: 1.25rem 1rem;
     }
 
     .documentation-page .doc-header .header-content h1 {
-        font-size: 1.875rem;
+        font-size: 1.625rem;
     }
 
     .documentation-page .doc-header .header-content>p {
-        font-size: 1rem;
+        font-size: 0.9375rem;
     }
 
     .documentation-page .doc-section {
-        padding: 2rem 1rem;
+        padding: 1.25rem 1rem;
     }
 
     .documentation-page .features-grid {
         grid-template-columns: 1fr;
     }
 
+    /* Component features wrap properly */
+    .documentation-page .component-features {
+        flex-wrap: wrap;
+    }
+
+    /* Tables responsive */
+    .documentation-page .props-table {
+        font-size: 0.75rem;
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .documentation-page .props-table th,
+    .documentation-page .props-table td {
+        padding: 0.75rem 0.5rem;
+        min-width: 100px;
+    }
+
+    /* Code blocks responsive */
+    .documentation-page .code-block {
+        margin: 1rem 0;
+        border-radius: 0.5rem;
+    }
+
+    .documentation-page .code-block::before {
+        display: none;
+    }
+
+    .documentation-page .code-block .code-header {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .documentation-page .code-block .code-header::before {
+        width: 8px;
+        height: 8px;
+        box-shadow: 13px 0 0 var(--warning), 26px 0 0 var(--success);
+    }
+
+    .documentation-page .code-block pre {
+        padding: 0.875rem;
+        font-size: 0.8125rem;
+    }
+
     /* Responsive Quick Start Styles */
     .documentation-page .step-header {
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.875rem;
         text-align: center;
-        padding: 1.5rem;
+        padding: 1.25rem;
     }
 
     .documentation-page .step-indicator {
@@ -1665,11 +1749,11 @@ html {
     }
 
     .documentation-page .step-body {
-        padding: 1rem 1.5rem 1.5rem 1.5rem;
+        padding: 1rem 1.25rem 1.25rem 1.25rem;
     }
 
     .documentation-page .sub-steps {
-        padding: 1rem;
+        padding: 0.875rem;
     }
 
     .documentation-page .quickstart-success {
@@ -1715,15 +1799,6 @@ html {
     .documentation-page .community-links {
         justify-content: center;
     }
-
-    .documentation-page .props-table {
-        font-size: 0.75rem;
-    }
-
-    .documentation-page .props-table th,
-    .documentation-page .props-table td {
-        padding: 0.75rem 0.5rem;
-    }
 }
 
 @media (max-width: 480px) {
@@ -1740,9 +1815,53 @@ html {
         gap: 1rem;
     }
 
-    .documentation-page .props-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+    .documentation-page .doc-header {
+        padding: 1rem 0.75rem;
+    }
+
+    .documentation-page .doc-section {
+        padding: 1rem 0.75rem;
+    }
+
+    .documentation-page .code-block pre {
+        padding: 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    .documentation-page .code-block .code-header {
+        padding: 0.5rem 0.625rem;
+        font-size: 0.8125rem;
+    }
+
+    /* Ensure component headers wrap properly */
+    .documentation-page .component-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .documentation-page .component-icon {
+        align-self: center;
+    }
+
+    /* Step titles smaller on very small screens */
+    .documentation-page .step-title p:nth-child(1) {
+        font-size: 1.125rem;
+    }
+
+    .documentation-page .step-header {
+        padding: 1rem;
+    }
+
+    .documentation-page .step-body {
+        padding: 0.875rem 1rem 1rem 1rem;
+    }
+
+    /* Floating button stays visible on mobile */
+    .documentation-page .mobile-menu-btn {
+        width: 3rem;
+        height: 3rem;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        font-size: 1.25rem;
     }
 }

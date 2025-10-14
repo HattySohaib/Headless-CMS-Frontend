@@ -80,4 +80,9 @@ export const userApi = {
       `/users${queryString ? `?${queryString}` : ""}`
     );
   },
+
+  // Get top authors by views
+  async getTopAuthors(limit = 5) {
+    return await apiService.get(`/users/top-authors/week`);
+  },
 };

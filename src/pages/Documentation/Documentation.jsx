@@ -70,10 +70,11 @@ function Documentation() {
     { id: "blogs-page", label: "IradaBlogsPage", icon: RiArticleLine },
     {
       id: "blogs-carousel",
-      label: "FeaturedBlogsCarousel",
+      label: "IradaBlogsCarousel",
       icon: RiLayoutLine,
     },
-    { id: "message-form", label: "MessageForm", icon: RiContactsBookLine },
+    { id: "blog-reader", label: "IradaBlogReader", icon: RiEyeLine },
+    { id: "contact-form", label: "IradaContactForm", icon: RiContactsBookLine },
     { id: "blog-card", label: "IradaBlogCard", icon: RiFileTextLine },
     { id: "styling", label: "Styling", icon: RiPaletteLine },
     { id: "dashboard", label: "Dashboard Integration", icon: RiDashboardLine },
@@ -130,7 +131,7 @@ function Documentation() {
         default: "'light'",
       },
     ],
-    MessageForm: [
+    IradaContactForm: [
       {
         name: "apiKey",
         type: "string",
@@ -234,7 +235,7 @@ function Documentation() {
       ],
     },
     {
-      name: "FeaturedBlogsCarousel",
+      name: "IradaBlogsCarousel",
       icon: RiLayoutLine,
       description: "Interactive carousel showcasing featured blog posts",
       features: [
@@ -245,7 +246,18 @@ function Documentation() {
       ],
     },
     {
-      name: "MessageForm",
+      name: "IradaBlogReader",
+      icon: RiEyeLine,
+      description: "Standalone blog reader component for individual posts",
+      features: [
+        "Rich Content Display",
+        "SEO Optimized",
+        "Share Buttons",
+        "Related Posts",
+      ],
+    },
+    {
+      name: "IradaContactForm",
       icon: RiContactsBookLine,
       description:
         "Customizable contact form with real-time dashboard integration",
@@ -285,6 +297,10 @@ function Documentation() {
     "Blog Object Based": RiDatabaseLine,
     Lightweight: RiFlightTakeoffLine,
     "Theme Support": RiPaintBrushLine,
+    "Rich Content Display": RiArticleLine,
+    "SEO Optimized": RiSearchLine,
+    "Share Buttons": RiMailSendLine,
+    "Related Posts": RiLayoutLine,
   };
 
   const scrollToSection = (sectionId) => {
@@ -420,12 +436,6 @@ function Documentation() {
       <nav className={`doc-sidebar ${mobileMenuOpen ? "mobile-open" : ""}`}>
         <div className="sidebar-header">
           <h2>Documentation</h2>
-          <button
-            className="mobile-close-btn"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <RiCloseLine size="1.5rem" />
-          </button>
         </div>
 
         <ul className="nav-list">
@@ -464,13 +474,19 @@ function Documentation() {
         </div>
       </nav>
 
-      {/* Mobile Menu Button */}
+      {/* Mobile Overlay */}
+      <div
+        className={`mobile-overlay ${mobileMenuOpen ? "active" : ""}`}
+        onClick={() => setMobileMenuOpen(false)}
+      />
+
+      {/* Floating Menu Button - Toggle Open/Close */}
       <button
         className="mobile-menu-btn"
-        onClick={() => setMobileMenuOpen(true)}
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
       >
-        <RiMenuLine size="1.5rem" />
-        Menu
+        {mobileMenuOpen ? <RiCloseLine /> : <RiMenuLine />}
       </button>
 
       {/* Main Content */}
@@ -804,12 +820,12 @@ import { Routes, Route } from "react-router-dom";
           </table>
         </section>
 
-        {/* FeaturedBlogsCarousel Component */}
+        {/* IradaBlogsCarousel Component */}
         <section id="blogs-carousel" className="doc-section">
           <div className="component-header">
             <RiLayoutLine size="2.5rem" className="component-icon" />
             <div className="component-info">
-              <h2>FeaturedBlogsCarousel</h2>
+              <h2>IradaBlogsCarousel</h2>
               <p>Interactive carousel showcasing featured blog posts</p>
               <div className="component-features">
                 <FeaturePill feature="Auto-scroll" />
@@ -822,13 +838,13 @@ import { Routes, Route } from "react-router-dom";
 
           <h3>Usage Example</h3>
           <CodeBlock id="carousel-usage" language="jsx">
-            {`import { FeaturedBlogsCarousel } from "irada-widgets";
+            {`import { IradaBlogsCarousel } from "irada-widgets";
 
 function HomePage() {
   return (
     <section className="hero">
       <h1>Featured Posts</h1>
-      <FeaturedBlogsCarousel
+      <IradaBlogsCarousel
         apiKey="your-demo-api-key"
         theme="light"
       />
@@ -874,12 +890,12 @@ function HomePage() {
           </table>
         </section>
 
-        {/* MessageForm Component */}
-        <section id="message-form" className="doc-section">
+        {/* IradaContactForm Component */}
+        <section id="contact-form" className="doc-section">
           <div className="component-header">
             <RiContactsBookLine size="2.5rem" className="component-icon" />
             <div className="component-info">
-              <h2>MessageForm</h2>
+              <h2>IradaContactForm</h2>
               <p>
                 Customizable contact form with real-time dashboard integration
               </p>
@@ -895,13 +911,13 @@ function HomePage() {
           <h3>Usage Examples</h3>
 
           <h4>Basic Contact Form</h4>
-          <CodeBlock id="message-form-basic" language="jsx">
-            {`import { MessageForm } from "irada-widgets";
+          <CodeBlock id="contact-form-basic" language="jsx">
+            {`import { IradaContactForm } from "irada-widgets";
 
 function ContactPage() {
   return (
     <div className="contact-page">
-      <MessageForm
+      <IradaContactForm
         apiKey="your-demo-api-key"
         theme="light"
         heading="Get in Touch"
@@ -922,14 +938,14 @@ function ContactPage() {
           </CodeBlock>
 
           <h4>Embedded in Footer</h4>
-          <CodeBlock id="message-form-footer" language="jsx">
-            {`import { MessageForm } from "irada-widgets";
+          <CodeBlock id="contact-form-footer" language="jsx">
+            {`import { IradaContactForm } from "irada-widgets";
 
 function Footer() {
   return (
     <footer className="site-footer">
       <div className="contact-section">
-        <MessageForm
+        <IradaContactForm
           apiKey="your-demo-api-key"
           theme="dark"
           heading="Quick Message"
@@ -956,7 +972,7 @@ function Footer() {
               </tr>
             </thead>
             <tbody>
-              {componentProps.MessageForm.map((prop) => (
+              {componentProps.IradaContactForm.map((prop) => (
                 <tr key={prop.name}>
                   <td className="prop-name">{prop.name}</td>
                   <td className="prop-type">{prop.type}</td>
@@ -979,6 +995,50 @@ function Footer() {
               ))}
             </tbody>
           </table>
+        </section>
+
+        {/* IradaBlogReader Component */}
+        <section id="blog-reader" className="doc-section">
+          <div className="component-header">
+            <RiEyeLine size="2.5rem" className="component-icon" />
+            <div className="component-info">
+              <h2>IradaBlogReader</h2>
+              <p>Standalone blog reader component for individual posts</p>
+              <div className="component-features">
+                <FeaturePill feature="Rich Content Display" />
+                <FeaturePill feature="SEO Optimized" />
+                <FeaturePill feature="Share Buttons" />
+                <FeaturePill feature="Related Posts" />
+              </div>
+            </div>
+          </div>
+
+          <h3>Usage Example</h3>
+          <CodeBlock id="blog-reader-usage" language="jsx">
+            {`import { IradaBlogReader } from "irada-widgets";
+import { useParams } from "react-router-dom";
+
+function BlogPost() {
+  const { slug } = useParams();
+  
+  return (
+    <IradaBlogReader
+      apiKey="your-demo-api-key"
+      theme="light"
+      slug={slug}
+    />
+  );
+}`}
+          </CodeBlock>
+
+          <div className="important-note">
+            <RiLightbulbLine size="1.25rem" />
+            <div>
+              <strong>Note:</strong> IradaBlogReader is automatically used
+              within IradaBlogsPage. Use this component only if you need a
+              standalone blog reader outside of IradaBlogsPage.
+            </div>
+          </div>
         </section>
 
         {/* IradaBlogCard Component */}
@@ -1362,7 +1422,7 @@ import "irada-widgets/dist/App.css";`}</code>
               <h3>Bug Reports</h3>
               <p>Report issues and track their progress</p>
               <a
-                href="https://github.com/HattySohaib/irada-widgetsUi/issues"
+                href="https://github.com/HattySohaib/irada-widgets/issues"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="support-link"
@@ -1376,7 +1436,7 @@ import "irada-widgets/dist/App.css";`}</code>
               <h3>Feature Requests</h3>
               <p>Suggest new features and enhancements</p>
               <a
-                href="https://github.com/HattySohaib/irada-widgetsUi/issues"
+                href="https://github.com/HattySohaib/irada-widgets/issues"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="support-link"
@@ -1389,7 +1449,7 @@ import "irada-widgets/dist/App.css";`}</code>
               <RiMailLine size="2rem" className="support-icon" />
               <h3>Email Support</h3>
               <p>Direct support from the maintainers</p>
-              <a href="mailto:sohaib@yourdomain.com" className="support-link">
+              <a href="mailto:sohaibaftab29@gmail.com" className="support-link">
                 Contact Us <RiArrowRightLine size="1rem" />
               </a>
             </div>
@@ -1408,7 +1468,7 @@ import "irada-widgets/dist/App.css";`}</code>
 
             <div id="contributing" className="community-links">
               <a
-                href="https://github.com/HattySohaib/irada-widgetsUi"
+                href="https://github.com/HattySohaib/irada-widgets"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="community-link"
@@ -1417,7 +1477,7 @@ import "irada-widgets/dist/App.css";`}</code>
                 Star on GitHub
               </a>
               <a
-                href="https://github.com/HattySohaib/irada-widgetsUi/issues"
+                href="https://github.com/HattySohaib/irada-widgets/issues"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="community-link"
@@ -1444,13 +1504,13 @@ import "irada-widgets/dist/App.css";`}</code>
             </p>
             <div className="footer-links">
               <a
-                href="https://github.com/HattySohaib/irada-widgetsUi"
+                href="https://github.com/HattySohaib/irada-widgets"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 GitHub
               </a>
-              <a href="mailto:sohaib@yourdomain.com">Support</a>
+              <a href="mailto:sohaibaftab29@gmail.com">Support</a>
               <Link to="/dashboard">Dashboard</Link>
             </div>
           </div>

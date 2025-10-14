@@ -17,11 +17,16 @@ import {
   RiSettings3Line,
   RiHomeLine,
   RiLogoutCircleLine,
+  RiArticleLine,
+  RiSunLine,
+  RiMoonLine,
+  RiMenuLine,
+  RiCloseLine,
 } from "@remixicon/react";
 import { useNavigate } from "react-router-dom";
 
 const PlaygroundNavbar = () => {
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const { logout } = useAuthContext();
   const { userData } = useUserContext();
   const location = useLocation();
@@ -143,6 +148,15 @@ const PlaygroundNavbar = () => {
                   <Link
                     className="mobile-profile-link"
                     onClick={closeMobileMenu}
+                    to="/dashboard/blogs"
+                  >
+                    <RiArticleLine size="1rem" />
+                    <span>Blogs</span>
+                  </Link>
+
+                  <Link
+                    className="mobile-profile-link"
+                    onClick={closeMobileMenu}
                     to="/dashboard/messages"
                   >
                     <RiMessage2Line size="1rem" />
@@ -157,6 +171,23 @@ const PlaygroundNavbar = () => {
                     <RiSettings3Line size="1rem" />
                     <span>Settings</span>
                   </Link>
+
+                  <button
+                    className="mobile-theme-toggle-btn"
+                    onClick={() => {
+                      toggleTheme();
+                      closeMobileMenu();
+                    }}
+                  >
+                    {theme === "light" ? (
+                      <RiMoonLine size="1rem" />
+                    ) : (
+                      <RiSunLine size="1rem" />
+                    )}
+                    <span>
+                      {theme === "light" ? "Dark Mode" : "Light Mode"}
+                    </span>
+                  </button>
 
                   <div className="mobile-menu-divider"></div>
 
@@ -190,6 +221,19 @@ const PlaygroundNavbar = () => {
       {isMobileMenuOpen && (
         <div className="mobile-profile-overlay" onClick={closeMobileMenu}></div>
       )}
+
+      {/* Mobile Floating Menu Button */}
+      <button
+        className={`mobile-floating-menu-btn mobile-floating-menu-btn-${theme}`}
+        onClick={toggleMobileMenu}
+        aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+      >
+        {isMobileMenuOpen ? (
+          <RiCloseLine size={24} />
+        ) : (
+          <RiMenuLine size={24} />
+        )}
+      </button>
     </>
   );
 };

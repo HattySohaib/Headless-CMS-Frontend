@@ -13,10 +13,7 @@ import {
   RiGlobalLine,
   RiArrowRightLine,
   RiPlayCircleLine,
-  RiCheckboxCircleLine,
-  RiDashboardLine,
-  RiMessage2Line,
-  RiArticleLine,
+  RiBook2Line,
 } from "@remixicon/react";
 
 function Home() {
@@ -49,8 +46,8 @@ function Home() {
 
           <div className="hero-actions">
             <Link to={"/documentation"} className="cta-primary">
-              Read Documentation
-              <RiArrowRightLine size="1.2rem" />
+              <RiBook2Line size="1.2rem" />
+              Documentation
             </Link>
             <button className="cta-secondary">
               <RiPlayCircleLine size="1.2rem" />

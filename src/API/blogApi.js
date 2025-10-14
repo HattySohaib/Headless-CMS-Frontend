@@ -77,4 +77,9 @@ export const blogApi = {
   async getBlogViews(id) {
     return await apiService.get(`/blogs/${id}/views`);
   },
+
+  // Get trending blogs
+  async getTrendingBlogs(limit = 15) {
+    return await apiService.get(`/blogs/trending/today`);
+  },
 };
