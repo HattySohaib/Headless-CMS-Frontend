@@ -1,88 +1,152 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./Blogs.css";
-import { toast } from "react-toastify";
-
-import Footer from "../../components/Footer/Footer";
-import Carousel from "../../components/Carousel/Carousel";
-import BlogCard2 from "../../components/BlogCard2/BlogCard2";
-import AuthorCard from "../../components/AuthorCard/AuthorCard";
-import { RiArrowRightSLine, RiArrowLeftSLine } from "@remixicon/react";
-
+import { IradaBlogsCarousel, IradaBlogCard } from "irada-widgets";
 import { useTheme } from "../../contexts/theme";
 import { blogApi } from "../../API/blogApi";
 import { userApi } from "../../API/userApi";
+import { Link } from "react-router-dom";
+import {
+  RiUserStarLine,
+  RiLineChartFill,
+  RiEyeLine,
+  RiArticleLine,
+  RiUserLine,
+} from "@remixicon/react";
 
 function Blogs() {
-  const [published, setPublished] = useState([]);
-  const [authors, setAuthors] = useState([]);
-
+  const [topAuthors, setTopAuthors] = useState([]);
+  const [topBlogs, setTopBlogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { theme } = useTheme();
 
-  const handleGetPublished = useCallback(async () => {
-    const response = await blogApi.getBlogs({
-      published: true,
-      featured: true,
-    });
+  // Fetch top authors (NEEDS BACKEND: Add viewCount/totalViews sorting)
+  const fetchTopAuthors = useCallback(async () => {
+    const response = await userApi.getUsers({ limit: 8 });
     if (response.success) {
-      setPublished(response.data.blogs || []);
+      setTopAuthors(response.data.users || []);
     }
-    // Error handling is done by apiService centrally
   }, []);
 
-  const handleGetUsers = useCallback(async () => {
-    const response = await userApi.getUsers();
+  // Fetch top blogs (NEEDS BACKEND: Add dailyViews sorting)
+  const fetchTopBlogs = useCallback(async () => {
+    const response = await blogApi.getBlogs({ published: true, limit: 15 });
     if (response.success) {
-      setAuthors(response.data.users || []);
+      setTopBlogs(response.data.blogs || []);
     }
-    // Error handling is done by apiService centrally
   }, []);
 
   useEffect(() => {
-    handleGetPublished();
-    handleGetUsers();
-  }, [handleGetPublished, handleGetUsers]);
+    const loadData = async () => {
+      setIsLoading(true);
+      await Promise.all([fetchTopAuthors(), fetchTopBlogs()]);
+      setIsLoading(false);
+    };
+    loadData();
+  }, [fetchTopAuthors, fetchTopBlogs]);
 
-  const scrollContainerRef = React.createRef();
-
-  const scrollLeft = () => {
-    scrollContainerRef.current.scrollBy({ left: -200, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    scrollContainerRef.current.scrollBy({ left: 200, behavior: "smooth" });
-  };
+  if (isLoading) {
+    return (
+      <div className={`blogs-page blogs-${theme}`}>
+        <div className="loading-state">
+          <div className="spinner"></div>
+          <p>Loading content...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div id="blogs" className={`blogs-${theme}`}>
-      <div className="featured-authors">
-        <Carousel slides={Array.from(published)} />
-      </div>
-      <div className="author-list">
-        <h2>Popular Authors</h2>
-        <div className="authors" ref={scrollContainerRef}>
-          {authors.map((author) => (
-            <AuthorCard author={author} key={author._id} />
-          ))}
-        </div>
-        <div className="scroll-buttons">
-          <button className="scroll-button" onClick={scrollLeft}>
-            <RiArrowLeftSLine size={24} />
-          </button>
-          <button className="scroll-button" onClick={scrollRight}>
-            <RiArrowRightSLine size={24} />
-          </button>
-        </div>
-      </div>
-      <div className="recommended-blogs">
-        <h2>Top Trending Blogs</h2>
-        <div className="recommended-blogs-list">
-          {published.map((blog) => (
-            <BlogCard2 blog={blog} key={blog._id} />
-          ))}
-        </div>
-      </div>
+    <div className={`blogs-page blogs-${theme}`}>
+      {/* Top Viewed Authors Section */}
+      <section className="top-authors-section">
+        <div className="container">
+          <div className="section-header">
+            <RiUserStarLine className="header-icon" size={32} />
+            <h2>Most Viewed Authors</h2>
+            <p>Discover the most popular content creators on our platform</p>
+          </div>
 
-      <Footer />
+          <div className="authors-grid">
+            {topAuthors.map((author) => (
+              <Link
+                key={author._id}
+                to={`/author/${author._id}`}
+                className="author-card"
+              >
+                <div className="author-avatar">
+                  <img
+                    src={author.profileImageUrl}
+                    alt={author.fullName}
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/120?text=Author";
+                    }}
+                  />
+                </div>
+                <div className="author-info">
+                  <h3>{author.fullName}</h3>
+                  <p className="author-username">@{author.username}</p>
+                  <div className="author-stats">
+                    <div className="stat-item">
+                      <RiArticleLine size={16} />
+                      <span>{author.blogCount || 0} posts</span>
+                    </div>
+                    <div className="stat-item">
+                      <RiUserLine size={16} />
+                      <span>{author.followersCount || 0} followers</span>
+                    </div>
+                  </div>
+                  {/* NEEDS BACKEND: Add author.totalViews field */}
+                  <div className="view-count">
+                    <RiEyeLine size={16} />
+                    <span>{author.totalViews || "N/A"} views</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Blogs Carousel Section */}
+      <section className="featured-section">
+        <div className="container">
+          <div className="section-header">
+            <h2>Featured Stories</h2>
+            <p>Handpicked articles from our editorial team</p>
+          </div>
+          <div className="carousel-wrapper">
+            <IradaBlogsCarousel
+              apiKey="56c43b56a55751dcf7d389b0b913eabea62fa3ac43d28c800caf8d49bf19bd8e"
+              theme={theme}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Top 15 Blogs of the Day Section */}
+      <section className="top-blogs-section">
+        <div className="container">
+          <div className="section-header">
+            <RiLineChartFill className="header-icon" size={32} />
+            <h2>Today's Top Stories</h2>
+            <p>The most engaging content from the last 24 hours</p>
+          </div>
+
+          {/* <div className="blogs-grid">
+            {topBlogs.map((blog, index) => (
+              <div key={blog._id} className="blog-card-wrapper">
+                {index < 3 && (
+                  <div className={`rank-badge rank-${index + 1}`}>
+                    #{index + 1}
+                  </div>
+                )}
+                <IradaBlogCard blog={blog} theme={theme} />
+              </div>
+            ))}
+          </div> */}
+        </div>
+      </section>
     </div>
   );
 }

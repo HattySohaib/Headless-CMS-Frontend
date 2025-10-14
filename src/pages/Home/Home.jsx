@@ -49,7 +49,7 @@ function Home() {
 
           <div className="hero-actions">
             <Link to={"/documentation"} className="cta-primary">
-              Get Started Free
+              Read Documentation
               <RiArrowRightLine size="1.2rem" />
             </Link>
             <button className="cta-secondary">

@@ -182,21 +182,26 @@
 .login-btn,
 .join-btn,
 .playground-btn {
-    padding: 0.75rem 2.5rem;
+    padding: 0.5rem 2rem;
     border: 1px solid var(--bor);
-    border-radius: 5rem;
+    border-radius: 50px;
     text-decoration: none;
     color: var(--txt);
     font-family: 'Bricolage Grotesque';
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 0.95rem;
     text-align: center;
-    transition: all 0.4s;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .login-btn:hover,
 .join-btn:hover,
 .playground-btn:hover {
-    opacity: 0.8;
+    border-color: var(--pri);
+    scale: 1.05;
 }
 
 .join-btn {

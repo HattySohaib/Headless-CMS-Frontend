@@ -222,7 +222,7 @@ export default function Editor() {
       fd.append("banner", form.banner);
       blogApi.createBlog(fd);
       setTimeout(() => {
-        navigate("/playground/dashboard");
+        navigate("/");
       }, 100);
     } else {
       toast.warn("Please select both banner images");

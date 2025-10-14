@@ -70,7 +70,7 @@ export default function Navbar() {
           </li>
           <li className="nav-list-item">
             <Link
-              to={"/"}
+              to={"/documentation"}
               className={isActiveRoute("/documentation") ? "active" : ""}
             >
               Documentation
@@ -78,10 +78,10 @@ export default function Navbar() {
           </li>
           <li className="nav-list-item">
             <Link
-              to={"/"}
-              className={isActiveRoute("/components") ? "active" : ""}
+              to={"/widgets"}
+              className={isActiveRoute("/widgets") ? "active" : ""}
             >
-              Components
+              Widgets
             </Link>
           </li>
         </ul>

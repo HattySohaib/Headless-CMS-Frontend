@@ -30,7 +30,7 @@ const Login = () => {
     const res = await userApi.login(formData);
     if (res.success) {
       login(res.data);
-      setTimeout(() => navigate("/playground/dashboard"), 500);
+      setTimeout(() => navigate("/"), 500);
     }
     setLoading(false);
   };

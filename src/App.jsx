@@ -1,5 +1,6 @@
 import "./App.css";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { IradaBlogsPage } from "irada-widgets";
 
 import BlogRead from "./pages/BlogRead/BlogRead";
 import Playground from "./pages/Playground/Playground";
@@ -16,11 +17,14 @@ import { ApiErrorProvider } from "./contexts/apiError";
 import { DropAreaProvider } from "./contexts/file";
 import { UserProvider } from "./contexts/user";
 import { RefreshProvider } from "./contexts/refresh";
+import { useTheme } from "./contexts/theme";
 
 import Home from "./pages/Home/Home";
 import Signup from "./pages/UserPages/Signup";
 import Login from "./pages/UserPages/Login";
 import Author from "./pages/Author/Author";
+import Documentation from "./pages/Documentation/Documentation";
+import config from "./config/appConfig";
 
 import Navbar from "./components/Navbar/Navbar";
 import Draftboard from "./pages/Draftboard/Draftboard";
@@ -28,6 +32,19 @@ import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import OfflineBanner from "./components/OfflineBanner/OfflineBanner";
 import NotFound from "./pages/NotFound/NotFound";
 import Loader from "./components/Loader/Loader";
+
+// Wrapper for IradaBlogsPage with theme
+const IradaBlogsPageWrapper = () => {
+  const { theme } = useTheme();
+  return (
+    <IradaBlogsPage
+      apiKey={config.apiBaseUrl}
+      theme={theme}
+      heading="Explore Our Blog"
+      subheading="Discover insights, tutorials, and stories from our community"
+    />
+  );
+};
 
 const App = () => {
   const { user, isLoading } = useAuthContext();
@@ -72,6 +89,15 @@ const App = () => {
             element={
               <ErrorBoundary title="Blogs Page Error">
                 <Blogs />
+              </ErrorBoundary>
+            }
+          />
+
+          <Route
+            path="blog/*"
+            element={
+              <ErrorBoundary title="Blog Content Error">
+                <IradaBlogsPageWrapper />
               </ErrorBoundary>
             }
           />
@@ -221,6 +247,15 @@ const App = () => {
                 <UserProvider>
                   <BlogRead />
                 </UserProvider>
+              </ErrorBoundary>
+            }
+          />
+
+          <Route
+            path="documentation"
+            element={
+              <ErrorBoundary title="Documentation Error">
+                <Documentation />
               </ErrorBoundary>
             }
           />

@@ -54,7 +54,9 @@ function Dashboard() {
       if (apiParams) {
         apiParams.featured = true;
       }
-      const response = await blogApi.getBlogs(apiParams || { featured: true });
+      const response = await blogApi.getBlogs(
+        apiParams || { featured: true, author: user?.id }
+      );
       if (response.success) {
         setFeatured(response.data.blogs || []);
         setPagination(
