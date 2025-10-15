@@ -388,8 +388,8 @@ export default function Editor() {
                 Select Category
               </option>
               {categories.map((cat, index) => (
-                <option key={index} value={`${cat.value}`}>
-                  {cat.value}
+                <option key={index} value={cat.name}>
+                  {cat.name}
                 </option>
               ))}{" "}
             </select>

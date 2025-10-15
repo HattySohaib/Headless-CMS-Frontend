@@ -78,7 +78,7 @@ function Draftboard() {
   const handleGetCategories = useCallback(async () => {
     const response = await categoryApi.getCategories();
     if (response.success) {
-      setCategories(response.data?.map((obj) => obj.value) || []);
+      setCategories(response.data || []);
     }
     // Error handling is done by apiService centrally
   }, []);
