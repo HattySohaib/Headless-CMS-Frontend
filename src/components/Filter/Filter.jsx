@@ -214,16 +214,11 @@ const Filter = ({
                   className="filter-select"
                 >
                   <option value="">All Categories</option>
-                  {availableCategories.map((cat) => {
-                    // Handle both object {_id, name} and string formats
-                    const categoryId = cat._id || cat;
-                    const categoryName = cat.name || cat;
-                    return (
-                      <option key={categoryId} value={categoryName}>
-                        {categoryName}
-                      </option>
-                    );
-                  })}
+                  {availableCategories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
                 </select>
               </div>
             )}

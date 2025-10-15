@@ -25,7 +25,7 @@ const CategoryManager = () => {
   const handleCreateCategory = async () => {
     if (newCategory === "") return;
     const category = {
-      name: newCategory,
+      value: newCategory,
     };
     const response = await categoryApi.createCategory(category);
     if (response.success) {
@@ -39,7 +39,7 @@ const CategoryManager = () => {
     if (!editingCategory) return;
 
     const updatedCategory = {
-      name: editingCategory.name,
+      value: editingCategory.value,
     };
     const response = await categoryApi.updateCategory(id, updatedCategory);
     if (response.success) {
@@ -93,11 +93,11 @@ const CategoryManager = () => {
               <div className="custom-edit-section">
                 <input
                   type="text"
-                  value={editingCategory.name}
+                  value={editingCategory.value}
                   onChange={(e) =>
                     setEditingCategory({
                       ...editingCategory,
-                      name: e.target.value,
+                      value: e.target.value,
                     })
                   }
                   className="custom-edit-input"
@@ -120,7 +120,7 @@ const CategoryManager = () => {
               </div>
             ) : (
               <div className="custom-view-section">
-                <p>{cat.name}</p>
+                <p>{cat.value}</p>
                 <p>{cat.blogCount}</p>
                 <div className="cat-actions">
                   <button

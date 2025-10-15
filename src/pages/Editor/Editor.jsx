@@ -112,7 +112,7 @@ export default function Editor() {
   const handleGetCategories = async () => {
     const response = await categoryApi.getCategories();
     if (response.success) {
-      setCategories(response.data || []);
+      setCategories(response.data?.map((obj) => obj.value) || []);
     }
     // Error handling is done by apiService centrally
   };
@@ -388,8 +388,8 @@ export default function Editor() {
                 Select Category
               </option>
               {categories.map((cat, index) => (
-                <option key={index} value={cat.name}>
-                  {cat.name}
+                <option key={index} value={cat}>
+                  {cat}
                 </option>
               ))}{" "}
             </select>
