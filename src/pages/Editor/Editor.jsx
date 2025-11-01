@@ -13,6 +13,7 @@ import {
   RiArrowDownSLine,
   RiArrowUpSLine,
   RiSendPlaneLine,
+  RiLoader4Line,
 } from "@remixicon/react";
 
 import { useTheme } from "../../contexts/theme.js";
@@ -35,6 +36,8 @@ export default function Editor() {
     ],
   };
   const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
   const [categories, setCategories] = useState([]);
   const [isMetaExpanded, setIsMetaExpanded] = useState(false);
   const [bannerPreview, setBannerPreview] = useState(null);
@@ -206,7 +209,19 @@ export default function Editor() {
 
   const navigate = useNavigate();
 
-  const handleCreateBlog = (publish = false) => {
+  const handleCreateBlog = async (publish = false) => {
+    if (!form.banner) {
+      toast.warn("Please select a banner image");
+      return;
+    }
+
+    // Set appropriate loading state
+    if (publish) {
+      setIsPublishing(true);
+    } else {
+      setIsSaving(true);
+    }
+
     const fd = new FormData();
     fd.append("category", form.category || "");
     fd.append("title", form.title || "");
@@ -218,18 +233,25 @@ export default function Editor() {
     if (tagsArr.length) {
       tagsArr.forEach((t) => fd.append("tags", t));
     }
-    if (form.banner) {
-      fd.append("banner", form.banner);
-      blogApi.createBlog(fd);
-      setTimeout(() => {
-        navigate("/");
-      }, 100);
-    } else {
-      toast.warn("Please select both banner images");
+    fd.append("banner", form.banner);
+
+    const response = await blogApi.createBlog(fd);
+
+    // Reset loading states
+    setIsPublishing(false);
+    setIsSaving(false);
+
+    if (response.success) {
+      // Redirect to read the newly created blog
+      const blogSlug = response.data?.slug || form.slug;
+      navigate(`/blogs/${blogSlug}`);
     }
+    // If failed, stay on the page (errors are handled by apiService)
   };
 
-  const handleEditBlog = () => {
+  const handleEditBlog = async () => {
+    setIsSaving(true);
+
     const formData = new FormData();
     formData.append("category", form.category || "");
     formData.append("title", form.title || "");
@@ -244,7 +266,17 @@ export default function Editor() {
     if (form.banner) {
       formData.append("banner", form.banner);
     }
-    blogApi.updateBlog(blog, formData);
+
+    const response = await blogApi.updateBlog(blog, formData);
+
+    setIsSaving(false);
+
+    if (response.success) {
+      // Redirect to read the updated blog
+      const blogSlug = response.data?.slug || form.slug;
+      navigate(`/blogs/${blogSlug}`);
+    }
+    // If failed, stay on the page (errors are handled by apiService)
   };
 
   if (loading) {
@@ -268,25 +300,44 @@ export default function Editor() {
                 id="save-btn"
                 onClick={() => handleCreateBlog(false)}
                 className="save-btn"
+                disabled={isSaving || isPublishing}
               >
-                <RiSaveLine size="1.2rem" color="var(--txt)" />
-                <span>Save to drafts</span>
+                {isSaving ? (
+                  <RiLoader4Line size="1.2rem" color="var(--txt)" className="spinning-icon" />
+                ) : (
+                  <RiSaveLine size="1.2rem" color="var(--txt)" />
+                )}
+                <span>{isSaving ? "Saving..." : "Save to drafts"}</span>
               </button>
 
               <button
                 id="publish-btn"
                 onClick={handlePublish}
                 className="publish-btn"
+                disabled={isSaving || isPublishing}
               >
-                <RiSendPlaneLine className="btn-icon" size={16} />
-                <span>Publish Now</span>
+                {isPublishing ? (
+                  <RiLoader4Line className="btn-icon spinning-icon" size={16} />
+                ) : (
+                  <RiSendPlaneLine className="btn-icon" size={16} />
+                )}
+                <span>{isPublishing ? "Publishing..." : "Publish Now"}</span>
               </button>
             </>
           )}
           {blog && (
-            <button id="save-btn" onClick={handleEditBlog} className="save-btn">
-              <RiSaveLine size="1.2rem" color="var(--txt)" />
-              <span>Save edits</span>
+            <button 
+              id="save-btn" 
+              onClick={handleEditBlog} 
+              className="save-btn"
+              disabled={isSaving}
+            >
+              {isSaving ? (
+                <RiLoader4Line size="1.2rem" color="var(--txt)" className="spinning-icon" />
+              ) : (
+                <RiSaveLine size="1.2rem" color="var(--txt)" />
+              )}
+              <span>{isSaving ? "Saving..." : "Save edits"}</span>
             </button>
           )}
         </div>

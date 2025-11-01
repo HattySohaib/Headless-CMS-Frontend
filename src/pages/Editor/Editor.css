@@ -509,6 +509,38 @@ option {
     border-color: #d63610;
 }
 
+/* Spinning animation for loading states */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinning-icon {
+    animation: spin 1s linear infinite;
+}
+
+/* Disabled state for buttons */
+#save-btn:disabled,
+#publish-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+#save-btn:disabled:hover,
+#publish-btn:disabled:hover {
+    background-color: var(--bg2);
+    border-color: var(--bor);
+}
+
+#publish-btn:disabled:hover {
+    background-color: var(--pri);
+    border-color: var(--pri);
+}
+
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
     .editorpanel {
