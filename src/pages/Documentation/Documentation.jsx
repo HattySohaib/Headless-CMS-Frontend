@@ -114,6 +114,13 @@ function Documentation() {
         default:
           "'Explore insights, tutorials, and stories from our community'",
       },
+      {
+        name: "homeRoute",
+        type: "string",
+        required: false,
+        description: "Route to navigate when clicking home/back button",
+        default: "'/'",
+      },
     ],
     FeaturedBlogsCarousel: [
       {
@@ -655,6 +662,7 @@ function App() {
               apiKey="your-demo-api-key"
               theme="light"
               heading="Our Blog"
+              homeRoute="/"
             />
           }
         />
@@ -774,6 +782,7 @@ import { Routes, Route } from "react-router-dom";
       theme="light"
       heading="Our Blog"
       subheading="Explore insights and stories"
+      homeRoute="/"
     />
   }
 />`}
