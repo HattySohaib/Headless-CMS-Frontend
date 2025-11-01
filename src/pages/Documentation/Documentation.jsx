@@ -617,10 +617,6 @@ npm install react react-dom react-router-dom`}
                     <span>Copy and securely store your API key</span>
                   </div>
                 </div>
-                <div className="step-info">
-                  <strong>Security:</strong> Keep your API key secure and never
-                  expose it in client-side code in production.
-                </div>
               </div>
             </div>
 

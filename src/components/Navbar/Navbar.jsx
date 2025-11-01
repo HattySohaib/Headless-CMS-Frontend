@@ -214,7 +214,7 @@ export default function Navbar() {
             </li>
             <li className="mobile-nav-item">
               <Link
-                to={"/widgets"}
+                to={"https://www.npmjs.com/package/irada-widgets"}
                 onClick={closeMobileMenu}
                 className={isActiveRoute("/widgets") ? "active" : ""}
               >
