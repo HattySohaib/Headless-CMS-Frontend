@@ -303,7 +303,11 @@ export default function Editor() {
                 disabled={isSaving || isPublishing}
               >
                 {isSaving ? (
-                  <RiLoader4Line size="1.2rem" color="var(--txt)" className="spinning-icon" />
+                  <RiLoader4Line
+                    size="1.2rem"
+                    color="var(--txt)"
+                    className="spinning-icon"
+                  />
                 ) : (
                   <RiSaveLine size="1.2rem" color="var(--txt)" />
                 )}
@@ -326,14 +330,18 @@ export default function Editor() {
             </>
           )}
           {blog && (
-            <button 
-              id="save-btn" 
-              onClick={handleEditBlog} 
+            <button
+              id="save-btn"
+              onClick={handleEditBlog}
               className="save-btn"
               disabled={isSaving}
             >
               {isSaving ? (
-                <RiLoader4Line size="1.2rem" color="var(--txt)" className="spinning-icon" />
+                <RiLoader4Line
+                  size="1.2rem"
+                  color="var(--txt)"
+                  className="spinning-icon"
+                />
               ) : (
                 <RiSaveLine size="1.2rem" color="var(--txt)" />
               )}
