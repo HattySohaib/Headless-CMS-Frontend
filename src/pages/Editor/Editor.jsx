@@ -244,7 +244,7 @@ export default function Editor() {
     if (response.success) {
       // Redirect to read the newly created blog
       const blogSlug = response.data?.slug || form.slug;
-      navigate(`/blogs/${blogSlug}`);
+      navigate(`/blogs/blog/${blogSlug}`);
     }
     // If failed, stay on the page (errors are handled by apiService)
   };
@@ -274,7 +274,7 @@ export default function Editor() {
     if (response.success) {
       // Redirect to read the updated blog
       const blogSlug = response.data?.slug || form.slug;
-      navigate(`/blogs/${blogSlug}`);
+      navigate(`/blogs/blog/${blogSlug}`);
     }
     // If failed, stay on the page (errors are handled by apiService)
   };
